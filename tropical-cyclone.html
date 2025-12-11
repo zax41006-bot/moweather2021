@@ -17,6 +17,8 @@
                     colors: {
                         primary: '#1E88E5',
                         secondary: '#E3F2FD',
+                        card: '#FFFFFF',
+                        border: '#E5E7EB',
                         tc_low: '#BDBDBD',
                         tc_td: '#FFF176',
                         tc_storm: '#64B5F6',
@@ -27,6 +29,9 @@
                         tc_path_past: '#43A047',
                         tc_path_forecast: '#1976D2',
                     },
+                    fontFamily: {
+                        sans: ['Microsoft JhengHei', 'PingFang TC', 'sans-serif'],
+                    },
                 }
             }
         }
@@ -34,12 +39,15 @@
     
     <style type="text/tailwindcss">
         @layer utilities {
-            .weather-card { @apply bg-white rounded-xl shadow-md; }
+            .site-container { @apply container mx-auto px-4 py-6 max-w-6xl; }
+            .page-title { @apply text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary mb-4; }
+            .card { @apply bg-card rounded-xl shadow-md p-4 mb-4 transition-shadow hover:shadow-lg; }
+            .card-title { @apply text-lg font-semibold text-gray-800 mb-3 flex items-center; }
+            .card-title-icon { @apply mr-2 text-primary; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .nav-link-active { @apply text-primary font-medium; }
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-card shadow-lg py-2 z-50 border-t border-border; }
             .mobile-menu-hidden { @apply hidden; }
-            .tc-info-card { @apply bg-white rounded-xl shadow-md p-4 mb-4; }
-            .tc-strength-badge { @apply inline-block px-3 py-1 rounded-full text-white text-sm font-medium; }
             .legend-item { @apply inline-flex items-center mr-4 text-sm; }
             .legend-dot { @apply w-3 h-3 rounded-full mr-2 border border-white shadow-sm; }
             .legend-line { @apply w-6 h-0.5 mr-2; }
@@ -53,17 +61,17 @@
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <header class="bg-card shadow-sm sticky top-0">
+        <div class="site-container py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
             </div>
             
             <nav class="hidden md:flex items-center gap-1">
-                <a href="index.html" class="nav-link font-medium text-primary">首頁</a>
-                <a href="tropical-cyclone.html" class="nav-link text-primary font-medium">熱帶氣旋資訊</a>
-                <a href="#" class="nav-link">/</a>
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="tropical-cyclone.html" class="nav-link nav-link-active">熱帶氣旋資訊</a>
+                <span class="text-gray-400">/</span>
                 <a href="about.html" class="nav-link">關於我們</a>
             </nav>
             
@@ -72,22 +80,22 @@
             </button>
             
             <div id="mobileMenu" class="mobile-menu mobile-menu-hidden md:hidden">
-                <a href="index.html" class="block px-4 py-2 text-primary font-medium">首頁</a>
+                <a href="index.html" class="block px-4 py-2 hover:bg-blue-50 transition-colors">首頁</a>
                 <a href="tropical-cyclone.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">熱帶氣旋資訊</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">/</a>
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">關於我們</a>
+                <span class="block px-4 py-2 text-gray-400">/</span>
+                <a href="about.html" class="block px-4 py-2 hover:bg-blue-50 transition-colors">關於我們</a>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-6">
-        <div class="mb-6">
-            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary mb-2">熱帶氣旋實時資訊</h2>
+    <main class="site-container">
+        <div>
+            <h2 class="page-title">熱帶氣旋實時資訊</h2>
         </div>
 
-        <div class="tc-info-card">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                <i class="fa-solid fa-triangle-exclamation text-primary mr-2"></i>
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fa-solid fa-triangle-exclamation card-title-icon"></i>
                 澳門氣象中心警報信號介紹
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -118,8 +126,8 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-md p-4 mb-4 tc-hidden">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">圖例說明</h3>
+        <div class="card tc-hidden">
+            <h3 class="card-title">圖例說明</h3>
             <div class="flex flex-wrap items-center">
                 <div class="legend-item">
                     <span class="legend-dot bg-tc_low"></span>
@@ -160,17 +168,17 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-md p-4 mb-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                <i class="fa-solid fa-map-location-dot text-primary mr-2"></i>
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fa-solid fa-map-location-dot card-title-icon"></i>
                 熱帶氣旋路徑預報
             </h3>
             <div id="typhoonMap"></div>
         </div>
 
-        <div class="tc-info-card">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                <i class="fa-solid fa-shield-halved text-primary mr-2"></i>
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fa-solid fa-shield-halved card-title-icon"></i>
                 影響分析
             </h3>
             <div class="grid md:grid-cols-2 gap-4">
@@ -182,14 +190,13 @@
                         <li>請密切關注澳門氣象局資訊及本中心後續更新</li>
                     </ul>
                 </div>
-                <div>
-                </div>
+                <div></div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-white py-6 mt-8">
-        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+    <footer class="bg-card py-6 mt-8">
+        <div class="site-container text-center text-gray-500 text-sm">
             <p>©2025 澳門氣象中心 </p>
             <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
         </div>
@@ -360,4 +367,3 @@
     </script>
 </body>
 </html>
-
