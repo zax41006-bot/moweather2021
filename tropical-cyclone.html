@@ -68,6 +68,7 @@
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
             </div>
             
+            <!-- 電腦端導航：僅熱帶氣旋資訊高亮 -->
             <nav class="hidden md:flex items-center gap-1">
                 <a href="index.html" class="nav-link">首頁</a>
                 <a href="tropical-cyclone.html" class="nav-link nav-link-active">熱帶氣旋資訊</a>
@@ -79,11 +80,12 @@
                 <i id="menuIcon" class="fa fa-bars text-xl"></i>
             </button>
             
+            <!-- 手機端菜單：僅熱帶氣旋資訊藍色高亮，首頁還原默認灰色 -->
             <div id="mobileMenu" class="mobile-menu mobile-menu-hidden md:hidden">
-                <a href="index.html" class="block px-4 py-2 hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
                 <a href="tropical-cyclone.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">熱帶氣旋資訊</a>
                 <span class="block px-4 py-2 text-gray-400">/</span>
-                <a href="about.html" class="block px-4 py-2 hover:bg-blue-50 transition-colors">關於我們</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
             </div>
         </div>
     </header>
