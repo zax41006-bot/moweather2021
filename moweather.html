@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>澳門氣象中心 | 首頁</title>
+    <link rel="icon" href="mmclogo.jpg" type="澳門氣象中心">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome (導航欄圖標) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    
+    <!-- 自定義配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        secondary: '#E3F2FD',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .weather-card { @apply bg-white rounded-xl shadow-md; }
+            .forecast-day { @apply w-24 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; }
+            .smg-icon { @apply w-10 h-10 my-2 object-contain; }
+            .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; }
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .mobile-menu { @apply hidden absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50; }
+            .forecast-container { @apply flex min-w-max justify-center; }
+        }
+        
+        body { background-color: #E3F2FD; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen relative">
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
+            </div>
+            
+            <!-- 電腦端導航菜單（新增熱帶氣旋鏈接） -->
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="moweather.html" class="nav-link font-medium text-primary">首頁</a>
+                <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
+                <a href="#" class="nav-link">/</a>
+                <a href="about.html" class="nav-link">關於我們</a>
+            </nav>
+            
+            <!-- 手機端菜單按鈕 -->
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+            
+            <!-- 手機端下拉菜單（新增熱帶氣旋鏈接） -->
+            <div id="mobileMenu" class="mobile-menu md:hidden">
+                <a href="index.html" class="block px-4 py-2 text-primary font-medium">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">熱帶氣旋資訊</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">/</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">關於我們</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- 天氣警報 -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">現時生效天氣警報</h2>
+            <div class="weather-card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center gap-4 mb-4 md:mb-0">
+                        <p class="text-gray-600">暫無生效天氣警報</p>
+                    </div>
+                     <p class="text-gray-600 text-sm">
+                        (發佈/更新時間：/)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 一日天氣預報 -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">明日天氣預報</h2>
+            <div class="weather-card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center gap-4 mb-4 md:mb-0">
+                        <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                        <div>
+                            <h3 class="text-lg font-semibold">12-12（五）</h3>
+                            <p class="text-gray-600 text-sm">受偏東氣流影響。多雲。部分時間有陽光。吹3至5級偏東風及有陣風。</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 text-center">
+                        <div>
+                            <p class="text-xs text-gray-500">最高氣溫</p>
+                            <p class="text-xl font-bold text-red-500">24°C</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">最低氣溫</p>
+                            <p class="text-xl font-bold text-blue-500">18°C</p>
+                        </div>
+                    </div>
+                     <p class="text-gray-600 text-sm mt-4 md:mt-0">
+                        (發佈/更新時間：2025年12月11日21時00分)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 七日預報 -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">七日天氣預報</h2>
+            <div class="weather-card overflow-hidden">
+                <!-- 七日天氣展望 -->
+                <div class="forecast-outlook">
+                    <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
+                    <p class="text-gray-600 text-sm">
+                        受偏東氣流影響，明日本澳風勢較大。星期六，受冬季季候風及廣闊雲雨帶影響，本澳氣溫顯著下降，有幾陣雨，風勢頗大，風寒效應顯著。隨後持續受冬季季候風及其相關乾燥氣流影響，下周初期天氣主要以多雲及乾燥天氣爲主。下周中期，天色好轉及氣溫回升。
+                    </p>
+                </div>
+
+                <!-- 七日預報內容 -->
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <div class="forecast-container">
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-12 (五)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-primary text-sm">18~24°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-13 (六)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c12.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-blue-500 text-sm">15~21°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-14 (日)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-primary text-sm">12~18°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-15 (一)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-primary text-sm">14~20°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-16 (二)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-primary text-sm">16~23°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-17 (三)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-primary text-sm">17~25°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-18 (四)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="smg-icon">
+                                <p class="font-bold text-primary text-sm">17~25°C</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 溫度趨勢圖 -->
+                    <div class="p-6 border-t border-gray-100 mt-2">
+                        <h3 class="text-base font-semibold mb-3">七日氣溫預報</h3>
+                        <div class="h-56 bg-white/50 p-2 rounded-lg">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm text-center mt-2">
+                        (發佈/更新時間：2025年12月12日21時00分)
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2025 澳門氣象中心 | 圖示來源：澳門氣象局官方網站</p>
+            <p class="mt-1">數據僅供參考，請以氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+    <!-- 腳本：手機端菜單切換 + 溫度圖表 -->
+    <script>
+        // 手機端導航菜單切換
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 溫度圖表
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('tempChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17', '12-18'],
+                    datasets: [
+                        {
+                            label: '最高氣溫',
+                            data: [24,21,18,20,23,25,25],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239,68,68,0.1)',
+                            tension: 0.5,
+                            fill: true
+                        },
+                        {
+                            label: '最低氣溫',
+                            data: [18,15,12,14,16,17,17],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59,130,246,0.1)',
+                            tension: 0.5,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 10,
+                            max: 30,
+                            ticks: {
+                                stepSize: 5,
+                                callback: function(value) {
+                                    return value + '°C';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

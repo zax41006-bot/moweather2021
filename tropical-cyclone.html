@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>澳門氣象中心 | 熱帶氣旋資訊</title>
+    <link rel="icon" href="mmclogo.jpg" type="澳門氣象中心">
+    <!-- Tailwind CSS (匹配主站) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome (導航欄圖標) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- GIS 核心庫 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- 自定義配置 (匹配主站) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        secondary: '#E3F2FD',
+                        // 熱帶氣旋強度配色
+                        tc_low: '#BDBDBD',      // 低壓區
+                        tc_td: '#FFF176',      // 熱帶低氣壓-黃
+                        tc_storm: '#64B5F6',    // 熱帶風暴-藍
+                        tc_strong_storm: '#4CAF50', // 強烈熱帶風暴-綠
+                        tc_typhoon: '#FFB74D',  // 颱風-橙
+                        tc_strong_typhoon: '#FF7043', // 強颱風-紅
+                        tc_super_typhoon: '#BA68C8', // 超強颱風-紫
+                        tc_path_past: '#43A047', // 過去路徑-深綠
+                        tc_path_forecast: '#1976D2', // 預報路徑-藍
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .weather-card { @apply bg-white rounded-xl shadow-md; }
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .mobile-menu { @apply hidden absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50; }
+            .tc-info-card { @apply bg-white rounded-xl shadow-md p-4 mb-4; }
+            .tc-strength-badge { @apply inline-block px-3 py-1 rounded-full text-white text-sm font-medium; }
+            .legend-item { @apply inline-flex items-center mr-4 text-sm; }
+            .legend-dot { @apply w-3 h-3 rounded-full mr-2 border border-white shadow-sm; }
+            .legend-line { @apply w-6 h-0.5 mr-2; }
+        }
+        
+        body { background-color: #E3F2FD; }
+        #typhoonMap { width: 100%; height: 600px; border-radius: 0.75rem; }
+        .tc-popup { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen relative">
+    <!-- 統一頁頭 (完全匹配主站) -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
+            </div>
+            
+            <!-- 電腦端導航菜單 -->
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="moweather.html" class="nav-link font-medium text-primary">首頁</a>
+                <a href="tropical-cyclone.html" class="nav-link text-primary font-medium">熱帶氣旋資訊</a>
+                <a href="#" class="nav-link">/</a>
+                <a href="about.html" class="nav-link">關於我們</a>
+            </nav>
+            
+            <!-- 手機端菜單按鈕 -->
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+            
+            <!-- 手機端下拉菜單 -->
+            <div id="mobileMenu" class="mobile-menu md:hidden">
+                <a href="index.html" class="block px-4 py-2 text-primary font-medium">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">熱帶氣旋資訊</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">/</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">關於我們</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 頁面標題 -->
+        <div class="mb-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary mb-2">熱帶氣旋實時資訊</h2>
+        </div>
+
+        <!-- 熱帶氣旋警報信號 -->
+        <div class="tc-info-card">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fa-solid fa-triangle-exclamation text-primary mr-2"></i>
+                澳門氣象中心警報信號介紹
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
+                    <h4 class="font-medium text-sm mb-1">潛在熱帶氣旋的低壓區影響警報</h4>
+                    <p class="text-xs text-gray-600">預測該低壓區在未來24小時發展為熱帶氣旋的機會為高，預計可能受其影響。</p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
+                    <h4 class="font-medium text-sm mb-1">颱風綠色警報</h4>
+                    <p class="text-xs text-gray-600">熱帶氣旋集結於澳門800公里範圍內，預計可能受熱帶氣旋影響。</p>
+                </div>
+                <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
+                    <h4 class="font-medium text-sm mb-1">颱風藍色警報</h4>
+                    <p class="text-xs text-gray-600">澳門受到熱帶氣旋的影響，持續風速現正或預測將達41公里/小時至62公里/小時，陣風約達至110公里/小時。</p>
+                </div>
+                <div class="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-500">
+                    <h4 class="font-medium text-sm mb-1">颱風黃色警報</h4>
+                    <p class="text-xs text-gray-600">澳門受到熱帶氣旋的影響，持續風速現正或預測將達63公里/小時至117公里/小時，陣風約達至180公里/小時。劃分為東北、東南、西南和西北，指示方位為未來數小時內的可能風向。</p>
+                </div>
+                <div class="bg-orange-50 p-3 rounded-lg border-l-4 border-orange-500">
+                    <h4 class="font-medium text-sm mb-1">颱風橙色警報</h4>
+                    <p class="text-xs text-gray-600">熱帶氣旋中心正進一步接近當地或熱帶氣旋（強烈熱帶風暴級別）中心會在當地附近經過，持續風速已達63公里/小時至117公里/小時，且現正或預測將顯著加強。</p>
+                </div>
+                <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
+                    <h4 class="font-medium text-sm mb-1">颱風紅色警報</h4>
+                    <p class="text-xs text-gray-600">熱帶氣旋（颱風或以上級別）中心會在當地附近經過，持續風速現正或預測將達118公里/小時或以上，並伴有強烈陣風。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 圖例說明 -->
+        <div class="bg-white rounded-xl shadow-md p-4 mb-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">圖例說明</h3>
+            <div class="flex flex-wrap items-center">
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_low"></span>
+                    <span>低壓區</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_td"></span>
+                    <span>熱帶低氣壓</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_storm"></span>
+                    <span>熱帶風暴</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_strong_storm"></span>
+                    <span>強烈熱帶風暴</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_typhoon"></span>
+                    <span>颱風</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_strong_typhoon"></span>
+                    <span>強颱風</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot bg-tc_super_typhoon"></span>
+                    <span>超強颱風</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-line bg-tc_path_past"></span>
+                    <span>過去路徑 (實線)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-line bg-tc_path_forecast border-b border-white border-dashed"></span>
+                    <span>預報路徑 (虛線)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GIS地圖容器 (強化資訊展示) -->
+        <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fa-solid fa-map-location-dot text-primary mr-2"></i>
+                熱帶氣旋路徑預報
+            </h3>
+            <div id="typhoonMap"></div>
+        </div>
+
+        <!-- 影響分析與建議 -->
+        <div class="tc-info-card">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fa-solid fa-shield-halved text-primary mr-2"></i>
+                影響分析
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="font-medium text-sm text-gray-700 mb-2">影響分析：</h4>
+                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                        <li>/</li>
+                        <li>/</li>
+                        <li>/</li>
+                        <li>/</li>
+                    </ul>
+                </div>
+                <div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 統一頁尾 (完全匹配主站) -->
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2025 澳門氣象中心 | 圖示來源：澳門氣象局官方網站</p>
+            <p class="mt-1">數據僅供參考，請以氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+    <script>
+        // 移動端菜單交互
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 1. 初始化GIS地圖 (以澳門為中心)
+        //const map = L.map('typhoonMap').setView([22.1987, 113.5439], 7);
+        
+        // 2. 加載高德地圖底圖 (適配澳門地區)
+        L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+            subdomains: ['1', '2', '3', '4'],
+            attribution: '© 高德地圖'
+        }).addTo(map);
+
+        // 3. 熱帶氣旋強度顏色配置
+        const getTcColor = (speed) => {
+            if (speed <= 40) return '#BDBDBD';    // 低壓區
+            if (speed <= 62) return '#FFF176';    // 熱帶低氣壓
+            if (speed <= 88) return '#64B5F6';    // 熱帶風暴
+            if (speed <= 117) return '#4CAF50';   // 強烈熱帶風暴
+            if (speed <= 149) return '#FFB74D';   // 颱風
+            if (speed <= 184) return '#FF7043';   // 強颱風
+            return '#BA68C8';                     // 超強颱風
+        };
+
+        // 4. 熱帶氣旋路徑數據 (包含詳細屬性)
+        const tcPathData = [
+            // 過去路徑點 (包含時間、風速、氣壓)
+            { lat: 18.5, lng: 116.0, speed: 55, pressure: 1002, time: "08-10 08:00", type: "熱帶低氣壓" },
+            { lat: 18.2, lng: 115.8, speed: 65, pressure: 998, time: "08-10 11:00", type: "熱帶風暴" },
+            { lat: 18.0, lng: 115.5, speed: 75, pressure: 995, time: "08-10 14:00", type: "熱帶風暴" },
+            { lat: 18.5, lng: 114.8, speed: 85, pressure: 990, time: "08-10 17:00", type: "熱帶風暴" },
+            
+            // 預報路徑點
+            { lat: 19.8, lng: 113.0, speed: 110, pressure: 980, time: "08-11 17:00", type: "強烈熱帶風暴" },
+            { lat: 21.0, lng: 111.0, speed: 145, pressure: 965, time: "08-12 17:00", type: "颱風" },
+            { lat: 22.0, lng: 107.5, speed: 110, pressure: 980, time: "08-13 17:00", type: "強烈熱帶風暴" },
+            { lat: 22.3, lng: 103.2, speed: 65, pressure: 998, time: "08-14 17:00", type: "熱帶風暴" },
+            { lat: 22.5, lng: 100.0, speed: 35, pressure: 1000, time: "08-15 17:00", type: "低壓區" }
+        ];
+
+        // 5. 拆分過去/預報路徑
+        const currentIdx = 3; // 當前位置索引
+        const pastPoints = tcPathData.slice(0, currentIdx + 1).map(p => [p.lat, p.lng]);
+        const forecastPoints = tcPathData.slice(currentIdx).map(p => [p.lat, p.lng]);
+
+        // 6. 繪製路徑線
+        // 過去路徑 - 深綠色實線
+        L.polyline(pastPoints, {
+            color: '#43A047',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: ''
+        }).addTo(map);
+
+        // 預報路徑 - 藍色虛線
+        L.polyline(forecastPoints, {
+            color: '#1976D2',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '8,4'
+        }).addTo(map);
+
+        // 7. 繪製路徑點 (帶詳細彈窗信息)
+        tcPathData.forEach((point, idx) => {
+            const color = getTcColor(point.speed);
+            const isCurrent = idx === currentIdx;
+            
+            // 自定義標記樣式
+            const markerHtml = `
+                <div style="
+                    width: ${isCurrent ? 16 : 12}px;
+                    height: ${isCurrent ? 16 : 12}px;
+                    border-radius: 50%;
+                    background: ${color};
+                    border: 2px solid white;
+                    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+                    ${isCurrent ? 'transform: scale(1.2);' : ''}
+                "></div>
+            `;
+
+            // 創建標記
+            const marker = L.marker([point.lat, point.lng], {
+                icon: L.divIcon({
+                    html: markerHtml,
+                    className: '',
+                    iconSize: [isCurrent ? 16 : 12, isCurrent ? 16 : 12]
+                })
+            }).addTo(map);
+
+            // 添加詳細彈窗信息
+            marker.bindPopup(`
+                <div class="tc-popup text-sm">
+                    <div class="font-medium mb-1">${point.time}</div>
+                    <div>強度：${point.type}</div>
+                    <div>風速：${point.speed} km/h</div>
+                    <div>氣壓：${point.pressure} hPa</div>
+                    <div>位置：${point.lat}°N, ${point.lng}°E</div>
+                </div>
+            `);
+        });
+
+        // 8. 澳門位置標記 (突出顯示)
+        L.marker([22.17, 113.55], {
+            icon: L.divIcon({
+                html: `
+                    <div style="
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        background: #1E88E5;
+                        border: 2px solid white;
+                        box-shadow: 0 0 4px rgba(0,0,0,0.4);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-size: 8px;
+                        font-weight: bold;
+                    ">MO</div>
+                `,
+                className: '',
+                iconSize: [18, 18]
+            })
+        }).addTo(map).bindPopup(`
+            <div class="tc-popup text-sm">
+                <div class="font-medium">澳門</div>
+                <div>22.1987°N, 113.5439°E</div>
+            </div>
+        `);
+
+        // 9. 調整地圖視圖範圍
+        const allPoints = tcPathData.map(p => [p.lat, p.lng]);
+        map.fitBounds(L.polyline(allPoints).getBounds(), { 
+            padding: [80, 80],
+            maxZoom: 9
+        });
+    </script>
+</body>
+</html>
