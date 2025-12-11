@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>澳門氣象中心 | 首頁</title>
-    <link rel="icon" href="mmclogo.jpg" type="澳門氣象中心">
-    <!-- Tailwind CSS -->
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome (導航欄圖標) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     
-    <!-- 自定義配置 -->
     <script>
         tailwind.config = {
             theme: {
@@ -42,13 +39,12 @@
 </head>
 <body class="font-sans text-gray-800 min-h-screen relative">
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
             </div>
             
-            <!-- 電腦端導航菜單（新增熱帶氣旋鏈接） -->
             <nav class="hidden md:flex items-center gap-1">
                 <a href="index.html" class="nav-link font-medium text-primary">首頁</a>
                 <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
@@ -56,12 +52,10 @@
                 <a href="about.html" class="nav-link">關於我們</a>
             </nav>
             
-            <!-- 手機端菜單按鈕 -->
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60">
                 <i class="fa fa-bars text-xl"></i>
             </button>
             
-            <!-- 手機端下拉菜單（新增熱帶氣旋鏈接） -->
             <div id="mobileMenu" class="mobile-menu md:hidden">
                 <a href="index.html" class="block px-4 py-2 text-primary font-medium">首頁</a>
                 <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">熱帶氣旋資訊</a>
@@ -72,9 +66,8 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <!-- 天氣警報 -->
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">現時生效天氣警報</h2>
+            <h2 class="text-xl font-bold mb-4">現時生效天氣警報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
@@ -87,7 +80,6 @@
             </div>
         </section>
 
-        <!-- 一日天氣預報 -->
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">明日天氣預報</h2>
             <div class="weather-card p-6">
@@ -116,11 +108,9 @@
             </div>
         </section>
 
-        <!-- 七日預報 -->
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">七日天氣預報</h2>
             <div class="weather-card overflow-hidden">
-                <!-- 七日天氣展望 -->
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
@@ -128,7 +118,6 @@
                     </p>
                 </div>
 
-                <!-- 七日預報內容 -->
                 <div class="p-4">
                     <div class="overflow-x-auto">
                         <div class="forecast-container">
@@ -170,7 +159,6 @@
                         </div>
                     </div>
                     
-                    <!-- 溫度趨勢圖 -->
                     <div class="p-6 border-t border-gray-100 mt-2">
                         <h3 class="text-base font-semibold mb-3">七日氣溫預報</h3>
                         <div class="h-56 bg-white/50 p-2 rounded-lg">
@@ -192,16 +180,45 @@
         </div>
     </footer>
 
-    <!-- 腳本：手機端菜單切換 + 溫度圖表 -->
     <script>
-        // 手機端導航菜單切換
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // 溫度圖表
         document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); // 防止事件冒泡
+                mobileMenu.classList.toggle('hidden');
+                
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                    // 恢復按鈕圖標
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+
             const ctx = document.getElementById('tempChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
@@ -247,4 +264,3 @@
     </script>
 </body>
 </html>
-
