@@ -7,7 +7,6 @@
     <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     
     <script>
@@ -52,8 +51,9 @@
                 <a href="about.html" class="nav-link">關於我們</a>
             </nav>
             
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60">
-                <i class="fa fa-bars text-xl"></i>
+            <!-- 修復按鈕結構，確保圖標切換穩定 -->
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60 p-2">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
             </button>
             
             <div id="mobileMenu" class="mobile-menu md:hidden">
@@ -182,43 +182,57 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 獲取核心元素
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
             
-            mobileMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation(); // 防止事件冒泡
-                mobileMenu.classList.toggle('hidden');
-                
-                const icon = this.querySelector('i');
-                if (mobileMenu.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+            // 統一的圖標切換函數
+            const toggleMenuIcon = (isOpen) => {
+                if (isOpen) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
                 } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
                 }
+            };
+            
+            // 菜單切換主函數
+            const toggleMobileMenu = () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                // 切換菜單顯示狀態
+                mobileMenu.classList.toggle('hidden');
+                // 同步切換圖標
+                toggleMenuIcon(!isHidden);
+            };
+            
+            // 按鈕點擊事件（核心修復：直接調用統一函數）
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleMobileMenu();
             });
             
+            // 點擊頁面其他區域關閉菜單
             document.addEventListener('click', function(e) {
                 if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    mobileMenu.classList.add('hidden');
-                    // 恢復按鈕圖標
-                    const icon = mobileMenuBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        toggleMenuIcon(false); // 強制恢復菜單圖標
+                    }
                 }
             });
             
+            // 菜單鏈接點擊後關閉菜單
             const menuLinks = mobileMenu.querySelectorAll('a');
             menuLinks.forEach(link => {
                 link.addEventListener('click', function() {
                     mobileMenu.classList.add('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    toggleMenuIcon(false); // 強制恢復菜單圖標
                 });
             });
 
+            // 氣溫圖表初始化
             const ctx = document.getElementById('tempChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
@@ -264,5 +278,3 @@
     </script>
 </body>
 </html>
-
-
