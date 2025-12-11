@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>澳門氣象中心 | 關於我們</title>
     <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,15 +24,17 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .mobile-menu { @apply hidden absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50; }
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
             .about-card { @apply bg-white rounded-xl shadow-md p-6 mb-6; }
         }
         body { background-color: #E3F2FD; }
+        header { position: relative; z-index: 999; }
     </style>
 </head>
-<body class="font-sans text-gray-800 min-h-screen relative">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
+<body class="font-sans text-gray-800 min-h-screen">
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
@@ -45,14 +47,14 @@
                 <a href="about.html" class="nav-link text-primary font-medium">關於我們</a>
             </nav>
             
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60">
-                <i class="fa fa-bars text-xl"></i>
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
             </button>
             
-            <div id="mobileMenu" class="mobile-menu md:hidden">
-                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">首頁</a>
-                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">熱帶氣旋資訊</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">/</a>
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">/</a>
                 <a href="about.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">關於我們</a>
             </div>
         </div>
@@ -69,7 +71,7 @@
                 基礎概況
             </h3>
             <div class="space-y-3 text-gray-700">
-                <p>澳門氣象中心是在<span class="font-medium text-primary">2021年09月28日</span>成立的<span class="font-medium"></span>，由一個熱愛氣象的人建立的。</p>
+                <p>澳門氣象中心是在<span class="font-medium text-primary">2021年09月28日</span>成立的，由一個熱愛氣象的人建立的。</p>
             </div>
         </div>
 
@@ -81,7 +83,7 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
                     <ul class="space-y-1 text-gray-700 list-disc list-inside text-sm">
-                        <p>希望提供更多天氣資訊給大衆</p>
+                        <li>希望提供更多天氣資訊給大衆</li>
                     </ul>
                 </div>
             </div>
@@ -147,45 +149,46 @@
         document.addEventListener('DOMContentLoaded', () => {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            const toggleMenuIcon = (isOpen) => {
+                if (isOpen) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                } else {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            };
+            
+            const toggleMobileMenu = () => {
+                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                toggleMenuIcon(!isHidden);
+            };
             
             mobileMenuBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                mobileMenu.classList.toggle('hidden');
-                
-                const icon = this.querySelector('i');
-                if (mobileMenu.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
+                toggleMobileMenu();
             });
             
             document.addEventListener('click', function(e) {
                 if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    mobileMenu.classList.add('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
+                        mobileMenu.classList.add('mobile-menu-hidden');
+                        toggleMenuIcon(false);
+                    }
                 }
             });
             
             const menuLinks = mobileMenu.querySelectorAll('a');
             menuLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    mobileMenu.classList.add('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    toggleMenuIcon(false);
                 });
             });
         });
     </script>
 </body>
 </html>
-
-
-
-
-
