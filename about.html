@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>澳門氣象中心 | 關於我們</title>
-    <link rel="icon" href="mmclogo.jpg" type="澳門氣象中心">
-    <!-- Tailwind CSS -->
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- 自定義配置 -->
     <script>
         tailwind.config = {
             theme: {
@@ -34,15 +31,13 @@
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen relative">
-    <!-- 頁頭 (與主站完全一致) -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
             </div>
             
-            <!-- 電腦端導航 -->
             <nav class="hidden md:flex items-center gap-1">
                 <a href="index.html" class="nav-link font-medium">首頁</a>
                 <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
@@ -50,12 +45,10 @@
                 <a href="about.html" class="nav-link text-primary font-medium">關於我們</a>
             </nav>
             
-            <!-- 手機端菜單按鈕 -->
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none">
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60">
                 <i class="fa fa-bars text-xl"></i>
             </button>
             
-            <!-- 手機端菜單 -->
             <div id="mobileMenu" class="mobile-menu md:hidden">
                 <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">首頁</a>
                 <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">熱帶氣旋資訊</a>
@@ -65,14 +58,11 @@
         </div>
     </header>
 
-    <!-- 主要內容 -->
     <main class="container mx-auto px-4 py-6">
-        <!-- 頁面標題 -->
         <div class="mb-6">
             <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary mb-2">關於我們</h2>
         </div>
 
-        <!-- 1. 基礎概況 -->
         <div class="about-card">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <i class="fa-solid fa-calendar-check text-primary mr-2"></i>
@@ -83,7 +73,6 @@
             </div>
         </div>
 
-        <!-- 2. 宗旨 -->
         <div class="about-card">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <i class="fa-solid fa-flag text-primary mr-2"></i>
@@ -98,7 +87,6 @@
             </div>
         </div>
 
-        <!-- 3. 服務內容 -->
         <div class="about-card">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <i class="fa-solid fa-server text-primary mr-2"></i>
@@ -118,7 +106,6 @@
             </div>
         </div>
 
-        <!-- 4. 重要聲明 -->
         <div class="about-card bg-blue-50 border border-primary/20">
             <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
                 <i class="fa-solid fa-circle-exclamation text-primary mr-2"></i>
@@ -129,7 +116,6 @@
             </p>
         </div>
 
-        <!-- 5. 聯繫方式 -->
         <div class="about-card">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <i class="fa-solid fa-paper-plane text-primary mr-2"></i>
@@ -150,7 +136,6 @@
         </div>
     </main>
 
-    <!-- 頁尾 -->
     <footer class="bg-white py-6 mt-8">
         <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
             <p>©2025 澳門氣象中心 | 圖示來源：澳門氣象局官方網站</p>
@@ -159,13 +144,45 @@
     </footer>
 
     <script>
-        // 移動端菜單交互
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('hidden');
+            
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('hidden');
+                
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
         });
     </script>
 </body>
-
 </html>
+
 
