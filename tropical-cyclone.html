@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>澳門氣象中心 | 熱帶氣旋資訊</title>
     <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,7 +36,8 @@
         @layer utilities {
             .weather-card { @apply bg-white rounded-xl shadow-md; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .mobile-menu { @apply hidden absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50; }
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
             .tc-info-card { @apply bg-white rounded-xl shadow-md p-4 mb-4; }
             .tc-strength-badge { @apply inline-block px-3 py-1 rounded-full text-white text-sm font-medium; }
             .legend-item { @apply inline-flex items-center mr-4 text-sm; }
@@ -48,11 +49,12 @@
         body { background-color: #E3F2FD; }
         #typhoonMap { width: 100%; height: 600px; border-radius: 0.75rem; }
         .tc-popup { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; }
+        header { position: relative; z-index: 999; }
     </style>
 </head>
-<body class="font-sans text-gray-800 min-h-screen relative">
+<body class="font-sans text-gray-800 min-h-screen">
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
@@ -65,15 +67,15 @@
                 <a href="about.html" class="nav-link">關於我們</a>
             </nav>
             
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60">
-                <i class="fa fa-bars text-xl"></i>
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
             </button>
             
-            <div id="mobileMenu" class="mobile-menu md:hidden">
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden md:hidden">
                 <a href="index.html" class="block px-4 py-2 text-primary font-medium">首頁</a>
                 <a href="tropical-cyclone.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">熱帶氣旋資訊</a>
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">/</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">關於我們</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">關於我們</a>
             </div>
         </div>
     </header>
@@ -116,7 +118,6 @@
             </div>
         </div>
 
-        <!-- ========== 圖例暫隱（如需顯示刪除 tc-hidden） ========== -->
         <div class="bg-white rounded-xl shadow-md p-4 mb-4 tc-hidden">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">圖例說明</h3>
             <div class="flex flex-wrap items-center">
@@ -159,7 +160,6 @@
             </div>
         </div>
 
-        <!-- ========== 地圖展示（僅顯示底圖，隱藏氣旋標記） ========== -->
         <div class="bg-white rounded-xl shadow-md p-4 mb-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
                 <i class="fa-solid fa-map-location-dot text-primary mr-2"></i>
@@ -199,41 +199,46 @@
         document.addEventListener('DOMContentLoaded', () => {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            const toggleMenuIcon = (isOpen) => {
+                if (isOpen) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                } else {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            };
+            
+            const toggleMobileMenu = () => {
+                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                toggleMenuIcon(!isHidden);
+            };
             
             mobileMenuBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                mobileMenu.classList.toggle('hidden');
-                
-                const icon = this.querySelector('i');
-                if (mobileMenu.classList.contains('hidden')) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                } else {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                }
+                toggleMobileMenu();
             });
             
             document.addEventListener('click', function(e) {
                 if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    mobileMenu.classList.add('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
+                        mobileMenu.classList.add('mobile-menu-hidden');
+                        toggleMenuIcon(false);
+                    }
                 }
             });
             
             const menuLinks = mobileMenu.querySelectorAll('a');
             menuLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    mobileMenu.classList.add('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    toggleMenuIcon(false);
                 });
             });
 
-            // ========== 地圖基礎初始化（僅顯示底圖） ==========
             const map = L.map('typhoonMap').setView([22.1987, 113.5439], 7);
             
             L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
@@ -241,7 +246,6 @@
                 attribution: '© 高德地圖'
             }).addTo(map);
 
-            // 澳門位置標記（保留）
             L.marker([22.17, 113.55], {
                 icon: L.divIcon({
                     html: `
@@ -270,7 +274,6 @@
                 </div>
             `);
 
-            // ========== 以下熱帶氣旋路徑程式碼暫註釋（如需恢復請取消註釋） ==========
             /*
             const getTcColor = (speed) => {
                 if (speed <= 40) return '#BDBDBD';
@@ -353,10 +356,8 @@
                 maxZoom: 9
             });
             */
-            // ========== 以上熱帶氣旋路徑程式碼暫註釋 ==========
         });
     </script>
 </body>
 </html>
-
 
