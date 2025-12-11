@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>澳門氣象中心 | 首頁</title>
     <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -29,16 +29,18 @@
             .smg-icon { @apply w-10 h-10 my-2 object-contain; }
             .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .mobile-menu { @apply hidden absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50; }
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
             .forecast-container { @apply flex min-w-max justify-center; }
         }
         
         body { background-color: #E3F2FD; }
+        header { position: relative; z-index: 999; }
     </style>
 </head>
-<body class="font-sans text-gray-800 min-h-screen relative">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
+<body class="font-sans text-gray-800 min-h-screen">
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
@@ -51,16 +53,15 @@
                 <a href="about.html" class="nav-link">關於我們</a>
             </nav>
             
-            <!-- 修復按鈕結構，確保圖標切換穩定 -->
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none z-60 p-2">
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
                 <i id="menuIcon" class="fa fa-bars text-xl"></i>
             </button>
             
-            <div id="mobileMenu" class="mobile-menu md:hidden">
-                <a href="index.html" class="block px-4 py-2 text-primary font-medium">首頁</a>
-                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">熱帶氣旋資訊</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">/</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50">關於我們</a>
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+                <a href="index.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">/</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
             </div>
         </div>
     </header>
@@ -182,12 +183,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 獲取核心元素
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
             const menuIcon = document.getElementById('menuIcon');
             
-            // 統一的圖標切換函數
             const toggleMenuIcon = (isOpen) => {
                 if (isOpen) {
                     menuIcon.classList.remove('fa-bars');
@@ -198,41 +197,34 @@
                 }
             };
             
-            // 菜單切換主函數
             const toggleMobileMenu = () => {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                // 切換菜單顯示狀態
-                mobileMenu.classList.toggle('hidden');
-                // 同步切換圖標
+                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
+                mobileMenu.classList.toggle('mobile-menu-hidden');
                 toggleMenuIcon(!isHidden);
             };
             
-            // 按鈕點擊事件（核心修復：直接調用統一函數）
             mobileMenuBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 toggleMobileMenu();
             });
             
-            // 點擊頁面其他區域關閉菜單
             document.addEventListener('click', function(e) {
                 if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                        toggleMenuIcon(false); // 強制恢復菜單圖標
+                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
+                        mobileMenu.classList.add('mobile-menu-hidden');
+                        toggleMenuIcon(false);
                     }
                 }
             });
             
-            // 菜單鏈接點擊後關閉菜單
             const menuLinks = mobileMenu.querySelectorAll('a');
             menuLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    mobileMenu.classList.add('hidden');
-                    toggleMenuIcon(false); // 強制恢復菜單圖標
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    toggleMenuIcon(false);
                 });
             });
 
-            // 氣溫圖表初始化
             const ctx = document.getElementById('tempChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
