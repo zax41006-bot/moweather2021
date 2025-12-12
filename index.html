@@ -26,7 +26,7 @@
         @layer utilities {
             .weather-card { @apply bg-white rounded-xl shadow-md; }
             .forecast-day { @apply w-24 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; }
-            .smg-icon { @apply w-10 h-10 my-2 object-contain; }
+            .mmc-icon { @apply w-10 h-10 my-2 object-contain; }
             .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
@@ -82,28 +82,28 @@
         </section>
 
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>
+            <h2 class="text-xl font-bold mb-4">明日天氣預報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
-                        <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                        <img src="rain1.png" alt="/" class="mmc-icon">
                         <div>
-                            <h3 class="text-lg font-semibold">12-12（五）</h3>
-                            <p class="text-gray-600 text-sm">受偏東氣流影響。多雲。部分時間有陽光。吹3至5級偏東風及有陣風。</p>
+                            <h3 class="text-lg font-semibold">12-13（六）</h3>
+                            <p class="text-gray-600 text-sm">初時受偏東氣流影響，後轉冬季季候風影響。氣溫顯著下降。大致多雲。稍後有幾陣雨。初時吹4至5級偏東風，後轉4至6級偏北風及有陣風。</p>
                         </div>
                     </div>
                     <div class="flex gap-6 text-center">
                         <div>
                             <p class="text-xs text-gray-500">最高氣溫</p>
-                            <p class="text-xl font-bold text-red-500">24°C</p>
+                            <p class="text-xl font-bold text-red-500">22°C</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500">最低氣溫</p>
-                            <p class="text-xl font-bold text-blue-500">18°C</p>
+                            <p class="text-xl font-bold text-blue-500">13°C</p>
                         </div>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2025年12月12日00時00分)
+                        (發佈/更新時間：2025年12月12日17時00分)
                     </p>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
-                        受偏東氣流影響，今日本澳風勢較大。預料明日受冬季季候風及廣闊雲雨帶影響，本澳氣溫顯著下降，有幾陣雨，風勢頗大，風寒效應顯著。隨後持續受冬季季候風及其相關乾燥氣流影響，下周初期天氣主要以多雲及乾燥天氣爲主。下周中期，季候風逐步緩和，天色好轉及氣溫回升。
+                        預料明日受冬季季候風及廣闊雲雨帶影響，本澳氣溫顯著下降，多雲及有幾陣雨，風勢頗大，風寒效應顯著。隨後持續受冬季季候風及其相關乾燥氣流影響，下周初期天氣主要以多雲及乾燥天氣爲主。下周中期，季候風逐步緩和，天色好轉及氣溫回升。下周中後期，受高空槽及暖濕氣流共同影響，華南沿岸天氣漸轉不穩定。
                     </p>
                 </div>
 
@@ -123,38 +123,38 @@
                     <div class="overflow-x-auto">
                         <div class="forecast-container">
                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">12-12 (五)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
-                                <p class="font-bold text-primary text-sm">18~24°C</p>
-                            </div>
-                            <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-13 (六)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c12.png" alt="/" class="smg-icon">
-                                <p class="font-bold text-blue-500 text-sm">15~21°C</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c12.png" alt="/" class="mmc-icon">
+                                <p class="font-bold text-blue-500 text-sm">13~22°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-14 (日)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="smg-icon">
-                                <p class="font-bold text-primary text-sm">12~18°C</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="mmc-icon">
+                                <p class="font-bold text-primary text-sm">11~18°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-15 (一)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">14~20°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-16 (二)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">16~23°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-17 (三)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="smg-icon">
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">17~25°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-18 (四)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="smg-icon">
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="mmc-icon">
+                                <p class="font-bold text-primary text-sm">17~25°C</p>
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-19 (五)</p>
+                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">17~25°C</p>
                             </div>
                         </div>
@@ -270,6 +270,7 @@
     </script>
 </body>
 </html>
+
 
 
 
