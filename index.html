@@ -68,6 +68,19 @@
 
     <main class="container mx-auto px-4 py-8">
         <section class="mb-8">
+           <h2 class="text-xl font-bold mb-4">特別天氣提示（本中心）</h2>
+           <div class="weather-card p-6 bg-amber-50 border border-amber-200 rounded-lg">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center gap-4 mb-4 md:mb-0">
+                        <p class="text-amber-900">預料一道冷鋒會在明日稍後橫過廣東沿岸一帶，與其相關的冬季季候風與廣闊雲雨帶會為本澳帶來多雲有雨，風勢頗大的天氣，風寒效應顯著。預料明日晚間氣溫下降至13-14度，星期日早上最低氣溫可達11-12度，天氣寒冷，請市民留意天氣變化，注意保暖。</p>
+                    </div>
+                    <p class="text-amber-800 text-sm">
+                        (發佈/更新時間：2025年12月12日17時00分)
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">現時生效天氣警報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
@@ -124,38 +137,38 @@
                         <div class="forecast-container">
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-13 (六)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c12.png" alt="/" class="mmc-icon">
+                                <img src="rain1.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-blue-500 text-sm">13~22°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-14 (日)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="mmc-icon">
+                                <img src="cloud.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">11~18°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-15 (一)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">14~20°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-16 (二)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">16~23°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-17 (三)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c02.png" alt="/" class="mmc-icon">
+                                <img src="Sun.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">17~25°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-18 (四)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud_rain.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm">17~25°C</p>
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-19 (五)</p>
-                                <img src="https://www.smg.gov.mo/assets/image/weather_named_icon/ww-c28.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">17~25°C</p>
+                                <img src="rain1.png" alt="/" class="mmc-icon">
+                                <p class="font-bold text-primary text-sm">16~23°C</p>
                             </div>
                         </div>
                     </div>
@@ -167,7 +180,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2025年12月12日00時00分)
+                        (發佈/更新時間：2025年12月12日17時00分)
                     </p>
                 </div>
             </div>
@@ -229,11 +242,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['12-12', '12-13', '12-14', '12-15', '12-16', '12-17', '12-18'],
+                    labels: ['12-13', '12-14', '12-15', '12-16', '12-17', '12-18', '12-19'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [24,21,18,20,23,25,25],
+                            data: [22,18,20,23,25,25,23],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -241,7 +254,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [18,15,12,14,16,17,17],
+                            data: [13,11,14,16,17,17,16],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
@@ -270,6 +283,7 @@
     </script>
 </body>
 </html>
+
 
 
 
