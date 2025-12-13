@@ -25,13 +25,14 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .weather-card { @apply bg-white rounded-xl shadow-md; }
-            .forecast-day { @apply w-24 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; }
-            .mmc-icon { @apply w-10 h-10 my-2 object-contain; }
+            .forecast-day { @apply w-28 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; }
+            .mmc-icon { @apply w-16 h-16 my-2 object-contain; }
             .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
             .mobile-menu-hidden { @apply hidden; }
             .forecast-container { @apply flex min-w-max justify-center; }
+            .seven-day-temp { @apply text-red-600; }
         }
         
         body { background-color: #E3F2FD; }
@@ -136,37 +137,37 @@
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-14 (日)</p>
                                 <img src="rain1.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">11~18°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">11~18°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-15 (一)</p>
                                 <img src="Sun_cloud.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">14~20°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">14~20°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-16 (二)</p>
                                 <img src="Sun_cloud.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">16~23°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">16~23°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-17 (三)</p>
                                 <img src="Sun.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">17~25°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">17~25°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-18 (四)</p>
                                 <img src="Sun_cloud_rain.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">17~25°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">17~25°C</p>
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-19 (五)</p>
                                 <img src="rain1.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">16~21°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">16~21°C</p>
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-20 (六)</p>
                                 <img src="Sun_cloud_rain.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm">17~24°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">17~24°C</p>
                             </div>
                         </div>
                     </div>
