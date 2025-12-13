@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>澳門氣象中心 | 熱帶氣旋路徑地圖</title>
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <!-- 核心依賴 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        /* 重置樣式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100vh; overflow: hidden; font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; }
+        
+        /* 頂部極簡導航 */
+        header { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            z-index: 1000; 
+            background: rgba(255,255,255,0.8); 
+            backdrop-filter: blur(4px);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0066CC;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .logo img { width: 32px; height: 32px; border-radius: 4px; }
+        
+        /* 地圖容器佔滿全螢幕 */
+        #typhoonMap { 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: 1;
+        }
+        
+        /* 地圖彈窗樣式 */
+        .tc-popup { 
+            font-size: 12px; 
+            min-width: 180px;
+        }
+        
+        /* 極簡圖例（懸浮顯示） */
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 1px solid #000; /* 黑色外圈 */
+        }
+        
+        .legend-line {
+            width: 20px;
+            height: 2px;
+            margin-right: 8px;
+        }
+        
+        /* 預報路徑虛線樣式（所有氣旋統一紅色） */
+        .legend-dashed-line {
+            width: 20px;
+            height: 2px;
+            margin-right: 8px;
+            background: linear-gradient(to right, #E60012 0%, #E60012 40%, transparent 40%, transparent 100%);
+            background-size: 6px 2px;
+        }
+
+        /* 無氣旋提示樣式 */
+        .no-tc-notice {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 998;
+            background: rgba(255,255,255,0.95);
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- 頂部極簡導航 -->
+    <header>
+        <div class="logo">
+            <img src="mmclogo.jpg" alt="澳門氣象中心">
+            <span>澳門氣象中心 - 熱帶氣旋路徑地圖</span>
+        </div>
+    </header>
+
+    <!-- 全螢幕GIS地圖 -->
+    <div id="typhoonMap"></div>
+
+    <!-- 無熱帶氣旋提示 -->
+    <div class="no-tc-notice">
+        <div style="font-weight: bold; color: #0066CC; margin-bottom: 8px;">當前無活躍熱帶氣旋</div>
+        <div>澳門氣象中心將持續監測西北太平洋及南海區域</div>
+    </div>
+
+    <!-- 極簡圖例（統一預報路徑樣式） -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #BDBDBD;"></div>
+            <span>低壓區 (≤40km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #FFF176;"></div>
+            <span>熱帶低氣壓 (41-62km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #64B5F6;"></div>
+            <span>熱帶風暴 (63-87km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #4CAF50;"></div>
+            <span>強烈熱帶風暴 (88-117km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #FFB74D;"></div>
+            <span>颱風 (118-149km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #FF7043;"></div>
+            <span>強颱風 (150-184km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot" style="background: #BA68C8;"></div>
+            <span>超強颱風 (≥185km/h)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-line" style="background: #000;"></div>
+            <span>過去路徑（所有氣旋）</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dashed-line"></div>
+            <span>預報路徑（所有氣旋）</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化全螢幕地圖
+            const map = L.map('typhoonMap').setView([21.5, 114.5], 7);
+            
+            // 加載高德地圖底圖
+            L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+                subdomains: ['1', '2', '3', '4'],
+                attribution: '© 高德地圖'
+            }).addTo(map);
+
+            // 標註澳門位置
+            L.marker([22.1987, 113.5439], {
+                icon: L.divIcon({
+                    html: `
+                        <div style="
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 50%;
+                            background: #0066CC;
+                            border: 1px solid #000; /* 黑色外圈 */
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-size: 8px;
+                            font-weight: bold;
+                        ">MO</div>
+                    `,
+                    className: '',
+                    iconSize: [18, 18]
+                })
+            }).addTo(map).bindPopup(`
+                <div class="tc-popup">
+                    <div style="font-weight: bold;">澳門</div>
+                    <div>22.1987°N, 113.5439°E</div>
+                </div>
+            `);
+
+            // 保留風速對應函數（未來可復用）
+            const getTcLevelBySpeed = (speed) => {
+                if (speed <= 40) return { level: 0, name: '低壓區', color: '#BDBDBD' };
+                if (speed <= 62) return { level: 1, name: '熱帶低氣壓', color: '#FFF176' };
+                if (speed <= 87) return { level: 2, name: '熱帶風暴', color: '#64B5F6' };
+                if (speed <= 117) return { level: 3, name: '強烈熱帶風暴', color: '#4CAF50' };
+                if (speed <= 149) return { level: 4, name: '颱風', color: '#FFB74D' };
+                if (speed <= 184) return { level: 5, name: '強颱風', color: '#FF7043' };
+                return { level: 6, name: '超強颱風', color: '#BA68C8' };
+            };
+
+            // 保留繪製函數（註釋掉調用，未來可復用）
+            const drawTcPath = (tcData, tcName) => {
+                const currentIdx = tcData.findIndex(p => p.type === "current");
+                if (currentIdx === -1) return [];
+                
+                const pastPoints = tcData.slice(0, currentIdx + 1).map(p => [p.lat, p.lng]);
+                const forecastPoints = tcData.slice(currentIdx).map(p => [p.lat, p.lng]);
+
+                L.polyline(pastPoints, {
+                    color: '#000',
+                    weight: 4,
+                    opacity: 0.8,
+                    lineCap: 'round'
+                }).addTo(map);
+
+                L.polyline(forecastPoints, {
+                    color: '#E60012',
+                    weight: 4,
+                    opacity: 0.8,
+                    dashArray: '4,8',
+                    lineCap: 'round'
+                }).addTo(map);
+
+                tcData.forEach((point) => {
+                    const tcInfo = getTcLevelBySpeed(point.speed);
+                    const isCurrent = point.type === "current";
+                    const size = isCurrent ? 12 : 10;
+
+                    const markerHtml = `
+                        <div style="
+                            width: ${size}px;
+                            height: ${size}px;
+                            border-radius: 50%;
+                            background: ${tcInfo.color};
+                            border: 1px solid #000;
+                            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+                            ${isCurrent ? 'transform: scale(1.2);' : ''}
+                        "></div>
+                    `;
+
+                    const marker = L.marker([point.lat, point.lng], {
+                        icon: L.divIcon({
+                            html: markerHtml,
+                            className: '',
+                            iconSize: [size, size]
+                        })
+                    }).addTo(map);
+
+                    let timeLabel = '';
+                    if (isCurrent) {
+                        timeLabel = `<div style="font-weight: bold; color: #E60012;">${tcName} - 目前時間：${point.time}</div>`;
+                    } else if (point.type === "forecast") {
+                        timeLabel = `<div style="font-weight: bold; color: #E60012;">${tcName} - 預報時間：${point.time}</div>`;
+                    } else {
+                        timeLabel = `<div style="font-weight: bold;">${tcName} - ${point.time}</div>`;
+                    }
+
+                    marker.bindPopup(`
+                        <div class="tc-popup">
+                            ${timeLabel}
+                            <div>強度：${tcInfo.name} (${point.speed} km/h)</div>
+                            <div>氣壓：${point.pressure} hPa</div>
+                            <div>位置：${point.lat}°N, ${point.lng}°E</div>
+                        </div>
+                    `);
+                });
+
+                return tcData.map(p => [p.lat, p.lng]);
+            };
+
+            // 註釋掉所有氣旋數據和繪製調用（保留代碼結構，未來可快速恢復）
+            /*
+            // 第一個熱帶氣旋路徑數據（熱帶氣旋A）
+            const tcPathDataA = [
+                { lat: 16.5, lng: 127.5, speed: 55, pressure: 1000, time: "08月12日02:00", type: "past" },
+                { lat: 16.8, lng: 127.0, speed: 55, pressure: 1000, time: "08月12日05:00", type: "past" },
+                { lat: 17.5, lng: 126.5, speed: 65, pressure: 998, time: "08月12日08:00", type: "past" },
+                { lat: 17.5, lng: 125.8, speed: 75, pressure: 995, time: "08月12日11:00", type: "current" },
+                { lat: 18.0, lng: 125.3, speed: 90, pressure: 985, time: "08月12日23:00", type: "forecast" },
+                { lat: 18.3, lng: 125.0, speed: 120, pressure: 975, time: "08月13日11:00", type: "forecast" },
+                { lat: 18.9, lng: 125.4, speed: 145, pressure: 960, time: "08月13日23:00", type: "forecast" },
+                { lat: 19.3, lng: 126.5, speed: 120, pressure: 975, time: "08月14日11:00", type: "forecast" },
+                { lat: 20.9, lng: 127.0, speed: 110, pressure: 980, time: "08月15日11:00", type: "forecast" },
+                { lat: 22.6, lng: 126.5, speed: 85, pressure: 995, time: "08月16日11:00", type: "forecast" },
+                { lat: 24.5, lng: 125.0, speed: 45, pressure: 998, time: "08月17日11:00", type: "forecast" },
+            ];
+
+            // 第二個熱帶氣旋路徑數據（熱帶氣旋B）
+            const tcPathDataB = [
+                { lat: 24.0, lng: 146.5, speed: 45, pressure: 1004, time: "08月11日17:00", type: "past" },
+                { lat: 24.5, lng: 146.0, speed: 55, pressure: 1002, time: "08月11日20:00", type: "past" },
+                { lat: 25.5, lng: 145.5, speed: 65, pressure: 998, time: "08月11日23:00", type: "past" },
+                { lat: 26.5, lng: 145.0, speed: 65, pressure: 998, time: "08月12日02:00", type: "past" },
+                { lat: 26.4, lng: 144.5, speed: 75, pressure: 995, time: "08月12日05:00", type: "past" },
+                { lat: 26.2, lng: 144.0, speed: 75, pressure: 995, time: "08月12日08:00", type: "past" },
+                { lat: 26.1, lng: 143.5, speed: 85, pressure: 990, time: "08月12日11:00", type: "current" },
+                { lat: 27.0, lng: 141.5, speed: 120, pressure: 975, time: "08月12日23:00", type: "forecast" },
+                { lat: 27.5, lng: 139.5, speed: 145, pressure: 960, time: "08月13日11:00", type: "forecast" },
+                { lat: 28.0, lng: 135.0, speed: 165, pressure: 948, time: "08月13日23:00", type: "forecast" },
+                { lat: 27.8, lng: 130.5, speed: 185, pressure: 935, time: "08月14日11:00", type: "forecast" },
+                { lat: 26.8, lng: 125.0, speed: 175, pressure: 938, time: "08月15日11:00", type: "forecast" },
+                { lat: 25.7, lng: 120.5, speed: 185, pressure: 935, time: "08月16日11:00", type: "forecast" },
+                { lat: 22.8, lng: 116.5, speed: 175, pressure: 940, time: "08月17日11:00", type: "forecast" },
+            ];            
+
+            // 繪製兩個熱帶氣旋（預報路徑都為紅色）
+            const pointsA = drawTcPath(tcPathDataA, "熱帶氣旋A");
+            const pointsB = drawTcPath(tcPathDataB, "熱帶氣旋B");
+
+            // 合併所有點並調整地圖視圖
+            const allPoints = [...pointsA, ...pointsB];
+            if (allPoints.length > 0) {
+                map.fitBounds(L.polyline(allPoints).getBounds(), { 
+                    padding: [80, 80],
+                    maxZoom: 9
+                });
+            }
+            */
+
+            // 允許地圖交互
+            map.scrollWheelZoom.enable();
+        });
+    </script>
+</body>
+</html>
