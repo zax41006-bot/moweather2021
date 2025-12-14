@@ -37,6 +37,7 @@
         
         body { background-color: #E3F2FD; }
         header { position: relative; z-index: 999; }
+        .windy-iframe { @apply w-full h-[500px] rounded-xl border-0; }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
@@ -67,8 +68,8 @@
         </div>
     </header>
 
-   <!-- <main class="container mx-auto px-4 py-8">
-        <section class="mb-8">
+    <main class="container mx-auto px-4 py-8">
+       <!-- <section class="mb-8">
            <h2 class="text-xl font-bold mb-4">特別天氣提示（本中心）</h2>
            <div class="weather-card p-6 bg-amber-50 border border-amber-200 rounded-lg">
                <div class="flex flex-col">
@@ -84,7 +85,7 @@
                    <div class="flex items-start gap-4 mb-3">
                         <img src="/" alt="/" class="w-16 h-16"> 
                    <div>
-                       <!--<h3 class="text-lg font-semibold text-gray-800 mb-1">黃色寒冷警報</h3>  
+                          <h3 class="text-lg font-semibold text-gray-800 mb-1">黃色寒冷警報</h3>  
                        <p class="text-gray-600">暫無天氣警報生效。</p>
                    </div>
                 </div>
@@ -184,6 +185,36 @@
                 </div>
             </div>
         </section>
+
+        <section class="mb-8">
+           <h2 class="text-xl font-bold mb-4">OpenWeatherMap</h2>
+           <div class="weather-card p-6">
+               <iframe
+                   src="https://openweathermap.org/weathermap?basemap=map&cities=true&layer=wind&lat=23.209&lon=113.076&zoom=10"
+                   width="100%" 
+                   height="500" 
+                   frameborder="0" 
+                   class="rounded-xl"
+                   title="openweathermap">
+               </iframe>
+           </div>
+        </section>
+        
+        <section class="mb-8">
+           <h2 class="text-xl font-bold mb-4">澳門地球物理氣象局實時氣象數據監測</h2>
+           <div class="weather-card p-6">
+               <div class="mb-3">
+               <iframe
+                   src="https://www.smg.gov.mo/zh/subpage/73/actualWeather" 
+                   width="100%" 
+                   height="600" 
+                   frameborder="0" 
+                   class="rounded-xl"
+                   title="澳門地球物理氣象局實時氣象數據監測">
+               </iframe>
+           </div>
+        </section>
+
     </main>
 
     <footer class="bg-white py-6 mt-8">
@@ -282,6 +313,7 @@
     </script>
 </body>
 </html>
+
 
 
 
