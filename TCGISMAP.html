@@ -260,9 +260,17 @@
                     if (isCurrent) {
                         timeLabel = `<div style="font-weight: bold; color: #E60012;">${tcName} - 目前時間：${point.time}</div>`;
                     } else if (point.type === "forecast") {
-                        timeLabel = `<div style="font-weight: bold; color: #E60012;">${tcName} - 預報時間：${point.time}</div>`;
+                        // 新增：显示预报小时数
+                        const hoursText = point.hours ? ` (預報${point.hours}小時)` : '';
+                        timeLabel = `<div style="font-weight: bold; color: #E60012;">${tcName} - 預報時間：${point.time}${hoursText}</div>`;
                     } else {
                         timeLabel = `<div style="font-weight: bold;">${tcName} - ${point.time}</div>`;
+                    }
+
+                    // 弹窗中新增预报小时数展示
+                    let hoursPopup = '';
+                    if (point.type === "forecast" && point.hours) {
+                        hoursPopup = `<div>預報時長：${point.hours} 小時</div>`;
                     }
 
                     marker.bindPopup(`
@@ -271,6 +279,7 @@
                             <div>強度：${tcInfo.name} (${point.speed} km/h)</div>
                             <div>氣壓：${point.pressure} hPa</div>
                             <div>位置：${point.lat}°N, ${point.lng}°E</div>
+                            ${hoursPopup} <!-- 新增：渲染预报小时数 -->
                         </div>
                     `);
                 });
@@ -278,23 +287,27 @@
                 return tcData.map(p => [p.lat, p.lng]);
             };
 
-            /*
-            // 第一個熱帶氣旋路徑數據（熱帶氣旋A）測試
+           /*
+           // 第一個熱帶氣旋路徑數據（熱帶氣旋A）測試 - 
+           //過去數據
             const tcPathDataA = [
-                { lat: 16.5, lng: 127.5, speed: 55, pressure: 1000, time: "08月12日02:00", type: "past" },
-                { lat: 16.8, lng: 127.0, speed: 55, pressure: 1000, time: "08月12日05:00", type: "past" },
-                { lat: 17.5, lng: 126.5, speed: 65, pressure: 998, time: "08月12日08:00", type: "past" },
-                { lat: 17.5, lng: 125.8, speed: 75, pressure: 995, time: "08月12日11:00", type: "current" },
-                { lat: 18.0, lng: 125.3, speed: 90, pressure: 985, time: "08月12日23:00", type: "forecast" },
-                { lat: 18.3, lng: 125.0, speed: 120, pressure: 975, time: "08月13日11:00", type: "forecast" },
-                { lat: 18.9, lng: 125.4, speed: 145, pressure: 960, time: "08月13日23:00", type: "forecast" },
-                { lat: 19.3, lng: 126.5, speed: 120, pressure: 975, time: "08月14日11:00", type: "forecast" },
-                { lat: 20.9, lng: 127.0, speed: 110, pressure: 980, time: "08月15日11:00", type: "forecast" },
-                { lat: 22.6, lng: 126.5, speed: 85, pressure: 995, time: "08月16日11:00", type: "forecast" },
-                { lat: 24.5, lng: 125.0, speed: 45, pressure: 998, time: "08月17日11:00", type: "forecast" },
+                {"lat": 16.5, "lng": 127.5, "speed": 55, "pressure": 1004, "time": "08月12日02時", "type": "past"},
+                {"lat": 16.8, "lng": 127.0, "speed": 55, "pressure": 1004, "time": "08月12日05時", "type": "past"},
+                {"lat": 17.5, "lng": 126.5, "speed": 65, "pressure": 998, "time": "08月12日08時", "type": "past"},
+                {"lat": 17.5, "lng": 125.8, "speed": 75, "pressure": 995, "time": "08月12日11時", "type": "current"},
+            //預報數據
+                {"lat": 18.2, "lng": 123.0, "speed": 90, "pressure": 985, "time": "08月12日23時", "type": "forecast", "hours": 12},
+                {"lat": 19.5, "lng": 120.8, "speed": 120, "pressure": 975, "time": "08月13日11時", "type": "forecast", "hours": 24},
+                {"lat": 20.2, "lng": 119.2, "speed": 140, "pressure": 960, "time": "08月13日23時", "type": "forecast", "hours": 36},
+                {"lat": 21.5, "lng": 115.8, "speed": 155, "pressure": 948, "time": "08月14日11時", "type": "forecast", "hours": 48},
+                {"lat": 20.8, "lng": 110.5, "speed": 185, "pressure": 935, "time": "08月15日11時", "type": "forecast", "hours": 72},
+                {"lat": 21.3, "lng": 105.8, "speed": 110, "pressure": 975, "time": "08月16日11時", "type": "forecast", "hours": 96},
+                {"lat": 22.3, "lng": 100.8, "speed": 35, "pressure": 998, "time": "08月17日11時", "type": "forecast", "hours": 120},
             ];
 
-            // 第二個熱帶氣旋路徑數據（熱帶氣旋B）測試
+            /*
+            // 第二個熱帶氣旋路徑數據（熱帶氣旋B）測試 - 新增hours字段
+            //過去數據
             const tcPathDataB = [
                 { lat: 24.0, lng: 146.5, speed: 45, pressure: 1004, time: "08月11日17:00", type: "past" },
                 { lat: 24.5, lng: 146.0, speed: 55, pressure: 1002, time: "08月11日20:00", type: "past" },
@@ -303,14 +316,15 @@
                 { lat: 26.4, lng: 144.5, speed: 75, pressure: 995, time: "08月12日05:00", type: "past" },
                 { lat: 26.2, lng: 144.0, speed: 75, pressure: 995, time: "08月12日08:00", type: "past" },
                 { lat: 26.1, lng: 143.5, speed: 85, pressure: 990, time: "08月12日11:00", type: "current" },
-                { lat: 27.0, lng: 141.5, speed: 120, pressure: 975, time: "08月12日23:00", type: "forecast" },
-                { lat: 27.5, lng: 139.5, speed: 145, pressure: 960, time: "08月13日11:00", type: "forecast" },
-                { lat: 28.0, lng: 135.0, speed: 165, pressure: 948, time: "08月13日23:00", type: "forecast" },
-                { lat: 27.8, lng: 130.5, speed: 185, pressure: 935, time: "08月14日11:00", type: "forecast" },
-                { lat: 26.8, lng: 125.0, speed: 175, pressure: 938, time: "08月15日11:00", type: "forecast" },
-                { lat: 25.7, lng: 120.5, speed: 185, pressure: 935, time: "08月16日11:00", type: "forecast" },
-                { lat: 22.8, lng: 116.5, speed: 175, pressure: 940, time: "08月17日11:00", type: "forecast" },
-            ];           
+            //預報數據
+                { lat: 27.0, lng: 141.5, speed: 120, pressure: 975, time: "08月12日23:00", type: "forecast", "hours": 12 },
+                { lat: 27.5, lng: 139.5, speed: 145, pressure: 960, time: "08月13日11:00", type: "forecast", "hours": 24 },
+                { lat: 28.0, lng: 135.0, speed: 165, pressure: 948, time: "08月13日23:00", type: "forecast", "hours": 36 },
+                { lat: 27.8, lng: 130.5, speed: 185, pressure: 935, time: "08月14日11:00", type: "forecast", "hours": 48 },
+                { lat: 26.8, lng: 125.0, speed: 175, pressure: 938, time: "08月15日11:00", type: "forecast", "hours": 72 },
+                { lat: 25.7, lng: 120.5, speed: 185, pressure: 935, time: "08月16日11:00", type: "forecast", "hours": 96 },
+                { lat: 22.8, lng: 116.5, speed: 175, pressure: 940, time: "08月17日11:00", type: "forecast", "hours": 120 },
+            ];   */      
 
             // 繪製兩個熱帶氣旋（預報路徑都為紅色）
             const pointsA = drawTcPath(tcPathDataA, "熱帶氣旋A");
@@ -324,7 +338,6 @@
                     maxZoom: 9
                 });
             }
-            */
 
             map.scrollWheelZoom.enable();
         });
