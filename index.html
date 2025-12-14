@@ -67,7 +67,7 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
+   <!-- <main class="container mx-auto px-4 py-8">
         <section class="mb-8">
            <h2 class="text-xl font-bold mb-4">特別天氣提示（本中心）</h2>
            <div class="weather-card p-6 bg-amber-50 border border-amber-200 rounded-lg">
@@ -76,22 +76,22 @@
                    <p class="text-amber-800 text-sm align-self-end"> (發佈/更新時間：2025年12月13日19時15分)</p>
                </div>
            </div>
-        </section>
-         <section class="mb-8">
+        </section>-->
+       <!--  <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">現時生效天氣警報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col">
                    <div class="flex items-start gap-4 mb-3">
-                       <!-- <img src="/" alt="/" class="w-16 h-16"> -->
+                        <img src="/" alt="/" class="w-16 h-16"> 
                    <div>
-                       <!--<h3 class="text-lg font-semibold text-gray-800 mb-1">黃色寒冷警報</h3>  -->
-                       <p class="text-gray-600">所有寒冷天氣警報於2025年12月14日12時15分取消。</p>
+                       <!--<h3 class="text-lg font-semibold text-gray-800 mb-1">黃色寒冷警報</h3>  
+                       <p class="text-gray-600">暫無天氣警報生效。</p>
                    </div>
                 </div>
-                <p class="text-amber-800 text-sm align-self-end mt-2">  (發佈/更新時間：2025年12月14日12時15分）  </p>
+                <p class="text-amber-800 text-sm align-self-end mt-2">  (發佈/更新時間：/）  </p>
             </div>
            </div>
-         </section>
+         </section>-->
 
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>
@@ -100,14 +100,14 @@
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
                         <img src="Sun_cloud.png" alt="/" class="mmc-icon">
                         <div>
-                            <h3 class="text-lg font-semibold">12-14（日）</h3>
-                            <p class="text-gray-600 text-sm">受冬季季候風。多雲。短暫時間有陽光。吹4至5級偏北風及有陣風。</p>
+                            <h3 class="text-lg font-semibold">12-15（一）</h3>
+                            <p class="text-gray-600 text-sm">受冬季季候風。大致天晴。後轉多雲。吹2至4級北至東北風。</p>
                         </div>
                     </div>
                     <div class="flex gap-6 text-center">
                         <div>
                             <p class="text-xs text-gray-500">最高氣溫</p>
-                            <p class="text-xl font-bold text-red-500">19°C</p>
+                            <p class="text-xl font-bold text-red-500">20°C</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500">最低氣溫</p>
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2025年12月14日12時25分)
+                        (發佈/更新時間：2025年12月14日22時30分)
                     </p>
                 </div>
             </div>
@@ -135,14 +135,9 @@
                     <div class="overflow-x-auto">
                         <div class="forecast-container">
                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">12-14 (日)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm seven-day-temp">13~19°C</p>
-                            </div>
-                            <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-15 (一)</p>
                                 <img src="Sun_cloud.png" alt="/" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm seven-day-temp">14~20°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">13~20°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-16 (二)</p>
@@ -168,6 +163,11 @@
                                 <p class="text-xs text-green-600">12-20 (六)</p>
                                 <img src="Sun_cloud_rain.png" alt="/" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">17~24°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-21 (日)</p>
+                                <img src="Sun.png" alt="/" class="mmc-icon">
+                                <p class="font-bold text-primary text-sm seven-day-temp">18~25°C</p>
                             </div>
                         </div>
                     </div>
@@ -241,11 +241,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['12-14', '12-15', '12-16', '12-17', '12-18', '12-19', '12-20'],
+                    labels: ['12-15', '12-16', '12-17', '12-18', '12-19', '12-20', '12-21'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [19,20,23,25,25,21,24],
+                            data: [20,23,25,25,21,24,25],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -253,7 +253,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [13,14,16,17,17,16,17],
+                            data: [13,16,17,17,16,17,18],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
@@ -282,6 +282,7 @@
     </script>
 </body>
 </html>
+
 
 
 
