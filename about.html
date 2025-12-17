@@ -24,6 +24,7 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
             .mobile-menu-hidden { @apply hidden; }
             .about-card { @apply bg-white rounded-xl shadow-md p-6 mb-6; }
@@ -41,10 +42,10 @@
             </div>
             
             <nav class="hidden md:flex items-center gap-1">
-                <a href="index.html" class="nav-link font-medium">首頁</a>
+                <a href="index.html" class="nav-link">首頁</a>
                 <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
-                <a href="#" class="nav-link">/</a>
-                <a href="about.html" class="nav-link text-primary font-medium">關於我們</a>
+                <a href="wi.html" class="nav-link">特別推送</a> 
+                <a href="about.html" class="nav-link-active">關於我們</a>
             </nav>
             
             <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
@@ -54,8 +55,8 @@
             <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
                 <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
                 <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">/</a>
-                <a href="about.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">關於我們</a>
+                <a href="wi.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">特別推送</a>
+                <a href="about.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">關於我們</a>
             </div>
         </div>
     </header>
@@ -71,7 +72,7 @@
                 基礎概況
             </h3>
             <div class="space-y-3 text-gray-700">
-                <p>澳門氣象中心是在<span class="font-medium text-primary">2021年09月28日</span>成立的，由一個熱愛氣象的人建立的。</p>
+                <p>澳門氣象中心是<span class="font-medium text-primary">2021年09月28日</span>在澳門成立的<span class="font-medium">是民間自發氣象資訊服務組織</span>，由一個熱愛氣象的人建立的。</p>
             </div>
         </div>
 
@@ -83,7 +84,7 @@
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
                     <ul class="space-y-1 text-gray-700 list-disc list-inside text-sm">
-                        <li>希望提供更多天氣資訊給大衆</li>
+                        <p>希望提供更多天氣資訊給大衆</p>
                     </ul>
                 </div>
             </div>
@@ -140,54 +141,15 @@
 
     <footer class="bg-white py-6 mt-8">
         <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>©2025 澳門氣象中心 </p>
-            <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
+            <p>©2025 澳門氣象中心 | 圖示來源：澳門氣象局官方網站</p>
+            <p class="mt-1">數據僅供參考，請以氣象局實時發布為準</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             const mobileMenu = document.getElementById('mobileMenu');
-            const menuIcon = document.getElementById('menuIcon');
-            
-            const toggleMenuIcon = (isOpen) => {
-                if (isOpen) {
-                    menuIcon.classList.remove('fa-bars');
-                    menuIcon.classList.add('fa-times');
-                } else {
-                    menuIcon.classList.remove('fa-times');
-                    menuIcon.classList.add('fa-bars');
-                }
-            };
-            
-            const toggleMobileMenu = () => {
-                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
-                mobileMenu.classList.toggle('mobile-menu-hidden');
-                toggleMenuIcon(!isHidden);
-            };
-            
-            mobileMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleMobileMenu();
-            });
-            
-            document.addEventListener('click', function(e) {
-                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
-                        mobileMenu.classList.add('mobile-menu-hidden');
-                        toggleMenuIcon(false);
-                    }
-                }
-            });
-            
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    mobileMenu.classList.add('mobile-menu-hidden');
-                    toggleMenuIcon(false);
-                });
-            });
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
 </body>
