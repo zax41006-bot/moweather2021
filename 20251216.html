@@ -68,10 +68,9 @@
         <div class="analysis-card">
             <div class="mb-6 border-b border-gray-100 pb-4">
                 <h2 class="text-2xl font-bold text-primary">天氣形勢分析（12-16）</h2>
-                <p class="text-gray-600 text-sm mt-2">發布時間：2025年12月16日23時15分</p>
+                <p class="text-gray-600 text-sm mt-2">發佈時間：2025年12月16日23時15分</p>
             </div>
 
-            <!-- 分析内容（纯文本无高亮） -->
             <div class="analysis-content">
                 <p>現時影響廣東沿岸的東北季候風正逐步緩和，氣溫逐漸回升，但早晚天氣清涼，日夜溫差較大。廣東沿岸仍會受其相關乾燥氣流影響，天氣大致晴朗及乾燥。</p>
                 
@@ -81,7 +80,6 @@
                 <img src="20251216-A1.png" alt="分析報文">
             </div>
 
-            <!-- 返回按钮 -->
             <div class="mt-8">
                 <a href="wi.html" class="inline-flex items-center gap-2 text-primary hover:underline">
                     <i class="fa fa-arrow-left"></i>
@@ -91,14 +89,12 @@
         </div>
     </main>
 
-    <!-- 保留你指定的页脚格式 -->
     <footer class="bg-white py-6 mt-8">
         <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
             <p>©2025 澳門氣象中心 | 資料以澳門氣象局實時發布為準</p>
         </div>
     </footer>
 
-    <!-- 保留你指定的移动端菜单脚本 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -111,7 +107,6 @@
                 menuIcon.classList.toggle('fa-times');
             });
 
-            // 点击外部关闭菜单
             document.addEventListener('click', (e) => {
                 if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn) {
                     mobileMenu.classList.add('mobile-menu-hidden');
@@ -122,4 +117,5 @@
         });
     </script>
 </body>
+
 </html>
