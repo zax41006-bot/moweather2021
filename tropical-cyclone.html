@@ -42,15 +42,15 @@
             .card { @apply bg-card rounded-xl shadow-md p-4 mb-4 transition-shadow hover:shadow-lg; }
             .card-title { @apply text-lg font-semibold text-gray-800 mb-3 flex items-center; }
             .card-title-icon { @apply mr-2 text-primary; }
-            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .nav-link-active { @apply text-primary font-medium; }
-            .mobile-menu { @apply absolute top-full left-0 right-0 bg-card shadow-lg py-2 z-50 border-t border-border; }
-            .mobile-menu-hidden { @apply hidden; }
             .legend-item { @apply inline-flex items-center mr-4 text-sm; }
             .legend-dot { @apply w-3 h-3 rounded-full mr-2 border border-white shadow-sm; }
             .legend-line { @apply w-6 h-0.5 mr-2; }
             .tc-hidden { @apply hidden; }
             .map-link-btn { @apply w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2; }
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
         }
         
         body { background-color: #E3F2FD; }
@@ -58,28 +58,25 @@
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
-    <header class="bg-card shadow-sm sticky top-0">
-        <div class="site-container py-3 flex justify-between items-center">
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
             </div>
-            
             <nav class="hidden md:flex items-center gap-1">
                 <a href="index.html" class="nav-link">首頁</a>
-                <a href="tropical-cyclone.html" class="nav-link nav-link-active">熱帶氣旋資訊</a>
-                <span class="text-gray-400">/</span>
+                <a href="tropical-cyclone.html" class="nav-link-active">熱帶氣旋資訊</a>
+                <a href="wi.html" class="nav-link">特別推送</a> 
                 <a href="about.html" class="nav-link">關於我們</a>
             </nav>
-            
             <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
                 <i id="menuIcon" class="fa fa-bars text-xl"></i>
             </button>
-            
-            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden md:hidden">
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
                 <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
-                <a href="tropical-cyclone.html" class="block px-4 py-2 bg-blue-50 text-primary font-medium">熱帶氣旋資訊</a>
-                <span class="block px-4 py-2 text-gray-400">/</span>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="wi.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">特別推送</a>
                 <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
             </div>
         </div>
@@ -249,7 +246,6 @@
                     toggleMenuIcon(false);
                 });
             });
-
         });
     </script>
 </body>
