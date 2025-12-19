@@ -33,11 +33,10 @@
             .mobile-menu-hidden { @apply hidden; }
             .forecast-container { @apply flex min-w-max justify-center; }
             .seven-day-temp { @apply text-red-600; }
+            .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; }
         }
-        
         body { background-color: #E3F2FD; }
         header { position: relative; z-index: 999; }
-        .windy-iframe { @apply w-full h-[500px] rounded-xl border-0; }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
@@ -137,6 +136,7 @@
 
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">七日天氣預報（本中心）</h2>
+            
             <div class="weather-card overflow-hidden">
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
@@ -153,37 +153,37 @@
                         <div class="forecast-container">
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-19 (五)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">18~24°C</p>
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-20 (六)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">18~24°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-21 (日)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">18~25°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-22 (一)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">15~22°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-23 (二)</p>
-                                <img src="Sun_cloud_rain.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">17~24°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-24 (三)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">17~24°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-25 (四)</p>
-                                <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 <p class="font-bold text-primary text-sm seven-day-temp">15~22°C</p>
                             </div>
                         </div>
@@ -193,6 +193,11 @@
                         <h3 class="text-base font-semibold mb-3">七日氣溫預報</h3>
                         <div class="h-56 bg-white/50 p-2 rounded-lg">
                             <canvas id="tempChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="weather-draft.html" class="weather-draft-btn inline-block">
+                                <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
+                            </a>
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
@@ -329,19 +334,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
