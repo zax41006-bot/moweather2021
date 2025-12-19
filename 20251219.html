@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>澳門氣象中心 | 天氣日志 - 回歸+冬至+聖誕假期天氣預報</title> 
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
+            .analysis-card { @apply bg-white rounded-lg shadow-md p-6 mb-8; }
+        }
+        
+        body { background-color: #F8FAFC; }
+        header { position: relative; z-index: 999; }
+        .analysis-content { @apply leading-relaxed text-gray-700 space-y-4; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen">
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
+                <a href="wi.html" class="nav-link-active">天氣日志</a> 
+                <a href="about.html" class="nav-link">關於我們</a>
+            </nav>
+            
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
+            </button>
+            
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="wi.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">天氣日志</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="analysis-card">
+            <div class="mb-6 border-b border-gray-100 pb-4">
+                <h2 class="text-2xl font-bold text-primary">回歸+冬至+聖誕假期天氣預報</h2>
+                <p class="text-gray-600 text-sm mt-2">發布時間：2025年12月19日17時30分</p>
+            </div>
+
+            <!-- 分析内容（纯文本无高亮） -->
+            <div class="analysis-content">
+                <p>[假期初期天氣形勢（回歸-冬至）]</p>
+                <p>
+                    20 日（回歸日）受地面偏東氣流支配，早上雲量較多，下午轉受乾燥氣流主導，雲量減少，大致天晴。21 日（冬至日），隨著東北季候風補充抵達，受其相關乾燥氣流影響，天氣會以晴朗及乾燥爲主。
+                </p>
+                <p>[假期中期天氣形勢]</p>
+                <p>
+                    22 日，受東北季候風補充及其相關乾燥氣流影響，早上天氣清涼。22日稍後，隨著季候風緩和，暖濕氣流北抬，本澳氣溫有所回升，受暖濕氣流影響，本澳在晚間逐漸轉爲多雲及伴有微雨天氣。
+                    23 日，受其暖濕氣流影響，多雲及有幾陣微雨，出現陽光時間較少。
+                </p>
+                 <p>[假期後期天氣形勢（平安夜-聖誕節）]</p>
+                <p>
+                    24 日（平安夜），暖濕氣流逐漸減弱，轉爲受乾燥氣流主導，天色好轉，預料當日天氣以大致天晴爲主，日間氣溫可升至24-25度。
+                    25 日（聖誕節），受季候風南下影響，氣溫再度下降，由於該季候風較乾燥，本澳繼續維持晴朗天氣。
+                </p>
+                <img src="1220-25weatherf.png" alt="分析報文">
+            </div>
+
+            <!-- 返回按钮 -->
+            <div class="mt-8">
+                <a href="wi.html" class="inline-flex items-center gap-2 text-primary hover:underline">
+                    <i class="fa fa-arrow-left"></i>
+                    返回天氣日志列表
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 保留你指定的页脚格式 -->
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2025 澳門氣象中心 | 資料以澳門氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+    <!-- 保留你指定的移动端菜单脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                menuIcon.classList.toggle('fa-bars');
+                menuIcon.classList.toggle('fa-times');
+            });
+
+            // 点击外部关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn) {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    menuIcon.classList.add('fa-bars');
+                    menuIcon.classList.remove('fa-times');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
