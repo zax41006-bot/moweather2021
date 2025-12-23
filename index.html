@@ -126,14 +126,14 @@
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
                         <img src="Sun_cloud_rain.png" alt="/" class="mmc-icon">
                         <div>
-                            <h3 class="text-lg font-semibold">12-23（日）</h3>
-                            <p class="text-gray-600 text-sm">受低空暖濕氣流影響。大致多雲。早上有一兩陣微雨。後轉天晴。吹2至4級東至東北風。</p>
+                            <h3 class="text-lg font-semibold">12-24（三）</h3>
+                            <p class="text-gray-600 text-sm">受偏東氣流影響。多雲。部分時間有陽光。吹2至3級東至東北風。</p>
                         </div>
                     </div>
                     <div class="flex gap-6 text-center">
                         <div>
                             <p class="text-xs text-gray-500">最高氣溫</p>
-                            <p class="text-xl font-bold text-red-500">22°C</p>
+                            <p class="text-xl font-bold text-red-500">25°C</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500">最低氣溫</p>
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2025年12月23日00時00分)
+                        (發佈/更新時間：2025年12月24日00時00分)
                     </p>
                 </div>
             </div>
@@ -154,9 +154,7 @@
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
-                        一股暖濕氣流會在今日早上為廣東沿岸帶來降水天氣。而隨著季候風逐步緩和，本澳氣溫在明日回升。 
-                        而一股東北季候風會在聖誕假期南下影響廣東沿岸地區，廣東沿岸氣溫下降。 
-                        本周後期至下周初期，受季候風相關的乾燥氣流影響，廣東地區雲量減少，天氣以晴冷爲主。
+                       一股東北季候風會在明日南下影響廣東沿岸地區，廣東沿岸氣溫下降。 本周後期至下周初期，受季候風相關的乾燥氣流影響，廣東地區雲量減少，天氣以晴冷爲主。
                     </p>
                 </div>
 
@@ -164,14 +162,9 @@
                     <div class="overflow-x-auto">
                         <div class="forecast-container">
                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">12-23 (二)</p>
-                                <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm seven-day-temp">17~24°C</p>
-                            </div>
-                            <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-24 (三)</p>
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm seven-day-temp">17~24°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">17~25°C</p>
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-25 (四)</p>
@@ -181,7 +174,7 @@
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-26 (五)</p>
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm seven-day-temp">13~21°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">12~21°C</p>
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-27 (六)</p>
@@ -196,7 +189,12 @@
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">12-29 (一)</p>
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
-                                <p class="font-bold text-primary text-sm seven-day-temp">14~22°C</p>
+                                <p class="font-bold text-primary text-sm seven-day-temp">15~23°C</p>
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">12-30 (二)</p>
+                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                <p class="font-bold text-primary text-sm seven-day-temp">15~24°C</p>
                             </div>
                         </div>
                     </div>
@@ -213,7 +211,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2025年12月23日00時00分)
+                        (發佈/更新時間：2025年12月24日00時00分)
                     </p>
                 </div>
             </div>
@@ -305,11 +303,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['12-23', '12-24', '12-25', '12-26', '12-27', '12-28', '12-29'],
+                    labels: ['12-24', '12-25', '12-26', '12-27', '12-28', '12-29', '12-30'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [24,24,22,21,21,22,22],
+                            data: [24,22,21,21,22,23,24],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -317,7 +315,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [17,17,14,13,14,14,14],
+                            data: [17,14,12,14,14,15,15],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
@@ -346,5 +344,8 @@
     </script>
 </body>
 </html>
+
+
+
 
 
