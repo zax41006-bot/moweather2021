@@ -126,12 +126,12 @@
             <div class="flex-1">
                 <h3 class="text-lg font-semibold text-gray-800 mb-1">冷暖天氣警報</h3>
                 <p class="text-gray-600 mb-2">
-                   寒冷黃色警報仍然生效。(2026年01月03日01時40分更新)。
+                   寒冷黃色警報仍然生效。(2026年01月03日21時40分更新)。
                    預料本澳在未來數日最低氣溫達12.5度或以下。
                    天氣寒冷，市民應注意保暖，尤其長者及體弱人士需特別留意。
                 </p>
                 <p class="text-amber-800 text-sm ml-auto">
-                    (發佈/更新時間：2026年01月03日01時40分）
+                    (發佈/更新時間：2026年01月03日21時40分）
                 </p>
             </div>
         </div>
@@ -152,28 +152,33 @@
     </section>
 
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>
+            <h2 class="text-xl font-bold mb-4">明日天氣預報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
-                        <img src="Sun.png" alt="/" class="mmc-icon">
+                        <img src="Sun_cloud.png" alt="/" class="mmc-icon">
                         <div>
-                            <h3 class="text-lg font-semibold">01-03</h3>
-                            <p class="text-gray-600 text-sm">受冬季季候風影響。天氣寒冷及乾燥。大致天晴。吹3至5級北至東北風及有陣風。</p>
+                            <h3 class="text-lg font-semibold">01-04</h3>
+                            <p class="text-gray-600 text-sm">
+                                晚上8時至凌晨0時內港一帶會因天文潮出現輕微水浸。
+                            </p>
+                            <p class="text-gray-600 text-sm">
+                                受冬季季候風影響。天氣寒冷及乾燥。天晴，部分時間多雲。吹2至4級北至東北風。
+                            </p>
                         </div>
                     </div>
                     <div class="flex gap-6 text-center">
                         <div>
                             <p class="text-xs text-gray-500">最高氣溫</p>
-                            <p class="text-xl font-bold text-red-500">17°C</p>
+                            <p class="text-xl font-bold text-red-500">21°C</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500">最低氣溫</p>
-                            <p class="text-xl font-bold text-blue-500">10°C</p>
+                            <p class="text-xl font-bold text-blue-500">12°C</p>
                         </div>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月03日01時40分)
+                        (發佈/更新時間：2026年01月03日21時40分)
                     </p>
                 </div>
             </div>
@@ -194,10 +199,6 @@
                     <div class="overflow-x-auto">
                         <div class="forecast-container">
                              <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-03</p>
-                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
-                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-04</p>
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
@@ -214,11 +215,15 @@
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                              <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-07</p>
+                                <p class="text-xs text-green-600">01-08</p>
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                              <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-08</p>
+                                <p class="text-xs text-green-600">01-09</p>
+                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">01-10</p>
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                         </div>
@@ -236,7 +241,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2026年01月03日01時40分)
+                        (發佈/更新時間：2026年01月03日21時40分)
                     </p>
                 </div>
             </div>
@@ -328,11 +333,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [ '01-03', '01-04', '01-05', '01-06', '01-07', '01-08','01-09'],
+                    labels: [ '01-04', '01-05', '01-06', '01-07', '01-08', '01-09','01-10'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [17,19,20,19,19,19,19],
+                            data: [21,21,19,19,19,20,20],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -340,7 +345,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [10,12,12,12,11,11,11],
+                            data: [12,12,10,10,10,11,11],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
