@@ -131,7 +131,7 @@
                    天氣寒冷，市民應注意保暖，尤其長者及體弱人士需特別留意。
                 </p>
                 <p class="text-amber-800 text-sm ml-auto">
-                    (發佈/更新時間：2026年01月04日00時00分）
+                    (發佈/更新時間：2026年01月05日00時00分）
                 </p>
             </div>
         </div>
@@ -156,21 +156,21 @@
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
-                        <img src="Sun_cloud.png" alt="/" class="mmc-icon">
+                        <img src="Sun.png" alt="/" class="mmc-icon">
                         <div>
-                            <h3 class="text-lg font-semibold">01-04</h3>
+                            <h3 class="text-lg font-semibold">01-05</h3>
                             <p class="text-gray-600 text-sm">
-                                晚上8時至凌晨0時內港一帶會因天文潮出現輕微水浸。
+                                晚上10時至凌晨1時內港一帶會因天文潮出現輕微水浸。
                             </p>
                             <p class="text-gray-600 text-sm">
-                                受冬季季候風影響。天氣寒冷及乾燥。天晴，部分時間多雲。吹2至4級北至東北風。
+                                受冬季季候風影響。天氣寒冷。天晴。吹2至3級偏北風，後轉4至5級及有陣風。
                             </p>
                         </div>
                     </div>
                     <div class="flex gap-6 text-center">
                         <div>
                             <p class="text-xs text-gray-500">最高氣溫</p>
-                            <p class="text-xl font-bold text-red-500">21°C</p>
+                            <p class="text-xl font-bold text-red-500">22°C</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500">最低氣溫</p>
@@ -178,7 +178,7 @@
                         </div>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月04日00時00分)
+                        (發佈/更新時間：2026年01月05日00時00分)
                     </p>
                 </div>
             </div>
@@ -198,10 +198,6 @@
                 <div class="p-4">
                     <div class="overflow-x-auto">
                         <div class="forecast-container">
-                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-04</p>
-                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-05</p>
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
@@ -226,6 +222,10 @@
                                 <p class="text-xs text-green-600">01-10</p>
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
                             </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">01-11</p>
+                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
                         </div>
                     </div>
                     
@@ -241,7 +241,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2026年01月04日00時00分)
+                        (發佈/更新時間：2026年01月05日00時00分)
                     </p>
                 </div>
             </div>
@@ -333,11 +333,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [ '01-04', '01-05', '01-06', '01-07', '01-08', '01-09','01-10'],
+                    labels: [ '01-05', '01-06', '01-07', '01-08', '01-09', '01-10','01-11'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [21,21,19,19,19,20,20],
+                            data: [21,19,19,19,20,20,21],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -345,7 +345,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [12,12,10,10,10,11,11],
+                            data: [12,10,10,10,11,11,12],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
@@ -374,5 +374,4 @@
     </script>
 </body>
 </html>
-
 
