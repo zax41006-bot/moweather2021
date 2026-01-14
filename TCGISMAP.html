@@ -129,6 +129,31 @@
             font-size: 14px;
             min-width: 200px;
         }
+
+        /* ========== 仅新增：台风图标旋转动画 ========== */
+        @keyframes typhoonRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .typhoon-marker-wrapper {
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+        .typhoon-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            border: 1px solid #000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            animation: typhoonRotate 5s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+        .typhoon-dot.current {
+            box-shadow: 0 0 8px rgba(230, 0, 18, 0.8);
+        }
+        /* ========== 新增结束 ========== */
     </style>
 </head>
 <body>
@@ -258,24 +283,27 @@
                 });
                 layers.push(forecastLine);
 
-                // 標記繪製
+                // 標記繪製（仅修改这里的图标渲染，保留其他逻辑）
                 tcData.forEach((point, index) => {
                     const tcInfo = getTcLevelBySpeed(point.speed);
                     const isCurrent = point.type === "current";
-                    const size = isCurrent ? 12 : 10;
+                    const size = isCurrent ? 16 : 12; // 稍微放大图标，让视觉更明显
 
+                    // ========== 仅修改：重构台风图标HTML，添加旋转 ==========
                     const markerHtml = `
-                        <div style='width: ${size}px; height: ${size}px; border-radius: 50%; 
-                            background: ${tcInfo.color}; border: 1px solid #000; 
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.3); 
-                            ${isCurrent ? 'transform: scale(1.2);' : ''}'></div>
+                        <div class="typhoon-marker-wrapper">
+                            <div class="typhoon-dot ${isCurrent ? 'current' : ''}" 
+                                 style="width: ${size}px; height: ${size}px; background: ${tcInfo.color};">
+                            </div>
+                        </div>
                     `;
+                    // ========== 修改结束 ==========
 
                     const marker = L.marker([point.lat, point.lng], {
                         icon: L.divIcon({
                             html: markerHtml.trim(),
                             className: '',
-                            iconSize: [size, size]
+                            iconSize: [20, 20] // 对应外层wrapper尺寸
                         })
                     });
 
