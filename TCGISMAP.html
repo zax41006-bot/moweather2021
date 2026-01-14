@@ -116,8 +116,8 @@
             font-size: 14px;
         }
 
-        /* 距离面板样式提前定义，确保显示 */
-        #distancePanel {
+        /* ========== 优化：合并信息面板，避免遮挡 ========== */
+        #infoPanel {
             position: absolute;
             top: 60px;
             right: 20px;
@@ -128,6 +128,29 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             font-size: 14px;
             min-width: 200px;
+        }
+        .info-section {
+            margin-bottom: 8px;
+        }
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+        .info-title {
+            font-weight:bold; 
+            color:#0066CC; 
+            margin-bottom:3px;
+            font-size: 13px;
+        }
+        .info-content {
+            font-size: 13px;
+        }
+        .highlight-text {
+            color: #E60012; 
+            font-weight:bold;
+        }
+        .time-text {
+            color: #0066CC; 
+            font-weight:bold;
         }
 
         /* ========== 仅新增：台风图标旋转动画 ========== */
@@ -211,10 +234,18 @@
         </div>
     </div>
 
-    <!-- 提前创建距离面板DOM，确保一定显示 -->
-    <div id="distancePanel">
-        <div style="font-weight:bold; color:#0066CC; margin-bottom:5px;">📏 距離資訊</div>
-        <div id="distanceInfo">加載中...</div>
+    <!-- 优化：合并距离和预报时间面板，减少遮挡 -->
+    <div id="infoPanel">
+        <!-- 距离信息部分 -->
+        <div class="info-section">
+            <div class="info-title">📏 距離資訊</div>
+            <div id="distanceInfo" class="info-content">加載中...</div>
+        </div>
+        <!-- 预报时间部分 -->
+        <div class="info-section">
+            <div class="info-title">📅 預報基準時間</div>
+            <div id="forecastTimeInfo" class="info-content">加載中...</div>
+        </div>
     </div>
 
     <script>
@@ -394,15 +425,17 @@
                 {"lat": 9.4, "lng": 131.1, "speed": 55, "pressure": 1002, "time": "01月14日08時", "type": "past"},
                 {"lat": 9.4, "lng": 131.0, "speed": 55, "pressure": 1002, "time": "01月14日11時", "type": "past"},
                 {"lat": 9.3, "lng": 130.8, "speed": 55, "pressure": 1002, "time": "01月14日14時", "type": "past"},
-                {"lat": 9.0, "lng": 130.8, "speed": 55, "pressure": 1002, "time": "01月14日17時", "type": "current"},
+                {"lat": 9.0, "lng": 130.8, "speed": 55, "pressure": 1002, "time": "01月14日17時", "type": "past"},
+                {"lat": 9.1, "lng": 130.7, "speed": 55, "pressure": 1002, "time": "01月14日20時", "type": "past"},
+                {"lat": 9.3, "lng": 130.4, "speed": 55, "pressure": 1002, "time": "01月14日23時", "type": "current"},
                 //預報内容//
-                {"lat": 9.4, "lng": 130.3, "speed": 65, "pressure": 1002, "time": "01月15日05時", "type": "forecast", "hours": 12},
-                {"lat": 10.1, "lng": 129.0, "speed": 65, "pressure": 998, "time": "01月15日17時", "type": "forecast", "hours": 24},
-                {"lat": 10.9, "lng": 128.4, "speed": 75, "pressure": 995, "time": "01月16日05時", "type": "forecast", "hours": 36},
-                {"lat": 11.8, "lng": 127.8, "speed": 75, "pressure": 995 , "time": "01月16日17時", "type": "forecast", "hours": 48},
-                {"lat": 13.6, "lng": 125.8, "speed": 85, "pressure": 990 , "time": "01月17日17時", "type": "forecast", "hours": 72},
-                {"lat": 15.3, "lng": 125.6, "speed": 75, "pressure": 995 , "time": "01月18日17時", "type": "forecast", "hours": 96},
-                {"lat": 17.5, "lng": 126.8, "speed": 65, "pressure": 998 , "time": "01月19日17時", "type": "forecast", "hours": 120},
+                {"lat": 10.0, "lng": 129.5, "speed": 65, "pressure": 1000, "time": "01月15日11時", "type": "forecast", "hours": 12},
+                {"lat": 11.0, "lng": 128.0, "speed": 65, "pressure": 998, "time": "01月15日23時", "type": "forecast", "hours": 24},
+                {"lat": 11.6, "lng": 127.5, "speed": 75, "pressure": 995, "time": "01月16日11時", "type": "forecast", "hours": 36},
+                {"lat": 12.6, "lng": 126.8, "speed": 75, "pressure": 995 , "time": "01月16日23時", "type": "forecast", "hours": 48},
+                {"lat": 14.0, "lng": 126.0, "speed": 85, "pressure": 990 , "time": "01月17日23時", "type": "forecast", "hours": 72},
+                {"lat": 15.5, "lng": 126.0, "speed": 75, "pressure": 995 , "time": "01月18日23時", "type": "forecast", "hours": 96},
+                {"lat": 17.0, "lng": 127.0, "speed": 65, "pressure": 998 , "time": "01月19日23時", "type": "forecast", "hours": 120},
             ];
 
             // 熱帶氣旋B數據
@@ -423,6 +456,36 @@
                 { lat: 22.8, lng: 116.5, speed: 175, pressure: 940, time: "08月17日11:00", type: "forecast", "hours": 120 }
             ];*/
 
+            // 新增：更新预报基准时间面板函数
+            window.updateForecastTimePanel = function(v) {
+                const forecastTimeInfo = document.getElementById('forecastTimeInfo');
+                
+                if (v === 'A') {
+                    const currentPoint = tcPathDataA.find(p => p.type === "current");
+                    if (currentPoint) {
+                        // 拼接完整年份显示
+                        forecastTimeInfo.innerHTML = `
+                            <div>NAMELESS</div>
+                            <div class="time-text">2026年${currentPoint.time}</div>
+                        `;
+                    } else {
+                        forecastTimeInfo.textContent = '未找到預報基準時間';
+                    }
+                } else if (v === 'B') {
+                    const currentPoint = tcPathDataB.find(p => p.type === "current");
+                    if (currentPoint) {
+                        forecastTimeInfo.innerHTML = `
+                            <div>熱帶氣旋B</div>
+                            <div class="time-text">2026年${currentPoint.time}</div>
+                        `;
+                    } else {
+                        forecastTimeInfo.textContent = '未找到預報基準時間';
+                    }
+                } else {
+                    forecastTimeInfo.textContent = '請選擇熱帶氣旋查看預報時間';
+                }
+            };
+
             // 核心切换逻辑（全局函数）
             showTC = function(v) {
                 // 先清空所有舊層
@@ -434,6 +497,8 @@
 
                 // 更新距离面板
                 updateDistancePanel(v);
+                // 新增：更新预报基准时间面板
+                updateForecastTimePanel(v);
 
                 // 選中A：繪製A的數據
                 if (v === 'A') {
@@ -472,10 +537,8 @@
                         const distance = calculateDistance(macauLat, macauLng, currentPoint.lat, currentPoint.lng);
 
                         distanceInfo.innerHTML = `
-                            <div>NAMELESS 當前位置：</div>
-                            <div style="color:#E60012; font-weight:bold;">
-                                距澳門 ${distance} 公里
-                            </div>
+                            <div>NAMELESS 當前位置</div>
+                            <div class="highlight-text">距澳門 ${distance} 公里</div>
                         `;
                     } else {
                         distanceInfo.textContent = '未找到當前位置數據';
@@ -486,10 +549,8 @@
                         const distance = calculateDistance(macauLat, macauLng, currentPoint.lat, currentPoint.lng);
 
                         distanceInfo.innerHTML = `
-                            <div>熱帶氣旋B 當前位置：</div>
-                            <div style="color:#E60012; font-weight:bold;">
-                                距澳門 ${distance} 公里
-                            </div>
+                            <div>熱帶氣旋B 當前位置</div>
+                            <div class="highlight-text">距澳門 ${distance} 公里</div>
                         `;
                     } else {
                         distanceInfo.textContent = '未找到當前位置數據';
