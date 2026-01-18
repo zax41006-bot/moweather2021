@@ -150,16 +150,16 @@
     </section>
 
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>
+            <h2 class="text-xl font-bold mb-4">今晚至明日天氣預報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
                             <p class="text-gray-600 text-sm">
-                                受東北季候風影響。大致天晴。吹3至4級東至東北風。氣溫約為攝氏17至24度。相對濕度介乎百分之45至90之間。
+                                受東北季候風影響。大致天晴。吹3至4級偏東風。氣溫約為攝氏16至25度。相對濕度介乎百分之50至95之間。
                             </p>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月18日14時00分)
+                        (發佈/更新時間：2026年01月18日22時30分)
                     </p>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
-                一股乾燥東北季候風會在今明兩日為廣東沿岸帶來晴朗天氣。 
+                一股乾燥東北季候風會在明日為廣東沿岸帶來晴朗天氣。 
                 一股冬季季候風會在周二抵達廣東沿岸，氣溫下降，本周中後期天氣寒冷。 
                 熱帶氣旋洛鞍會在未來數日為菲律賓以東海域帶來不穩定天氣。
                     </p>
@@ -181,10 +181,6 @@
                 <div class="p-4">
                     <div class="overflow-x-auto">
                         <div class="forecast-container"> 
-                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-18</p>
-                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-19</p>
                                 <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
@@ -207,7 +203,11 @@
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-24</p>
-                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">01-24</p>
+                                <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                         </div>
                     </div>
@@ -224,7 +224,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2026年01月18日00時00分)
+                        (發佈/更新時間：2026年01月18日22時30分)
                     </p>
                 </div>
             </div>
@@ -316,11 +316,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [ '01-18', '01-19', '01-20', '01-21', '01-22', '01-23', '01-24'],
+                    labels: [ '01-19', '01-20', '01-21', '01-22', '01-23', '01-24', '01-25'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [27,25,25,18,18,19,20],
+                            data: [25,25,18,18,19,20,20],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -328,7 +328,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [17,16,14,12,11,12,13],
+                            data: [16,15,11,11,13,14,16],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
