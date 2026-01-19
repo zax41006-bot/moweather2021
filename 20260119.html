@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>澳門氣象中心 | 天氣日志 - 天氣形勢分析(01-19)</title> 
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
+            .analysis-card { @apply bg-white rounded-lg shadow-md p-6 mb-8; }
+        }
+        
+        body { background-color: #F8FAFC; }
+        header { position: relative; z-index: 999; }
+        .analysis-content { @apply leading-relaxed text-gray-700 space-y-4; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen">
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
+                <a href="wi.html" class="nav-link-active">天氣日志</a> 
+                <a href="about.html" class="nav-link">關於我們</a>
+            </nav>
+            
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
+            </button>
+            
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="wi.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">天氣日志</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="analysis-card">
+            <div class="mb-6 border-b border-gray-100 pb-4">
+                <h2 class="text-2xl font-bold text-primary">天氣形勢分析(01-19)</h2>
+                <p class="text-gray-600 text-sm mt-2">發布時間：2026年01月19日13時30分</p>
+            </div>
+
+            <!-- 分析内容（纯文本无高亮） -->
+            <div class="analysis-content">
+                <p>
+                    現時，與冬季季候風相關的雲系正影響我國華中、華北地區，帶來大範圍雨雪天氣。
+                    據實況監測顯示，850百帕層面，華中地區有暖濕氣流與低空東北風交匯形成的切變線，為雨雪天氣提供有利動力條件；
+                    同時700百帕層面有一道短波槽位於我國西南地區，其槽前氣流向華中、華北輸送不穩定能量，共同造成華中、華北地區大範圍雨雪天氣。</p>
+                <p>
+                    現時，一道地面冷鋒位於武夷山脈以北地區，預料會在今日晚間至明日南下影響華南；
+                    與此同時，偏東氣流正影響廣東沿岸，偏東氣流亦會在明日大部分時段影響廣東沿岸，
+                    隨後冬季季候風南下抵達廣東沿岸，逐漸取代偏東氣流。
+                </p>
+                <p>
+                    據探空預報圖顯示，冬季季候風南下過程中，低空850百帕層面存在濕區，近地面及高空其他層面均呈乾燥態勢；
+                    本澳雲量將增多，降水機會較低，天氣整體呈乾冷特徵。
+                </p>
+                <p>
+                    預料冬季季候風會在本週中期至後期為本澳帶來寒冷天氣，週末季候風逐步緩和，本澳氣溫回升。
+                </p>
+                <img src="20260119wf1.jpg" alt="分析報文">
+                <img src="20260119wf2.jpg" alt="分析報文">
+            </div>
+
+            <!-- 返回按钮 -->
+            <div class="mt-8">
+                <a href="wi.html" class="inline-flex items-center gap-2 text-primary hover:underline">
+                    <i class="fa fa-arrow-left"></i>
+                    返回天氣日志列表
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 保留你指定的页脚格式 -->
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2025 澳門氣象中心 | 資料以澳門氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+    <!-- 保留你指定的移动端菜单脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                menuIcon.classList.toggle('fa-bars');
+                menuIcon.classList.toggle('fa-times');
+            });
+
+            // 点击外部关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn) {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    menuIcon.classList.add('fa-bars');
+                    menuIcon.classList.remove('fa-times');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
