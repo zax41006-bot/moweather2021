@@ -151,16 +151,18 @@
     </section>
 
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>
+            <!--<h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>-->
+            <h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>
+            <!--<h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>-->
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
                             <p class="text-gray-600 text-sm">
-                                受偏東氣流影響，後轉冬季季候風影響。天晴，部分時間多雲。吹3至5級東至東北風，後轉偏北風及有陣風。氣溫約為攝氏15至23度。相對濕度介乎百分之55至90之間。
+                                受偏東氣流影響，後轉冬季季候風影響。大致多雲。吹4至6級東至東北風，後轉偏北風及有陣風。氣溫約為攝氏14至22度。相對濕度介乎百分之55至90之間。
                             </p>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月20日00時00分)
+                        (發佈/更新時間：2026年01月20日12時00分)
                     </p>
                 </div>
             </div>
@@ -173,7 +175,6 @@
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
-                一股偏東氣流會在今日為廣東沿岸帶來晴朗天氣。 
                 一股冬季季候風會在今日稍後抵達廣東沿岸，氣溫下降，本周中期至後期天氣寒冷。 
                 季候風會在周末逐漸緩和，氣溫逐步回升。 
                 一股地面偏東氣流及低空暖濕氣流會在下周初期為廣東沿岸帶來多雲天氣。 
@@ -186,7 +187,7 @@
                         <div class="forecast-container"> 
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-20</p>
-                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-21</p>
@@ -227,7 +228,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2026年01月20日00時00分)
+                        (發佈/更新時間：2026年01月20日12時00分)
                     </p>
                 </div>
             </div>
@@ -323,7 +324,7 @@
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [23,18,18,19,20,20,20],
+                            data: [22,18,18,19,20,20,20],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -331,7 +332,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [15,11,11,13,14,16,17],
+                            data: [14,11,11,13,14,16,17],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
