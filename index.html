@@ -145,7 +145,7 @@
                    天氣寒冷，市民應注意保暖，尤其長者及體弱人士需特別留意。
                 </p>
                 <p class="text-amber-800 text-sm ml-auto">
-                    (發佈/更新時間：2026年01月21日00時00分）
+                    (發佈/更新時間：2026年01月21日17時00分）
                 </p>
             </div>
         </div>
@@ -167,8 +167,8 @@
 
         <section class="mb-8">
             <!--<h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>-->
-            <h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>
-            <!--<h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>-->
+            <!--<h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>-->
+            <h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
@@ -177,7 +177,7 @@
                             </p>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月21日14時00分)
+                        (發佈/更新時間：2026年01月21日17時00分)
                     </p>
                 </div>
             </div>
@@ -193,17 +193,12 @@
                 冬季季候風會在未來一兩日為本澳帶來寒冷天氣。
                 季候風會在周末逐漸緩和，氣溫逐步回升。
                 一股地面偏東氣流及低空暖濕氣流會在下周初期為廣東沿岸帶來多雲天氣。
-                熱帶氣旋洛鞍將會在菲律賓以東海域逐漸減弱為低壓區。
                     </p>
                 </div>
 
                 <div class="p-4">
                     <div class="overflow-x-auto">
                         <div class="forecast-container"> 
-                            <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-21</p>
-                                <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-22</p>
                                 <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
@@ -217,16 +212,20 @@
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                              <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-24</p>
+                                <p class="text-xs text-green-600">01-25</p>
                                 <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                              <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-25</p>
+                                <p class="text-xs text-green-600">01-26</p>
+                                <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">01-27</p>
                                 <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-25</p>
-                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                <p class="text-xs text-green-600">01-28</p>
+                                <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                         </div>
                     </div>
@@ -243,7 +242,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                        (發佈/更新時間：2026年01月21日14時00分)
+                        (發佈/更新時間：2026年01月21日17時00分)
                     </p>
                 </div>
             </div>
@@ -335,11 +334,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [ '01-21', '01-22', '01-23', '01-24', '01-25', '01-26', '01-27'],
+                    labels: [ '01-22', '01-23', '01-24', '01-25', '01-26', '01-27', '01-28'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [15,16,18,20,20,20,24],
+                            data: [16,18,20,20,20,21,21],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -347,7 +346,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [11,11,12,14,16,17,17],
+                            data: [11,12,14,16,17,17,17],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
