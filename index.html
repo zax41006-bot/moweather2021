@@ -164,17 +164,17 @@
 
         <section class="mb-8">
             <!--<h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>-->
-            <h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>
-            <!--<h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>-->
+            <!--<h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>-->
+            <h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
                             <p class="text-gray-600 text-sm">
-                                受偏東氣流影響。多雲，部分時間有陽光。吹2至4級東至東北風。氣溫約為攝氏16至25度。相對濕度介乎百分之55至90之間。
+                                受東北季候風影響。多雲，部分時間有陽光。有薄霧及烟霞。吹2至4級北至東北風。氣溫約為攝氏15至25度。相對濕度介乎百分之50至90之間。
                             </p>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月25日13時15分)
+                        (發佈/更新時間：2026年01月25日23時10分)
                     </p>
                 </div>
             </div>
@@ -187,22 +187,16 @@
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
-                一股地面偏東氣流及低空暖濕氣流會在今明兩日為廣東沿岸帶來多雲有雨天氣。
-                本周中期氣溫略降。 
-                本周後期，一股低空暖濕氣流再度為廣東沿岸帶來多雲有雨天氣，并會在周末期間與冬季季候風配合，為廣東沿岸帶來濕冷天氣。
+                一股東北季候風會在明日影響廣東沿岸。本周後期，一股低空暖濕氣流再度為廣東沿岸帶來多雲有雨天氣，并會在周末期間與冬季季候風配合，為廣東沿岸帶來濕冷天氣。
                     </p>
                 </div>
 
                 <div class="p-4">
                     <div class="overflow-x-auto">
                         <div class="forecast-container"> 
-                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-26</p>
-                                <img src="Haze.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-27</p>
-                                <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-28</p>
@@ -224,6 +218,10 @@
                                 <p class="text-xs text-green-600">02-01</p>
                                 <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
                             </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-02</p>
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
                         </div>
                     </div>
                     
@@ -239,7 +237,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                         (發佈/更新時間：2026年01月26日13時15分)
+                         (發佈/更新時間：2026年01月26日23時10分)
                     </p>
                 </div>
             </div>
@@ -331,11 +329,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [  '01-26', '01-27', '01-28', '01-29', '01-30', '01-31', '02-01'],
+                    labels: [  '01-27', '01-28', '01-29', '01-30', '01-31', '02-01', '02-02'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [25,23,22,21,21,21,18],
+                            data: [25,22,21,21,21,18,18],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -343,7 +341,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [16,17,15,17,17,16,13],
+                            data: [15,15,17,17,16,13,13],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
