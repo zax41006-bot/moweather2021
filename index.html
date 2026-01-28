@@ -164,17 +164,17 @@
 
         <section class="mb-8">
            <!-- <h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>-->
-           <h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>
-            <!--<h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>-->
+           <!--<h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>-->
+            <h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>
             <div class="weather-card p-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="flex items-center gap-4 mb-4 md:mb-0">
                             <p class="text-gray-600 text-sm">
-                                受東北季候風影響。多雲，部份時間有陽光。日間有煙霞。吹3至5級北至東北風，後轉偏東風及有陣風。氣溫約為攝氏15至22度。相對濕度介乎百分之50至95之間。
+                                受偏東氣流影響。多雲，短暫時間有陽光。晚間有微雨。吹4至5級偏東風及有陣風。氣溫約為攝氏17至21度。相對濕度介乎百分之60至90之間。
                             </p>
                     </div>
                      <p class="text-gray-600 text-sm mt-4 md:mt-0">
-                        (發佈/更新時間：2026年01月28日14時10分)
+                        (發佈/更新時間：2026年01月29日01時00分)
                     </p>
                 </div>
             </div>
@@ -187,7 +187,7 @@
                 <div class="forecast-outlook">
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
-                一股東北季候風會在今日影響廣東沿岸。未來兩三日，一股低空暖濕氣流再度為廣東沿岸帶來多雲有雨天氣，并會在周末期間與冬季季候風配合，為廣東沿岸帶來濕冷天氣。
+                未來兩三日，一股低空暖濕氣流會為廣東沿岸帶來多雲有雨天氣。周末期間，一股冬季季候風南下至廣東沿岸，氣溫下降，北風增強。
                     </p>
                 </div>
 
@@ -195,12 +195,8 @@
                     <div class="overflow-x-auto">
                         <div class="forecast-container"> 
                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">01-28</p>
-                                <img src="Haze.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
-                            <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-29</p>
-                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">01-30</p>
@@ -212,10 +208,14 @@
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-01</p>
-                                <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-02</p>
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-03</p>
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                              <div class="forecast-day">
@@ -237,7 +237,7 @@
                         </div>
                     </div>
                     <p class="text-gray-600 text-sm text-center mt-2">
-                         (發佈/更新時間：2026年01月28日14時10分)
+                         (發佈/更新時間：2026年01月29日01時00分)
                     </p>
                 </div>
             </div>
@@ -329,11 +329,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [ '01-28', '01-29', '01-30', '01-31', '02-01', '02-02', '02-03'],
+                    labels: [ '01-29', '01-30', '01-31', '02-01', '02-02', '02-03', '02-04'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [22,21,21,21,18,19,20],
+                            data: [21,21,21,18,19,20,22],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -341,7 +341,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [15,17,17,16,13,14,15],
+                            data: [17,17,16,13,14,15,16],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
