@@ -228,7 +228,7 @@
         <div class="header-actions">
             <select id="tcSelector" class="tc-selector">
                 <option value="">-- 請選擇熱帶氣旋 --</option>
-                <option value="A" selected>NAMELESS</option>
+                <option value="A" selected>西望洋</option>
                 <!--<option value="B">熱帶氣旋B</option>-->
             </select>
             <a href="index.html" class="back-btn">
@@ -463,14 +463,16 @@
                 {"lat": 8.7, "lng": 133.1, "speed": 55, "pressure": 1000, "time": "02月04日08時", "type": "past"},
                 {"lat": 8.6, "lng": 132.9, "speed": 55, "pressure": 1000, "time": "02月04日11時", "type": "past"},
                 {"lat": 8.5, "lng": 132.7, "speed": 55, "pressure": 1000, "time": "02月04日14時", "type": "past"},
-                {"lat": 8.7, "lng": 131.6, "speed": 55, "pressure": 1000, "time": "02月04日17時", "type": "current"},
+                {"lat": 8.7, "lng": 131.6, "speed": 55, "pressure": 1000, "time": "02月04日17時", "type": "past"},
+                {"lat": 8.8, "lng": 131.6, "speed": 65, "pressure": 1000, "time": "02月04日20時", "type": "past"},
+                {"lat": 8.3, "lng": 131.2, "speed": 65, "pressure": 1000, "time": "02月04日23時", "type": "current"},
                 //預報内容//
-             {"lat": 8.7, "lng": 130.0, "speed": 65, "pressure": 998, "time": "02月05日05時", "type": "forecast", "hours": 12},
-             {"lat": 8.8, "lng": 128.0, "speed": 75, "pressure": 995, "time": "02月05日17時", "type": "forecast", "hours": 24},
-             {"lat": 8.9, "lng": 125.0, "speed": 65, "pressure": 998, "time": "02月06日05時", "type": "forecast", "hours": 36},
-             {"lat": 9.6, "lng": 122.0, "speed": 55, "pressure": 1000, "time": "02月06日17時", "type": "forecast", "hours": 48},
-             {"lat": 11.1, "lng": 119.2, "speed": 45, "pressure": 1002, "time": "02月07日05時", "type": "forecast", "hours": 60},
-             {"lat": 10.7, "lng": 116.5, "speed": 35, "pressure": 1005, "time": "02月07日17時", "type": "forecast", "hours": 72},
+             {"lat": 7.8, "lng": 128.5, "speed": 65, "pressure": 998, "time": "02月05日11時", "type": "forecast", "hours": 12},
+             {"lat": 8.5, "lng": 126.0, "speed": 75, "pressure": 995, "time": "02月05日23時", "type": "forecast", "hours": 24},
+             {"lat": 8.9, "lng": 123.5, "speed": 65, "pressure": 998, "time": "02月06日11時", "type": "forecast", "hours": 36},
+             {"lat": 9.6, "lng": 121.8, "speed": 55, "pressure": 1000, "time": "02月06日23時", "type": "forecast", "hours": 48},
+             {"lat": 10.1, "lng": 121.0, "speed": 45, "pressure": 1002, "time": "02月07日11時", "type": "forecast", "hours": 60},
+             {"lat": 10.7, "lng": 120.5, "speed": 35, "pressure": 1005, "time": "02月07日23時", "type": "forecast", "hours": 72},
             ];
 
             // 熱帶氣旋B數據（注释保留）
@@ -487,7 +489,7 @@
                     const currentPoint = tcPathDataA.find(p => p.type === "current");
                     if (currentPoint) {
                         forecastTimeInfo.innerHTML = `
-                            <div>NAMELESS</div>
+                            <div>西望洋</div>
                             <div class="time-text">2026年${currentPoint.time}</div>
                         `;
                     } else {
@@ -523,7 +525,7 @@
 
                 // 選中A：繪製A的數據
                 if (v === 'A') {
-                    const lyrA = drawTcPath(tcPathDataA, 'NAMELESS');
+                    const lyrA = drawTcPath(tcPathDataA, '西望洋');
                     window.currentLayers.push(...lyrA);
                     allPoints.push(...tcPathDataA.map(p => [p.lat, p.lng]));
                 }
@@ -558,7 +560,7 @@
                         const distance = calculateDistance(macauLat, macauLng, currentPoint.lat, currentPoint.lng);
 
                         distanceInfo.innerHTML = `
-                            <div>NAMELESS 當前位置</div>
+                            <div>西望洋 當前位置</div>
                             <div class="highlight-text">距澳門 ${distance} 公里</div>
                         `;
                     } else {
