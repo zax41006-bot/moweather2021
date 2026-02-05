@@ -188,8 +188,8 @@
                     <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
                     <p class="text-gray-600 text-sm">
                今明兩日，一股地面偏東氣流及低空暖濕氣流將會共同為廣東沿岸帶來回南天氣。
-               另一股東北季候風會在本周後期抵達廣東沿岸。
-               現時位於菲律賓以東海域的熱帶氣旋，會在本周後期大致趨向菲律賓中南部一帶。
+               另一股東北季候風會在星期六日間抵達廣東沿岸。
+               現時位於菲律賓以東海域的熱帶氣旋“西望洋”，會在本周後期大致趨向菲律賓中南部一帶。
                     </p>
                 </div>
 
@@ -197,16 +197,12 @@
                     <div class="overflow-x-auto">
                         <div class="forecast-container"> 
                             <div class="forecast-day">
-                                <p class="text-xs text-green-600">02-05</p>
-                                <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
-                            </div>
-                            <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-06</p>
                                 <img src="fog2.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-07</p>
-                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-08</p>
@@ -222,6 +218,10 @@
                             </div>
                              <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-11</p>
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-12</p>
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                             </div>
                         </div>
@@ -331,11 +331,11 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [  '02-05', '02-06', '02-07', '02-08', '02-09','02-10' ,'02-11'],
+                    labels: [  '02-06', '02-07', '02-08', '02-09', '02-10','02-11' ,'02-12'],
                     datasets: [
                         {
                             label: '最高氣溫',
-                            data: [26,23,21,17,17,21,22],
+                            data: [24,21,17,17,21,22,22],
                             borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.1)',
                             tension: 0.5,
@@ -343,7 +343,7 @@
                         },
                         {
                             label: '最低氣溫',
-                            data: [17,18,16,12,13,15,16],
+                            data: [18,15,12,13,15,16,16],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59,130,246,0.1)',
                             tension: 0.5,
