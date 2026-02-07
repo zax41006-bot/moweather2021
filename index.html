@@ -148,6 +148,7 @@
                 </p> 
             </div> 
         </div>
+<<<<<<< HEAD
         <!--<div class="flex items-start gap-4"> 
            <img src="Wind.png" alt="強季風警報圖標" class="w-16 h-16 flex-shrink-0"> 
             <div class="flex-1"><h3 class="text-lg font-semibold text-gray-800 mb-1">強季風警報</h3> 
@@ -215,6 +216,46 @@
                              <div class="forecast-day"> 
                                 <p class="text-xs text-green-600">02-12</p> 
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon"> 
+=======
+    </div>
+    </section>
+
+        <section class="mb-8">
+           <!--<h2 class="text-xl font-bold mb-4">今日天氣預報（本中心）</h2>-->
+          <!--<h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>-->
+           <h2 class="text-xl font-bold mb-4">今日下午至今日晚間天氣預報（本中心）</h2>
+            <div class="weather-card p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center gap-4 mb-4 md:mb-0">
+                            <p class="text-gray-600 text-sm">
+                                受東北季候風影響。氣溫下降。多雲，短暫時間有陽光。有幾陣微雨。吹3至5級偏北風及有陣風。
+                            </p>
+                    </div>
+                     <p class="text-gray-600 text-sm mt-4 md:mt-0">
+                        (發佈/更新時間：2026年02月07日11時00分)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">七日天氣預報（本中心）</h2>
+            
+            <div class="weather-card overflow-hidden">
+                <div class="forecast-outlook">
+                    <h3 class="font-semibold text-primary mb-1">七日天氣展望</h3>
+                    <p class="text-gray-600 text-sm">
+               一股東北季候風會在今日抵達廣東沿岸。明日天氣寒冷。
+                    </p>
+                </div>
+
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <div class="forecast-container"> 
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-07</p>
+                                <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+>>>>>>> 804a2caf84b034a5322b92d557f38964abef8f7a
                             </div>
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-13</p>
@@ -223,6 +264,7 @@
                             <div class="forecast-day">
                                 <p class="text-xs text-green-600">02-14</p>
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+<<<<<<< HEAD
                             </div> 
                         </div> 
                     </div> 
@@ -370,5 +412,167 @@
         }); 
     </script> 
 </body> 
+=======
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-11</p>
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                             <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-12</p>
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                            <div class="forecast-day">
+                                <p class="text-xs text-green-600">02-13</p>
+                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 border-t border-gray-100 mt-2">
+                        <h3 class="text-base font-semibold mb-3">七日氣溫預報</h3>
+                        <div class="h-56 bg-white/50 p-2 rounded-lg">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="weather-draft.html" class="weather-draft-btn inline-block">
+                                <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm text-center mt-2">
+                         (發佈/更新時間：2026年02月07日11時00分)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+           <h2 class="text-xl font-bold mb-4">OpenWeatherMap</h2>
+           <div class="weather-card p-6">
+               <iframe
+                   src="https://openweathermap.org/weathermap?basemap=map&cities=true&layer=wind&lat=23.209&lon=113.076&zoom=10"
+                   width="100%" 
+                   height="500" 
+                   frameborder="0" 
+                   class="rounded-xl"
+                   title="openweathermap">
+               </iframe>
+           </div>
+        </section>
+        
+        <section class="mb-8">
+           <h2 class="text-xl font-bold mb-4">澳門地球物理氣象局實時氣象數據監測</h2>
+           <div class="weather-card p-6">
+               <div class="mb-3">
+               <iframe
+                   src="https://www.smg.gov.mo/zh/subpage/73/actualWeather" 
+                   width="100%" 
+                   height="600" 
+                   frameborder="0" 
+                   class="rounded-xl"
+                   title="澳門地球物理氣象局實時氣象數據監測">
+               </iframe>
+           </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2026 澳門氣象中心 </p>
+            <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            const toggleMenuIcon = (isOpen) => {
+                if (isOpen) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                } else {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            };
+            
+            const toggleMobileMenu = () => {
+                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                toggleMenuIcon(!isHidden);
+            };
+            
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
+                        mobileMenu.classList.add('mobile-menu-hidden');
+                        toggleMenuIcon(false);
+                    }
+                }
+            });
+            
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    toggleMenuIcon(false);
+                });
+            });
+
+            const ctx = document.getElementById('tempChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [   '02-07', '02-08', '02-09', '02-10','02-11' ,'02-12','02-13'],
+                    datasets: [
+                        {
+                            label: '最高氣溫',
+                            data: [21,17,17,21,22,22,22],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239,68,68,0.1)',
+                            tension: 0.5,
+                            fill: true
+                        },
+                        {
+                            label: '最低氣溫',
+                            data: [15,12,13,15,16,16,16],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59,130,246,0.1)',
+                            tension: 0.5,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 8,
+                            max: 28,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value + '°C';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+>>>>>>> 804a2caf84b034a5322b92d557f38964abef8f7a
 </html>
 
