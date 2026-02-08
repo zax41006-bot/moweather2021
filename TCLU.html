@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熱帶氣旋動態消息</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+        }
+        .cyclone-bulletin {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .bulletin-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .bulletin-header h1 {
+            color: #e63946;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .bulletin-header .update-time {
+            font-size: 0.95rem;
+            color: #555;
+        }
+        .header-divider {
+            height: 4px;
+            background-color: #e63946;
+            margin-bottom: 1.5rem;
+        }
+        .bulletin-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        .text-section {
+            border: 2px solid #333;
+            padding: 1.5rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background-color: #fafafa;
+        }
+        .image-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .image-box {
+            border: 2px solid #333;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fafafa;
+        }
+        .path-map {
+            min-height: 180px;
+            font-size: 1.1rem;
+        }
+        .additional-map {
+            min-height: 200px;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 768px) {
+            .bulletin-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cyclone-bulletin">
+        <!-- 标题区 -->
+        <div class="bulletin-header">
+            <h1>熱帶氣旋動態消息</h1>
+            <div class="update-time">發佈/更新時間：XXXX年XX月XX日XX時</div>
+        </div>
+        <div class="header-divider"></div>
+
+        <!-- 内容区 -->
+        <div class="bulletin-content">
+            <div class="text-section">
+                <div>文字部分</div>
+            </div>
+            <div class="image-section">
+                <div class="image-box path-map">熱帶氣旋預報路徑圖</div>
+                <div class="image-box additional-map">圖</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
