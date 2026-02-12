@@ -165,7 +165,7 @@
 <section class="mb-8"> 
            <!--<h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>-->
            <!--<h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>-->
-           <h2 class="text-xl font-bold mb-4">今日下午至晚間天氣預報（本中心）</h2>
+           <h2 class="text-xl font-bold mb-4">今日晚間至明日天氣預報（本中心）</h2>
             <div class="weather-card p-6"> 
                 <div class="flex flex-col md:flex-row justify-between items-center"> 
                     <div class="flex items-center gap-4 mb-4 md:mb-0"> 
@@ -175,7 +175,7 @@
             </div> 
         </div>
         <p class="text-amber-800 text-sm mt-4"> 
-            （發佈/更新時間：2026年02月12日11時00分） 
+            （發佈/更新時間：2026年02月12日17時00分） 
         </p> 
     </div> 
 </section>
@@ -197,10 +197,6 @@
                     <div class="overflow-x-auto"> 
                         <div class="forecast-container">  
                             <div class="forecast-day"> 
-                                <p class="text-xs text-green-600">02-12</p> 
-                                <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon"> 
-                            </div> 
-                            <div class="forecast-day"> 
                                 <p class="text-xs text-green-600">02-13</p> 
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon"> 
                             </div> 
@@ -221,8 +217,12 @@
                                 <img src="rain1.png" alt="天氣圖標" class="mmc-icon"> 
                             </div> 
                             <div class="forecast-day"> 
-                                <p class="text-xs text-green-600">02-17</p> 
+                                <p class="text-xs text-green-600">02-18</p> 
                                 <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon"> 
+                            </div> 
+                            <div class="forecast-day"> 
+                                <p class="text-xs text-green-600">02-19</p> 
+                                <img src="Sun.png" alt="天氣圖標" class="mmc-icon"> 
                             </div> 
                         </div> 
                     </div> 
@@ -238,7 +238,7 @@
                         </div> 
                     </div> 
                     <p class="text-gray-600 text-sm text-center mt-2"> 
-                         (發佈/更新時間：2026年02月12日11時00分) 
+                         (發佈/更新時間：2026年02月12日17時00分) 
                     </p> 
                 </div> 
             </div> 
@@ -330,11 +330,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '02-12' ,'02-13' ,'02-14' ,'02-15' ,'02-16' ,'02-17', '02-18'],
+                    labels: [ '02-13' ,'02-14' ,'02-15' ,'02-16' ,'02-17' ,'02-18', '02-19'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [23,24,25,25,26,20,22], 
+                            data: [24,25,25,26,20,22,23], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -342,7 +342,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [17,17,18,18,19,17,17], 
+                            data: [17,18,18,19,17,15,16], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
