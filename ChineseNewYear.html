@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>澳門氣象中心 | 新年祝福 </title> 
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
+            .analysis-card { @apply bg-white rounded-lg shadow-md p-6 mb-8; }
+        }
+        
+        body { background-color: #F8FAFC; }
+        header { position: relative; z-index: 999; }
+        .analysis-content { @apply leading-relaxed text-gray-700 space-y-4; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen">
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
+                <a href="wi.html" class="nav-link-active">天氣日志</a> 
+                <a href="about.html" class="nav-link">關於我們</a>
+            </nav>
+            
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
+            </button>
+            
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="wi.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">天氣日志</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="analysis-card">
+            <div class="mb-6 border-b border-gray-100 pb-4">
+                <h2 class="text-2xl font-bold text-primary">農曆新年祝福</h2>
+                <p class="text-gray-600 text-sm mt-2">發佈時間：2026年02月17日00時00分</p>
+            </div>
+
+            <!-- 分析内容（纯文本无高亮） -->
+            <div class="analysis-content">
+                <h3>踏入丙午年大年初一，MMC 祝大家新年快樂，身體健康，心想事成，馬年行大運！</h3>
+                <img src="MMC 20260217.png" alt="分析報文">
+            </div>
+
+            <!-- 返回按钮 -->
+            <div class="mt-8">
+                <a href="index.html" class="inline-flex items-center gap-2 text-primary hover:underline">
+                    <i class="fa fa-arrow-left"></i>
+                    返回首頁
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 保留你指定的页脚格式 -->
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2025 澳門氣象中心 | 資料以澳門氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+    <!-- 保留你指定的移动端菜单脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                menuIcon.classList.toggle('fa-bars');
+                menuIcon.classList.toggle('fa-times');
+            });
+
+            // 点击外部关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn) {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    menuIcon.classList.add('fa-bars');
+                    menuIcon.classList.remove('fa-times');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
