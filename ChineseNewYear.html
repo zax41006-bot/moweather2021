@@ -3,66 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>澳門氣象中心 | 新年祝福 </title> 
+    <title>澳門氣象中心 | 新年祝福</title>
     <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1E88E5',
-                        warning: '#F59E0B',
-                        danger: '#EF4444',
-                    },
-                }
-            }
-        }
-    </script>
-    
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
-            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
-            .mobile-menu-hidden { @apply hidden; }
-            .analysis-card { @apply bg-white rounded-lg shadow-md p-6 mb-8; }
-        }
-        
-        body { background-color: #F8FAFC; }
-        header { position: relative; z-index: 999; }
-        .analysis-content { @apply leading-relaxed text-gray-700 space-y-4; }
+    <style>
+        body { background-color: #ffffff;font-family: "PMingLiu", "新細明體", serif;}
+        .weather-draft-paper { border: 1px solid #e5e5e5;box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+        .date-title { border-bottom: 2px solid #333333; padding-bottom: 4px; }
+        .weather-item { line-height: 1.8; font-size: 16px;}
+        .overview-title {font-weight: bold;font-size: 18px;margin-bottom: 8px;}
     </style>
 </head>
-<body class="font-sans text-gray-800 min-h-screen">
-    <header class="bg-white shadow-sm sticky top-0">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
-                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
-            </div>
-            
-            <nav class="hidden md:flex items-center gap-1">
-                <a href="index.html" class="nav-link">首頁</a>
-                <a href="tropical-cyclone.html" class="nav-link">熱帶氣旋資訊</a>
-                <a href="wi.html" class="nav-link-active">天氣日志</a> 
-                <a href="about.html" class="nav-link">關於我們</a>
-            </nav>
-            
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
-                <i id="menuIcon" class="fa fa-bars text-xl"></i>
-            </button>
-            
-            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
-                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
-                <a href="tropical-cyclone.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
-                <a href="wi.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">天氣日志</a>
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
-            </div>
-        </div>
-    </header>
+<body class="text-gray-800 min-h-screen py-8">
+    <div class="container mx-auto px-4 mb-6 flex justify-end">
+        <a href="index.html" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition-all shadow-md flex items-center gap-2 text-sm">
+            <i class="fa fa-arrow-left"></i>返回首頁
+        </a>
+    </div>
 
     <main class="container mx-auto px-4 py-8">
         <div class="analysis-card">
