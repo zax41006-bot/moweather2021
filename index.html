@@ -104,7 +104,6 @@
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                     一道地面弱冷鋒與低空弱切變綫正為華南内陸帶來弱降水天氣。
                      受地面偏東氣流及低空暖濕氣流共同影響，預料廣東沿岸未來一兩日天色以多雲為主，早晚天氣潮濕及有薄霧，有幾陣雨。
                      一道低壓槽與高空擾動會在本周後期為廣東地區帶來不穩定天氣。
                     </p>
@@ -112,10 +111,6 @@
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">02-24</p>
-                                    <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">02-25</p>
                                     <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
@@ -140,6 +135,10 @@
                                     <p class="text-xs text-green-600">03-02</p>
                                     <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">03-03</p>
+                                    <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -157,7 +156,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年02月24日11時00分)
+                        (發佈/更新時間：2026年02月24日17時00分)
                     </p>
                 </div>
             </div>
@@ -251,11 +250,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '02-24', '02-25', '02-26', '02-27', '02-28', '03-01', '03-02'],
+                    labels: [  '02-25', '02-26', '02-27', '02-28', '03-01', '03-02', '03-03'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [26,26,27,25,23,24,25], 
+                            data: [26,27,25,23,24,25,23], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -263,7 +262,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [20,20,21,21,20,21,22], 
+                            data: [20,21,21,20,21,22,20], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
