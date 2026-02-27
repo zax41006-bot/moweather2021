@@ -89,10 +89,10 @@
             <h2 class="text-xl font-bold mb-4">特別天氣提示</h2> 
              <div class="mt-4"> 
               <p class="text-gray-700 text-base leading-relaxed">
-                預料位於華中地區的低壓槽將於明日（27 日）起逐漸南壓至華南，並於明日至星期六為本澳帶來驟雨及雷暴天氣，雨勢間中較大。請市民留意本中心及氣象部門發布的最新消息。
+                受一道低壓槽影響，預料今日晚間至明日，本澳有幾陣驟雨，雨勢間中較大，可能有雷暴。請市民留意本中心及氣象部門發布的最新消息。
               </p>
             </div> 
-           <p class="text-red-800 text-sm mt-4 self-end">（發佈時間：2026年02月26日14時00分）</p>
+           <p class="text-red-800 text-sm mt-4 self-end">（發佈時間：2026年02月27日17時00分）</p>
           </div>
         </div>
         </section>
@@ -119,14 +119,14 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受低空暖濕氣流及地面低壓槽共同影響。多雲。有薄霧。有幾陣驟雨，末期可能有雷暴。吹2至4級東至東南風。氣溫約為攝氏20至23度。相對濕度介乎百分之80至99之間。
+                    受低空暖濕氣流及地面低壓槽共同影響。多雲。有薄霧。有幾陣驟雨，末期可能有雷暴。吹2至4級東至東南風。
                     </p>
                 </div>
 
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受地面低壓槽影響。多雲。有幾陣驟雨及雷暴。吹3至4級東至東南風，間中5級及有陣風。氣溫約為攝氏20至23度。相對濕度介乎百分之80至99之間。
+                    受地面低壓槽影響。多雲。有幾陣驟雨。可能有雷暴。吹3至4級東至東南風，間中5級及有陣風。氣溫約為攝氏20至23度。相對濕度介乎百分之80至99之間。
                     </p>
                 </div>
 
@@ -134,7 +134,7 @@
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
                      一道低壓槽會在今明兩日為廣東地區帶來驟雨天氣，局部地區有雷暴天氣。
-                     另一道低壓槽會在下周初期再次為廣東地區帶來不穩定天氣。
+                     另一道低壓槽會在下周初期為廣東地區帶來不穩定天氣。
                     </p>
 
                     <div class="mb-4">
@@ -185,7 +185,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年02月27日12時40分)
+                        (發佈/更新時間：2026年02月27日17時00分)
                     </p>
                 </div>
             </div>
@@ -279,11 +279,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '02-27', '02-28', '03-01', '03-02', '03-03', '03-04', '03-05'],
+                    labels: [ '02-28', '03-01', '03-02', '03-03', '03-04', '03-05', '03-06'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [23,23,24,25,23,21,23], 
+                            data: [23,23,23,22,21,23,25], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -291,7 +291,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [20,20,21,22,20,18,19], 
+                            data: [20,20,20,19,18,19,19], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
