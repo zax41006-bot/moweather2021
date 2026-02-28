@@ -66,24 +66,22 @@
             </div> 
         </div> 
     </header> 
- 
-    <!--<main class="container mx-auto px-4 py-8"> 
-        <section class="mb-8"> 
-           <div class="weather-card p-6 bg-amber-50 border border-amber-200 rounded-lg"> 
-               <div class="flex flex-col"> 
-                     <h2 class="text-xl font-bold mb-4">農曆新年祝福</h2> 
-                    <img src="MMC 20260217.png" alt="新年祝福" class="max-w-[800px] w-full h-auto rounded-lg mb-4 mx-auto"> 
-                         <div class="mt-4 text-center"> 
-                            <a href="ChineseNewYear.html" class="weather-draft-btn inline-block"> 
-                                <i class="fa fa-file-text-o mr-1"></i>詳情 
-                            </a> 
-                        </div> 
-                   <p class="text-amber-800 text-sm align-self-end"> (發佈時間：2026年02月17日00時00分)</p> 
-               </div> 
-           </div> 
-        </section>-->
 
-        <main class="container mx-auto px-4 py-8"> 
+    <main class="container mx-auto px-4 py-8"> 
+        <section class="mb-8"> 
+            <h2 class="text-xl font-bold mb-4">澳門氣象中心TG</h2> 
+            <div class="weather-card p-6">
+                <div class="bg-gray-50 rounded-xl p-6 text-center">
+                    <i class="fa-brands fa-telegram text-4xl text-blue-500 mb-3"></i>
+                    <h3 class="text-lg font-semibold mb-2">歡迎加入我們的 Telegram 頻道</h3>
+                    <p class="text-gray-600 mb-4">即時接收澳門天氣、熱帶氣旋、氣象分析資訊</p>
+                    <a href="https://t.me/macaommc2021" target="_blank" class="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-all">
+                        <i class="fa-brands fa-telegram mr-2"></i>進入 Telegram 頻道
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <section class="mb-8"> 
            <div class="weather-card p-6 bg-amber-50 border border-amber-200 rounded-lg"> 
                <div class="flex flex-col"> 
@@ -147,11 +145,11 @@
                                     <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-04</p>
+                                    <p class="text-xs text-green-600">03-05</p>
                                     <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-05</p>
+                                    <p class="text-xs text-green-600">03-06</p>
                                     <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
@@ -194,16 +192,14 @@
         <section class="mb-8"> 
             <h2 class="text-xl font-bold mb-4">澳門地球物理氣象局實時氣象數據監測</h2> 
             <div class="weather-card p-6"> 
-                <div class="mb-3"> 
-                    <iframe 
-                        src="https://www.smg.gov.mo/zh/subpage/73/actualWeather"  
-                        width="100%"  
-                        height="600"  
-                        frameborder="0"  
-                        class="rounded-xl" 
-                        title="澳門地球物理氣象局實時氣象數據監測"> 
-                    </iframe> 
-                </div> 
+                <iframe 
+                    src="https://www.smg.gov.mo/zh/subpage/73/actualWeather"  
+                    width="100%"  
+                    height="600"  
+                    frameborder="0"  
+                    class="rounded-xl" 
+                    title="澳門地球物理氣象局實時氣象數據監測"> 
+                </iframe> 
             </div> 
         </section> 
     </main> 
@@ -217,7 +213,6 @@
  
     <script> 
         document.addEventListener('DOMContentLoaded', () => { 
-            // 移動菜單邏輯
             const mobileMenuBtn = document.getElementById('mobileMenuBtn'); 
             const mobileMenu = document.getElementById('mobileMenu'); 
             const menuIcon = document.getElementById('menuIcon'); 
@@ -260,7 +255,6 @@
                 }); 
             }); 
 
-            // 氣溫圖表邏輯
             const ctx = document.getElementById('tempChart').getContext('2d'); 
             new Chart(ctx, { 
                 type: 'line', 
