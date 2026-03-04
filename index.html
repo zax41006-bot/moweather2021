@@ -82,7 +82,7 @@
             </div>
         </section>
 
-        <section class="mb-8"> 
+       <!-- <section class="mb-8"> 
            <div class="weather-card p-6 bg-amber-50 border border-amber-200 rounded-lg"> 
                <div class="flex flex-col"> 
                      <h2 class="text-xl font-bold mb-4">【華南地區（03-02—03-03）大範圍降水天氣分析】</h2> 
@@ -95,7 +95,7 @@
                    <p class="text-amber-800 text-sm align-self-end"> (發佈時間：2026年03月01日21時00分)</p> 
                </div> 
            </div> 
-        </section>
+        </section>-->
 
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4">天氣預報（本中心）</h2>
@@ -103,53 +103,52 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受東北季候風，低空切變綫與短波槽共同影響。大致多雲。初時有幾陣驟雨。稍後雨勢逐漸減弱。吹3至5級東至東北風及有陣風。氣溫約為攝氏14至20度。相對濕度介乎百分之70至95之間。
+                    受東北季候風影響。大致多雲。有幾陣微雨。吹3至4級北至東北風及有陣風。
                     </p>
                 </div>
 
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    多雲，部分時間有陽光。吹2至4級東至東北風。氣溫約為攝氏16至23度。相對濕度介乎百分之65至90之間。
+                    多雲，部分時間有陽光。初時有微雨。吹2至4級東至東北風。氣溫約為攝氏16至24度。相對濕度介乎百分之65至90之間。
                     </p>
                 </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                     低空切變綫與短波槽會在今日初時東移，會為廣東西部沿岸至珠江口以西沿岸帶來強降水天氣，其餘地區亦會有降水天氣。
-                     受東北季候風影響，今日至本周後期，本澳早晚天氣清涼。
+                     受東北季候風影響，未來數日本澳早晚天氣持續清涼。
                     </p>
 
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-04</p>
-                                    <img src="rain2.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-05</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-06</p>
-                                    <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-07</p>
-                                    <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-08</p>
-                                    <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-09</p>
-                                    <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-09</p>
+                                    <p class="text-xs text-green-600">03-10</p>
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                 <div class="forecast-day">
+                                    <p class="text-xs text-green-600">03-11</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
@@ -169,7 +168,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年03月04日02時00分)
+                        (發佈/更新時間：2026年03月04日17時00分)
                     </p>
                 </div>
             </div>
@@ -259,11 +258,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '03-04', '03-05', '03-06', '03-07', '03-08', '03-09', '03-10'],
+                    labels: [ '03-05', '03-06', '03-07', '03-08', '03-09', '03-10', '03-11'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [20,23,25,24,24,24,23], 
+                            data: [24,25,24,24,24,23,23], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -271,7 +270,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [15,16,17,17,17,17,17], 
+                            data: [16,17,17,17,17,17,17], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
