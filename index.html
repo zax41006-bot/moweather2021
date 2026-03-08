@@ -117,16 +117,12 @@
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                     受偏東氣流影響，未來數日本澳風勢頗大，早晚天氣清涼及日間大致天晴。
+                     預計未來兩日將逐漸受東北季風影響，雲量逐步增加。展望隨後數日，天氣將轉受偏東氣流主導，天色轉好，風勢增強，日間陽光充足，天氣亦較為乾燥。
                     </p>
 
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-08</p>
-                                    <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-09</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
@@ -151,6 +147,10 @@
                                     <p class="text-xs text-green-600">03-14</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
+                                 <div class="forecast-day">
+                                    <p class="text-xs text-green-600">03-15</p>
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,7 +168,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年03月08日00時00分)
+                        (發佈/更新時間：2026年03月08日21時40分)
                     </p>
                 </div>
             </div>
@@ -258,11 +258,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '03-08', '03-09', '03-10', '03-11', '03-12', '03-13', '03-14'],
+                    labels: [ '03-09', '03-10', '03-11', '03-12', '03-13', '03-14', '03-15'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [22,24,23,23,24,24,23], 
+                            data: [24,20,22,24,21,22,24], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -270,7 +270,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [16,17,17,17,17,18,17], 
+                            data: [17,16,16,17,16,16,17], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
