@@ -111,109 +111,34 @@
 
         <div class="card">
             <h3 class="card-title">
-                <i class="fa-solid fa-triangle-exclamation card-title-icon"></i>
-                澳門氣象中心警報信號介紹
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-gray-400">
-                    <h4 class="font-medium text-sm mb-1">潛在熱帶氣旋的低壓區影響警報</h4>
-                    <p class="text-xs text-gray-600">預測該低壓區在未來24小時發展為熱帶氣旋的機會為高，預計可能受其影響。</p>
-                </div>
-                <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
-                    <h4 class="font-medium text-sm mb-1">颱風綠色警報</h4>
-                    <p class="text-xs text-gray-600">熱帶氣旋集結於澳門800公里範圍內，預計可能受熱帶氣旋影響。</p>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
-                    <h4 class="font-medium text-sm mb-1">颱風藍色警報</h4>
-                    <p class="text-xs text-gray-600">澳門受到熱帶氣旋的影響，持續風速現正或預測將達41公里/小時至62公里/小時，陣風約達至110公里/小時。</p>
-                </div>
-                <div class="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-500">
-                    <h4 class="font-medium text-sm mb-1">颱風黃色警報</h4>
-                    <p class="text-xs text-gray-600">澳門受到熱帶氣旋的影響，持續風速現正或預測將達63公里/小時至117公里/小時，陣風約達至180公里/小時。劃分為東北、東南、西南和西北，指示方位為未來數小時內的可能風向。</p>
-                </div>
-                <div class="bg-orange-50 p-3 rounded-lg border-l-4 border-orange-500">
-                    <h4 class="font-medium text-sm mb-1">颱風橙色警報</h4>
-                    <p class="text-xs text-gray-600">熱帶氣旋中心正進一步接近當地或熱帶氣旋（強烈熱帶風暴級別）中心會在當地附近經過，持續風速已達63公里/小時至117公里/小時，且現正或預測將顯著加強。</p>
-                </div>
-                <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
-                    <h4 class="font-medium text-sm mb-1">颱風紅色警報</h4>
-                    <p class="text-xs text-gray-600">熱帶氣旋（颱風或以上級別）中心會在當地附近經過，持續風速現正或預測將達118公里/小時或以上，並伴有強烈陣風。</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card tc-hidden">
-            <h3 class="card-title">圖例說明</h3>
-            <div class="flex flex-wrap items-center">
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_low"></span>
-                    <span>低壓區</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_td"></span>
-                    <span>熱帶低氣壓</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_storm"></span>
-                    <span>熱帶風暴</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_strong_storm"></span>
-                    <span>強烈熱帶風暴</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_typhoon"></span>
-                    <span>颱風</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_strong_typhoon"></span>
-                    <span>強颱風</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-tc_super_typhoon"></span>
-                    <span>超強颱風</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-line bg-tc_path_past"></span>
-                    <span>過去路徑 (實線)</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-line bg-tc_path_forecast border-b border-white border-dashed"></span>
-                    <span>預報路徑 (虛線)</span>
-                </div>
-            </div>
-        </div>
-
-        <!--<div class="card">
-            <h3 class="card-title">
                 <i class="fa-solid fa-shield-halved card-title-icon"></i>
                 熱帶氣旋路徑預報圖
-            </h3>-->
+            </h3>
             
-            <!--<div class="tc-selector-container">
+            <div class="tc-selector-container">
                 <label class="text-gray-700 font-medium">當前活躍的熱帶氣旋：</label>
                 <div class="w-full md:w-auto px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                    西望洋
+                    熱帶低氣壓
                 </div>
                 <select id="tcSelector" class="tc-select">
-                    <option value="02w" selected>2026年第02號 熱帶風暴西望洋</option>
-                    <option value="01w">2026年第01號 颱風東望洋</option>
-                    <option value="03w">2026年第03號 強颱風媽閣</option>
+                    <option value="02w" selected>熱帶低氣壓</option>
+                    <!--<option value="01w">2026年第01號 颱風東望洋</option>
+                    <option value="03w">2026年第03號 強颱風媽閣</option>-->
                 </select>
                 <button id="tcSelectBtn" class="tc-select-btn">
                     <i class="fa-solid fa-search"></i>
                     查看詳情
                 </button>
-            </div>-->
+            </div>
 
-           <!--<div class="carousel-with-time">
+           <div class="carousel-with-time">
                 <div class="carousel-main">
                     <div class="carousel" id="tcCarousel">
                         <div class="carousel-wrapper" id="carouselWrapper">
                             <div class="carousel-item">
-                                <img src="2026-02w/02w-8.png" alt="第八報" class="carousel-img">
+                                <img src="2026-03w/03w-1.png" alt="第一報" class="carousel-img">
                             </div>
-                            <div class="carousel-item">
+                            <!--<div class="carousel-item">
                                 <img src="2026-02w/02w-7.png" alt="第七報" class="carousel-img">
                             </div>
                             <div class="carousel-item">
@@ -233,17 +158,8 @@
                             </div>
                              <div class="carousel-item">
                                 <img src="2026-02w/02w-1.png" alt="第一報" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-01w/01w-1.png" alt="01月28日08時" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-01w/01w-2.png" alt="01月28日14時" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-01w/01w-3.png" alt="01月28日20時" class="carousel-img">
-                            </div>
-                            -->
+                            </div>-->
+
                             <!-- 保留03w輪播項（註釋狀態） -->
                             <!--
                             <div class="carousel-item">
@@ -270,13 +186,13 @@
                     </div>
                 </div>-->
 
-                <!--<div class="time-list-container">
+                <div class="time-list-container">
                     <div class="time-list-header">
                         <i class="fa-solid fa-clock mr-2"></i>預報圖表列表
                     </div>
                     <div class="time-list-content" id="timeListContent">
-                        <div class="time-item time-item-active" data-index="0">第八報</div>
-                        <div class="time-item" data-index="7">第七報</div>
+                        <div class="time-item time-item-active" data-index="0">第一報</div>
+                        <!--<div class="time-item" data-index="7">第七報</div>
                         <div class="time-item" data-index="6">第六報</div>
                         <div class="time-item" data-index="5">第五報</div>
                         <div class="time-item" data-index="4">第四報</div>
