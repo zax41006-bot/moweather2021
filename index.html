@@ -103,7 +103,7 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受偏東氣流影響。大致多雲，有幾陣微雨。吹3至5級北至東北風及有陣風。氣溫約為攝氏16至20度。相對濕度介乎百分之60至90之間。
+                    受東北季候風影響。大致多雲，有幾陣微雨。吹3至5級北至東北風及有陣風。
                     </p>
                 </div>
 
@@ -124,10 +124,6 @@
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-10</p>
-                                    <img src="rain1.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                  <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-11</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
@@ -152,6 +148,10 @@
                                     <p class="text-xs text-green-600">03-16</p>
                                     <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">03-17</p>
+                                    <img src="Sun.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年03月10日11時00分)
+                        (發佈/更新時間：2026年03月10日17時00分)
                     </p>
                 </div>
             </div>
@@ -259,11 +259,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '03-10', '03-11', '03-12', '03-13', '03-14', '03-15', '03-16'],
+                    labels: [ '03-11', '03-12', '03-13', '03-14', '03-15', '03-16', '03-17'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [20,22,24,21,22,24,25], 
+                            data: [22,24,21,22,24,25,25], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -271,7 +271,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [16,16,17,16,16,17,18], 
+                            data: [16,17,16,16,17,18,19], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
