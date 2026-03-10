@@ -46,33 +46,17 @@
             .legend-dot { @apply w-3 h-3 rounded-full mr-2 border border-white shadow-sm; }
             .legend-line { @apply w-6 h-0.5 mr-2; }
             .tc-hidden { @apply hidden; }
-            .map-link-btn { @apply w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
             .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
             .mobile-menu-hidden { @apply hidden; }
-            /* 輪播樣式 */
-            .carousel { @apply relative w-full mx-auto overflow-hidden rounded-lg; }
-            .carousel-wrapper { @apply flex transition-transform duration-500 ease-in-out; }
-            .carousel-item { @apply min-w-full flex-shrink-0; }
-            .carousel-img { @apply w-full h-auto max-h-[80vh] object-contain mx-auto; }
-            .carousel-btn { @apply absolute top-1/2 -translate-y-1/2 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center cursor-pointer z-20 hover:bg-primary/90 transition-colors shadow-md; }
-            .carousel-prev { @apply left-0 -ml-6 md:left-2 md:-ml-0; }
-            .carousel-next { @apply right-0 -mr-6 md:right-2 md:-mr-0; }
-            .carousel-dots { @apply absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2 bg-black/20 py-1 px-3 rounded-full; }
-            .carousel-dot { @apply w-3 h-3 rounded-full bg-white/70 cursor-pointer hover:bg-white transition-colors; }
-            .carousel-dot-active { @apply bg-primary; }
-            /* 新增：熱帶氣旋選擇器和時間列表樣式 */
+            /* 熱帶氣旋選擇器樣式 */
             .tc-selector-container { @apply mb-4 flex flex-col md:flex-row items-start md:items-center gap-3; }
             .tc-select { @apply w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors; }
             .tc-select-btn { @apply bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2; }
-            .carousel-with-time { @apply flex flex-col lg:flex-row gap-4 w-full; }
-            .carousel-main { @apply flex-1; }
-            .time-list-container { @apply lg:w-64 bg-white rounded-lg shadow-sm border border-gray-200 h-fit max-h-[60vh] overflow-y-auto; }
-            .time-list-header { @apply px-4 py-3 border-b border-gray-200 font-medium text-primary; }
-            .time-list-content { @apply px-2 py-2; }
-            .time-item { @apply px-3 py-2 rounded-md mb-1 cursor-pointer hover:bg-blue-50 transition-colors; }
-            .time-item-active { @apply bg-primary/10 text-primary font-medium border-l-2 border-primary; }
+            /* 氣旋圖片展示樣式 */
+            .tc-image-container { @apply w-full bg-white rounded-lg p-2 border border-gray-200; }
+            .tc-image { @apply w-full h-auto max-h-[80vh] object-contain mx-auto; }
         }
         
         body { background-color: #E3F2FD; }
@@ -116,10 +100,7 @@
             </h3>
             
             <div class="tc-selector-container">
-                <label class="text-gray-700 font-medium">當前活躍的熱帶氣旋：</label>
-                <div class="w-full md:w-auto px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg">
-                    熱帶低氣壓
-                </div>
+                <label class="text-gray-700 font-medium">選擇熱帶氣旋：</label>
                 <select id="tcSelector" class="tc-select">
                     <option value="02w" selected>熱帶低氣壓</option>
                     <!--<option value="01w">2026年第01號 颱風東望洋</option>
@@ -131,111 +112,18 @@
                 </button>
             </div>
 
-           <div class="carousel-with-time">
-                <div class="carousel-main">
-                    <div class="carousel" id="tcCarousel">
-                        <div class="carousel-wrapper" id="carouselWrapper">
-                            <div class="carousel-item">
-                                <img src="2026-03w/03w-1.png" alt="第一報" class="carousel-img">
-                            </div>
-                            <!--<div class="carousel-item">
-                                <img src="2026-02w/02w-7.png" alt="第七報" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-02w/02w-6.png" alt="第六報" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-02w/02w-5.png" alt="第五報" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-02w/02w-4.png" alt="第四報" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-02w/02w-3.png" alt="第三報" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-02w/02w-2.png" alt="第二報" class="carousel-img">
-                            </div>
-                             <div class="carousel-item">
-                                <img src="2026-02w/02w-1.png" alt="第一報" class="carousel-img">
-                            </div>-->
-
-                            <!-- 保留03w輪播項（註釋狀態） -->
-                            <!--
-                            <div class="carousel-item">
-                                <img src="2026-03w/03w-1.png" alt="02月10日02時" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-03w/03w-2.png" alt="02月10日08時" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-03w/03w-3.png" alt="02月10日14時" class="carousel-img">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="2026-03w/03w-4.png" alt="02月10日20時" class="carousel-img">
-                            </div>
-
-                        </div>
-                        <div class="carousel-btn carousel-prev" id="prevBtn">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </div>
-                        <div class="carousel-btn carousel-next" id="nextBtn">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </div>
-                        <div class="carousel-dots" id="carouselDots"></div>
-                    </div>
-                </div>-->
-
-                <div class="time-list-container">
-                    <div class="time-list-header">
-                        <i class="fa-solid fa-clock mr-2"></i>預報圖表列表
-                    </div>
-                    <div class="time-list-content" id="timeListContent">
-                        <div class="time-item time-item-active" data-index="0">第一報</div>
-                        <!--<div class="time-item" data-index="7">第七報</div>
-                        <div class="time-item" data-index="6">第六報</div>
-                        <div class="time-item" data-index="5">第五報</div>
-                        <div class="time-item" data-index="4">第四報</div>
-                        <div class="time-item" data-index="3">第三報</div>
-                        <div class="time-item" data-index="2">第二報</div>
-                        <div class="time-item" data-index="1">第一報</div>
-
-                        <div class="time-item" data-index="6">01月28日08時</div>
-                        <div class="time-item" data-index="7">01月28日14時</div>
-                        <div class="time-item" data-index="8">01月28日20時</div>
-                        -->
-                        <!-- 保留03w時間項（註釋狀態） -->
-                        <!--
-                        <div class="time-item" data-index="9">02月10日02時</div>
-                        <div class="time-item" data-index="10">02月10日08時</div>
-                        <div class="time-item" data-index="11">02月10日14時</div>
-                        <div class="time-item" data-index="12">02月10日20時</div>
-                    </div>
-                </div>
+            <!-- 靜態圖片展示區域（替代輪播） -->
+            <div class="tc-image-container" id="tcImageContainer">
+                <img src="2026-03w/03w-1.png" alt="熱帶低氣壓 - 最新預報圖" class="tc-image" id="tcMainImage">
             </div>
-             <p class="text-xs text-gray-500 mt-4 text-center">澳門氣象中心預報</p>-->
+            
+            <!-- 氣旋基本信息展示 -->
+            <div class="mt-4 text-sm text-gray-700">
+                <p id="tcInfo">當前顯示：熱帶低氣壓（最新預報時間：03月10日11時）</p>
+            </div>
+            
+            <p class="text-xs text-gray-500 mt-4 text-center">澳門氣象中心預報</p>
         </div>
-
-        <!--<div class="card">
-            <h3 class="card-title">
-                <i class="fa-solid fa-map-location-dot card-title-icon"></i>
-                熱帶氣旋路徑GIS地圖
-            </h3>
-            <div class="p-6 text-center bg-blue-50 rounded-lg border border-blue-100">
-                <p class="text-gray-700 mb-4">點擊下方按鈕查看詳細的熱帶氣旋路徑GIS地圖</p>
-                <a href="TCGISMAP.html" target="_blank" class="map-link-btn">
-                    <i class="fa-solid fa-globe"></i>
-                    打開熱帶氣旋GIS地圖
-                </a>
-                <p class="text-xs text-gray-500 mt-3">備註：地圖將在新視窗開啟，請確保瀏覽器允許彈窗</p>
-            </div>
-        </div>-->
-            <!--<div class="container mx-auto px-4 mb-6 flex justify-end">
-        <a href="TCLU.html" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition-all shadow-md flex items-center gap-2 text-sm">
-            <i class="fa fa-arrow-left"></i>熱帶氣旋公報（測試中）
-        </a>
-    </div>-->
-
     </main>
 
     <footer class="bg-card py-6 mt-8">
@@ -247,7 +135,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 移動端選單邏輯（保留原有）
+            // 移動端選單邏輯（保留）
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
             const menuIcon = document.getElementById('menuIcon');
@@ -290,210 +178,41 @@
                 });
             });
 
-            // 保留氣旋切換配置（註釋狀態），僅包含01w/02w/03w，無歷史颱風
-            /*
-            const tcSelector = document.getElementById('tcSelector');
-            const tcSelectBtn = document.getElementById('tcSelectBtn');
-            const carouselWrapper = document.getElementById('carouselWrapper');
-            const timeListContent = document.getElementById('timeListContent');
-            
-            // 定義熱帶氣旋配置（僅01w/02w/03w）
+            // 熱帶氣旋配置（只保留每個氣旋的最新一張圖）
             const tcConfig = {
-                '02w': {
-                    images: [
-                        '2026-02w/02w-1.png',
-                        '2026-02w/02w-2.png',
-                        '2026-02w/02w-3.png',
-                        '2026-02w/02w-4.png',
-                        '2026-02w/02w-5.png',
-                        '2026-02w/02w-6.png'
-                    ],
-                    times: [
-                        '02月03日14時',
-                        '02月03日23時',
-                        '02月04日11時',
-                        '02月04日14時',
-                        '02月04日23時',
-                        '02月05日20時'
-                    ]
-                },
-                '01w': {
-                    images: [
-                        '2026-01w/01w-1.png',
-                        '2026-01w/01w-2.png',
-                        '2026-01w/01w-3.png'
-                    ],
-                    times: [
-                        '01月28日08時',
-                        '01月28日14時',
-                        '01月28日20時'
-                    ]
-                },
                 '03w': {
-                    images: [
-                        '2026-03w/03w-1.png',
-                        '2026-03w/03w-2.png',
-                        '2026-03w/03w-3.png',
-                        '2026-03w/03w-4.png'
-                    ],
-                    times: [
-                        '02月10日02時',
-                        '02月10日08時',
-                        '02月10日14時',
-                        '02月10日20時'
-                    ]
+                    image: '2026-03w/03w-1.png',
+                    name: '熱帶低氣壓',
+                    updateTime: '02月10日02時'
                 }
             };
             
-            // 更新輪播圖片和時間列表的函數
-            const updateCarouselAndTimeList = (tcCode) => {
+            // 元素獲取
+            const tcSelector = document.getElementById('tcSelector');
+            const tcSelectBtn = document.getElementById('tcSelectBtn');
+            const tcMainImage = document.getElementById('tcMainImage');
+            const tcInfo = document.getElementById('tcInfo');
+            
+            // 更新氣旋信息函數
+            const updateTcInfo = (tcCode) => {
                 const config = tcConfig[tcCode] || tcConfig['02w'];
                 
-                carouselWrapper.innerHTML = '';
-                timeListContent.innerHTML = '';
+                // 更新圖片
+                tcMainImage.src = config.image;
+                tcMainImage.alt = `${config.name} - 最新預報圖`;
                 
-                config.images.forEach((imgSrc, index) => {
-                    const carouselItem = document.createElement('div');
-                    carouselItem.className = 'carousel-item';
-                    
-                    const img = document.createElement('img');
-                    img.src = imgSrc;
-                    img.alt = config.times[index];
-                    img.className = 'carousel-img';
-                    
-                    carouselItem.appendChild(img);
-                    carouselWrapper.appendChild(carouselItem);
-                    
-                    const timeItem = document.createElement('div');
-                    timeItem.className = `time-item ${index === 0 ? 'time-item-active' : ''}`;
-                    timeItem.dataset.index = index;
-                    timeItem.textContent = config.times[index];
-                    timeListContent.appendChild(timeItem);
-                    
-                    timeItem.addEventListener('click', () => {
-                        currentIndex = index;
-                        updateCarousel();
-                        updateTimeItemActive();
-                    });
-                });
+                // 更新文字信息
+                tcInfo.textContent = `當前顯示：${config.name}（最新預報時間：${config.updateTime}）`;
                 
-                initCarousel();
+                // 提示用戶
+                alert(`已切換至：${config.name}`);
             };
             
-            // 綁定選擇按鈕點擊事件
+            // 綁定按鈕點擊事件
             tcSelectBtn.addEventListener('click', () => {
                 const selectedTc = tcSelector.value;
-                updateCarouselAndTimeList(selectedTc);
-                alert(`已切換至：${tcSelector.options[tcSelector.selectedIndex].text}`);
+                updateTcInfo(selectedTc);
             });
-            */
-
-            // 輪播核心邏輯
-            let carouselTimer;
-            let currentIndex = 0;
-            
-            // 更新時間項激活狀態
-            const updateTimeItemActive = () => {
-                const timeItems = document.querySelectorAll('.time-item');
-                timeItems.forEach((item, index) => {
-                    if (index === currentIndex) {
-                        item.classList.add('time-item-active');
-                    } else {
-                        item.classList.remove('time-item-active');
-                    }
-                });
-            };
-            
-            // 初始化輪播
-            const initCarousel = () => {
-                // 清除原有定時器
-                if (carouselTimer) clearInterval(carouselTimer);
-                
-                const prevBtn = document.getElementById('prevBtn');
-                const nextBtn = document.getElementById('nextBtn');
-                const carouselDots = document.getElementById('carouselDots');
-                const carouselWrapper = document.getElementById('carouselWrapper');
-                const carouselItems = document.querySelectorAll('.carousel-item');
-                const totalItems = carouselItems.length;
-                
-                // 重置當前索引
-                currentIndex = 0;
-                
-                // 清空原有圓點
-                carouselDots.innerHTML = '';
-                
-                // 如果沒有輪播項，直接返回
-                if (totalItems === 0) return;
-                
-                // 生成輪播圓點
-                carouselItems.forEach((_, index) => {
-                    const dot = document.createElement('div');
-                    dot.className = `carousel-dot ${index === 0 ? 'carousel-dot-active' : ''}`;
-                    dot.dataset.index = index;
-                    carouselDots.appendChild(dot);
-                    
-                    // 點擊圓點切換
-                    dot.addEventListener('click', () => {
-                        currentIndex = index;
-                        updateCarousel();
-                    });
-                });
-                
-                // 更新輪播位置和圓點狀態
-                const updateCarousel = () => {
-                    currentIndex = Math.max(0, Math.min(currentIndex, totalItems - 1));
-                    carouselWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-                    
-                    // 更新圓點狀態
-                    document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-                        dot.className = `carousel-dot ${index === currentIndex ? 'carousel-dot-active' : ''}`;
-                    });
-                    
-                    // 更新時間項激活狀態
-                    updateTimeItemActive();
-                };
-                
-                // 下一張
-                const nextSlide = () => {
-                    currentIndex = (currentIndex + 1) % totalItems;
-                    updateCarousel();
-                };
-                
-                // 上一張
-                const prevSlide = () => {
-                    currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-                    updateCarousel();
-                };
-                
-                // 綁定按鈕事件
-                prevBtn.addEventListener('click', prevSlide);
-                nextBtn.addEventListener('click', nextSlide);
-                
-                // 自動輪播
-                carouselTimer = setInterval(nextSlide, 4000);
-                
-                // 滑鼠懸浮暫停/恢復
-                const carousel = document.getElementById('tcCarousel');
-                carousel.addEventListener('mouseenter', () => clearInterval(carouselTimer));
-                carousel.addEventListener('mouseleave', () => {
-                    carouselTimer = setInterval(nextSlide, 4000);
-                });
-                
-                // 初始化顯示
-                updateCarousel();
-                
-                // 綁定時間項點擊事件
-                const timeItems = document.querySelectorAll('.time-item');
-                timeItems.forEach((item, index) => {
-                    item.addEventListener('click', () => {
-                        currentIndex = index;
-                        updateCarousel();
-                    });
-                });
-            };
-
-            // 初始化輪播
-            initCarousel();
         });
     </script>
 </body>
