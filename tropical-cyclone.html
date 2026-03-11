@@ -102,9 +102,9 @@
             <div class="tc-selector-container">
                 <label class="text-gray-700 font-medium">選擇熱帶氣旋：</label>
                 <select id="tcSelector" class="tc-select">
-                    <option value="02w" selected>鸚鵡</option>
-                    <!--<option value="01w">2026年第01號 颱風東望洋</option>
-                    <option value="03w">2026年第03號 強颱風媽閣</option>-->
+                    <option value="03w" selected>鸚鵡</option>
+                    <option value="97w">熱帶低氣壓 (97w)</option>
+                    <!--<option value="03w">2026年第03號 強颱風媽閣</option>-->
                 </select>
                 <button id="tcSelectBtn" class="tc-select-btn">
                     <i class="fa-solid fa-search"></i>
@@ -119,7 +119,7 @@
             
             <!-- 氣旋基本信息展示 -->
             <div class="mt-4 text-sm text-gray-700">
-                <p id="tcInfo">當前顯示：鸚鵡（最新預報時間：03月11日14時）</p>
+                <p id="tcInfo">最新預報時間：03月11日14時</p>
             </div>
             
             <p class="text-xs text-gray-500 mt-4 text-center">澳門氣象中心預報</p>
@@ -184,7 +184,12 @@
                     image: '2026-03w/03w-4.png',
                     name: '鸚鵡',
                     updateTime: '03月11日14時'
-                }
+                },
+                '97w': {
+                    image: '20260311-TD97w/97w-1.png',
+                    name: '熱帶低氣壓',
+                    updateTime: '03月11日14時'
+                },
             };
             
             // 元素獲取
@@ -193,9 +198,10 @@
             const tcMainImage = document.getElementById('tcMainImage');
             const tcInfo = document.getElementById('tcInfo');
             
-            // 更新氣旋信息函數
+            // 更新氣旋信息函數 - 修正了默認值錯誤
             const updateTcInfo = (tcCode) => {
-                const config = tcConfig[tcCode] || tcConfig['02w'];
+                // 修正：默認值改為03w而不是02w
+                const config = tcConfig[tcCode] || tcConfig['03w'];
                 
                 // 更新圖片
                 tcMainImage.src = config.image;
@@ -212,6 +218,14 @@
             tcSelectBtn.addEventListener('click', () => {
                 const selectedTc = tcSelector.value;
                 updateTcInfo(selectedTc);
+            });
+
+            // 額外優化：支持按Enter鍵觸發選擇
+            tcSelector.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const selectedTc = tcSelector.value;
+                    updateTcInfo(selectedTc);
+                }
             });
         });
     </script>
