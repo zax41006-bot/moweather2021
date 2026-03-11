@@ -119,7 +119,7 @@
             
             <!-- 氣旋基本信息展示 -->
             <div class="mt-4 text-sm text-gray-700">
-                <p id="tcInfo">最新預報時間：03月11日14時</p>
+                <p id="tcInfo">當前顯示：鸚鵡（最新預報時間：03月11日14時）</p>
             </div>
             
             <p class="text-xs text-gray-500 mt-4 text-center">澳門氣象中心預報</p>
@@ -200,27 +200,21 @@
             
             // 更新氣旋信息函數 - 修正了默認值錯誤
             const updateTcInfo = (tcCode) => {
-                // 修正：默認值改為03w而不是02w
                 const config = tcConfig[tcCode] || tcConfig['03w'];
                 
-                // 更新圖片
                 tcMainImage.src = config.image;
                 tcMainImage.alt = `${config.name} - 最新預報圖`;
                 
-                // 更新文字信息
                 tcInfo.textContent = `當前顯示：${config.name}（最新預報時間：${config.updateTime}）`;
                 
-                // 提示用戶
                 alert(`已切換至：${config.name}`);
             };
             
-            // 綁定按鈕點擊事件
             tcSelectBtn.addEventListener('click', () => {
                 const selectedTc = tcSelector.value;
                 updateTcInfo(selectedTc);
             });
 
-            // 額外優化：支持按Enter鍵觸發選擇
             tcSelector.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     const selectedTc = tcSelector.value;
