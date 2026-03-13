@@ -103,14 +103,14 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受偏東氣流影響。天氣乾燥。天晴，部分時間多雲。吹4至6級偏東風及有陣風。氣溫約為攝氏15至21度。相對濕度介乎百分之40至85之間。
+                    受偏東氣流影響。天氣乾燥。天晴，部分時間多雲。吹4至6級偏東風及有陣風。
                     </p>
                 </div>
 
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    天晴，部分時間多雲。吹3至5級偏東風及有陣風。氣溫約為攝氏16至22度。相對濕度介乎百分之50至85之間。
+                    天晴，部分時間多雲。吹3至5級偏東風，間中6級及有陣風。氣溫約為攝氏16至22度。相對濕度介乎百分之50至85之間。
                     </p>
                 </div>
 
@@ -123,10 +123,6 @@
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-13</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-14</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
@@ -148,7 +144,11 @@
                                     <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-18</p>
+                                    <p class="text-xs text-green-600">03-19</p>
+                                    <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">03-20</p>
                                     <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年03月13日11時00分)
+                        (發佈/更新時間：2026年03月13日20時45分)
                     </p>
                 </div>
             </div>
@@ -258,11 +258,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '03-13', '03-14', '03-15', '03-16', '03-17', '03-18', '03-19'],
+                    labels: [ '03-14', '03-15', '03-16', '03-17', '03-18', '03-19', '03-20'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [22,22,24,25,25,25,25], 
+                            data: [22,24,25,25,25,25,25], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -270,7 +270,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [16,16,17,18,19,19,20], 
+                            data: [16,17,18,19,19,20,20], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
