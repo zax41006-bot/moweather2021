@@ -103,32 +103,28 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受地面偏東氣流影響以及受中低層單體高壓覆蓋。多雲，部分時間天晴。吹2至3級南至東南風。氣溫約為攝氏20至26度。相對濕度介乎百分之70至98之間。
+                    受中低層單體高壓覆蓋。多雲，部分時間天晴。吹2至3級南至東南風。
                     </p>
                 </div>
 
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    多雲，部分時間天晴。初時有薄霧。吹2至3級南至東南風。氣溫約為攝氏21至27度。相對濕度介乎百分之70至98之間。
+                    多雲，部分時間天晴。早晚有薄霧。吹2至3級南至東南風。氣溫約為攝氏21至27度。相對濕度介乎百分之65至98之間。
                     </p>
                 </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                   影響廣東沿岸的地面偏東氣流會在今明兩日逐漸緩和。
-                   本周中期將會轉爲受暖濕偏南氣流影響。
-                   同時一個中低層單體高壓會在未來數日覆蓋廣東沿岸及南海北部一帶。
+                   一個中低層單體高壓會在未來數日覆蓋廣東沿岸及南海北部一帶，因此未來數日天氣主要以天晴多雲為主。
+                   本周中期將會轉爲受暖濕偏南氣流影響，早晚有薄霧。
+                   展望本周後期，弱切變會爲華南内陸帶來驟雨天氣，而本澳會受暖濕東南氣流影響，有幾陣驟雨。
                     </p>
 
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-23</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-24</p>
                                     <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
@@ -139,18 +135,22 @@
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-26</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-27</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-28</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="fog1.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">03-29</p>
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                 <div class="forecast-day">
+                                    <p class="text-xs text-green-600">03-30</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
@@ -170,7 +170,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年03月23日11時00分)
+                        (發佈/更新時間：2026年03月23日20時00分)
                     </p>
                 </div>
             </div>
@@ -260,11 +260,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [  '03-23', '03-24', '03-25', '03-26', '03-27', '03-28', '03-29'],
+                    labels: [ '03-24', '03-25', '03-26', '03-27', '03-28', '03-29', '03-30'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [26,27,27,27,28,28,28], 
+                            data: [27,27,27,28,28,28,29], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -272,7 +272,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [20,21,21,21,22,22,22], 
+                            data: [21,21,21,22,22,22,23], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
@@ -285,8 +285,8 @@
                     maintainAspectRatio: false, 
                     scales: { 
                         y: { 
-                            min: 10, 
-                            max: 30, 
+                            min: 15, 
+                            max: 35, 
                             ticks: { 
                                 stepSize: 1, 
                                 callback: function(value) { 
