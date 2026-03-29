@@ -18,7 +18,7 @@
                         secondary: '#E3F2FD',
                     },
                 },
-            },
+            }
         };
     </script> 
      
@@ -34,17 +34,19 @@
             .forecast-container { @apply flex min-w-max justify-center; }
             .seven-day-temp { @apply text-red-600; }
             .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; }
-            .model-card { @apply bg-white rounded-xl shadow-md p-4 md:p-6 mb-6; }
-            .model-img { @apply w-1/2 mx-auto h-auto rounded-lg border border-gray-200; }
+            .model-card { @apply bg-white rounded-xl shadow-md p-5 md:p-6 mb-6; }
+            /* 手机图片全屏显示，电脑端保持适中 */
+            .model-img { @apply w-full md:w-3/4 mx-auto h-auto rounded-lg border border-gray-200; }
             .hour-btn { @apply px-3 py-2 text-sm rounded-lg transition-all; }
             .hour-btn-active { @apply bg-primary text-white; }
             .hour-btn-default { @apply bg-gray-100 text-gray-700 hover:bg-gray-200; }
             .element-btn { @apply flex-1 py-2 text-sm font-medium rounded-lg transition-all; }
-            .control-btn { @apply px-4 py-2 rounded-full border-2 border-gray-800 text-gray-800 hover:bg-gray-100 transition-all; }
+            /* 按钮放大，更适合手机点击 */
+            .control-btn { @apply px-5 py-3 rounded-full border-2 border-gray-800 text-gray-800 hover:bg-gray-100 transition-all text-lg; }
             .select-container { @apply relative w-full max-w-xs mx-auto mb-3; }
-            .select-box { @apply w-full py-2 px-4 bg-white rounded-lg border border-teal-200 text-center text-base text-blue-800 shadow-sm cursor-pointer flex items-center justify-center gap-2; }
+            .select-box { @apply w-full py-3 px-4 bg-white rounded-lg border border-teal-200 text-center text-base text-blue-800 shadow-sm cursor-pointer flex items-center justify-center gap-2; }
             .select-dropdown { @apply absolute top-full left-0 right-0 bg-white rounded-lg shadow-md mt-1 overflow-hidden z-10 text-sm; }
-            .select-option { @apply py-1.5 px-3 hover:bg-blue-50 cursor-pointer transition-colors; }
+            .select-option { @apply py-2 px-3 hover:bg-blue-50 cursor-pointer transition-colors; }
         }
         body { background-color: #E3F2FD; }
         header { position: relative; z-index: 999; }
@@ -100,21 +102,21 @@
 
         <img id="modelImage" src="model/10m wind + MSLP/6.png" class="model-img" alt="ECMWF 6hr 10m風場+氣壓 (MSLP)">
 
-        <div class="flex justify-center items-center gap-4 mb-4 mt-4">
+        <div class="flex justify-center items-center gap-5 mb-4 mt-5">
             <button id="prevBtn" class="control-btn">
-                <i class="fa fa-arrow-left text-xl"></i>
+                <i class="fa fa-arrow-left"></i>
             </button>
             <button id="playBtn" class="control-btn">
-                <i class="fa fa-play text-xl"></i>
+                <i class="fa fa-play"></i>
             </button>
             <button id="nextBtn" class="control-btn">
-                <i class="fa fa-arrow-right text-xl"></i>
+                <i class="fa fa-arrow-right"></i>
             </button>
         </div>
     </div>
 
-    <div class="model-card bg-blue-50 text-sm text-gray-700">
-        <p class="font-bold mb-1">ℹ️ 使用說明</p>
+    <div class="model-card bg-blue-50 text-base text-gray-700">
+        <p class="font-bold mb-1 text-lg">ℹ️ 使用說明</p>
         <p>• 點擊下拉選單切換預報類型</p>
         <p>• 點擊「上一個/下一個」切換預報時效</p>
         <p>• 點擊「播放」自動輪播（每2秒切換）</p>
@@ -198,15 +200,15 @@
         if (playInterval) {
             clearInterval(playInterval);
             playInterval = null;
-            document.getElementById('playBtn').innerHTML = '<i class="fa fa-play text-xl"></i>';
+            document.getElementById('playBtn').innerHTML = '<i class="fa fa-play"></i>';
         } else {
             playInterval = setInterval(() => {
                 currentIndex = (currentIndex + 1) % hours.length;
                 switchImage(currentIndex);
             }, 2000); 
-            document.getElementById('playBtn').innerHTML = '<i class="fa fa-pause text-xl"></i>';
+            document.getElementById('playBtn').innerHTML = '<i class="fa fa-pause"></i>';
         }
     };
 </script>
 </body>
-</html>
+</html> 
