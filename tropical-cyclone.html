@@ -3,225 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>澳門氣象中心 | 熱帶氣旋資訊</title>
+    <title>熱帶氣旋資訊 | 澳門氣象中心</title>
     <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1E88E5',
-                        secondary: '#E3F2FD',
-                        card: '#FFFFFF',
-                        border: '#E5E7EB',
-                        tc_low: '#BDBDBD',
-                        tc_td: '#FFF176',
-                        tc_storm: '#64B5F6',
-                        tc_strong_storm: '#4CAF50',
-                        tc_typhoon: '#FFB74D',
-                        tc_strong_typhoon: '#FF7043',
-                        tc_super_typhoon: '#BA68C8',
-                        tc_path_past: '#43A047',
-                        tc_path_forecast: '#1976D2',
-                    },
-                    fontFamily: {
-                        sans: ['Microsoft JhengHei', 'PingFang TC', 'sans-serif'],
-                    },
-                }
-            }
-        }
+            theme: { extend: { colors: { primary: '#1E88E5', secondary: '#E3F2FD' } } }
+        };
     </script>
-    
+
     <style type="text/tailwindcss">
         @layer utilities {
-            .site-container { @apply container mx-auto px-4 py-6 max-w-6xl; }
-            .page-title { @apply text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary mb-4; }
-            .card { @apply bg-card rounded-xl shadow-md p-4 mb-4 transition-shadow hover:shadow-lg; }
-            .card-title { @apply text-lg font-semibold text-gray-800 mb-3 flex items-center; }
-            .card-title-icon { @apply mr-2 text-primary; }
-            .legend-item { @apply inline-flex items-center mr-4 text-sm; }
-            .legend-dot { @apply w-3 h-3 rounded-full mr-2 border border-white shadow-sm; }
-            .legend-line { @apply w-6 h-0.5 mr-2; }
-            .tc-hidden { @apply hidden; }
             .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
             .mobile-menu-hidden { @apply hidden; }
-            /* 熱帶氣旋選擇器樣式 */
-            .tc-selector-container { @apply mb-4 flex flex-col md:flex-row items-start md:items-center gap-3; }
-            .tc-select { @apply w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors; }
-            .tc-select-btn { @apply bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2; }
-            /* 氣旋圖片展示樣式 */
-            .tc-image-container { @apply w-full bg-white rounded-lg p-2 border border-gray-200; }
-            .tc-image { @apply w-full h-auto max-h-[80vh] object-contain mx-auto; }
+            .model-card { @apply bg-white rounded-xl shadow-md p-4 md:p-6 mb-6; }
+            .model-img { @apply w-full md:w-3/4 mx-auto h-auto rounded-lg border border-gray-200; }
+            .select-container { @apply relative w-full max-w-xs mx-auto mb-3; }
+            .select-box { @apply w-full py-2 px-4 bg-white rounded-lg border border-teal-200 text-center text-base text-blue-800 shadow-sm cursor-pointer flex items-center justify-center gap-2; }
+            .select-dropdown { @apply absolute top-full left-0 right-0 bg-white rounded-lg shadow-md mt-1 overflow-hidden z-10 text-sm; }
+            .select-option { @apply py-1.5 px-3 hover:bg-blue-50 cursor-pointer transition-colors; }
+            .hidden { display: none; }
         }
-        
         body { background-color: #E3F2FD; }
         header { position: relative; z-index: 999; }
     </style>
 </head>
-<body class="font-sans text-gray-800 min-h-screen">
-    <header class="bg-white shadow-sm sticky top-0">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
-                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
-            </div>
-            <nav class="hidden md:flex items-center gap-1">
-                <a href="index.html" class="nav-link">首頁</a>
-                <a href="tropical-cyclone.html" class="nav-link-active">熱帶氣旋資訊</a>
-                <a href="wi.html" class="nav-link">天氣日志</a> 
-                <a href="about.html" class="nav-link">關於我們</a>
-            </nav>
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
-                <i id="menuIcon" class="fa fa-bars text-xl"></i>
-            </button>
-            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
-                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
-                <a href="tropical-cyclone.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
-                <a href="wi.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">天氣日志</a>
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
-            </div>
+
+<body>
+<header class="bg-white shadow-sm sticky top-0">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <img src="mmclogo.jpg" class="w-8 h-8">
+            <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
         </div>
-    </header>
-
-    <main class="site-container">
-        <div>
-            <h2 class="page-title">熱帶氣旋實時資訊</h2>
+        <nav class="hidden md:flex gap-1">
+            <a href="index.html" class="nav-link">首頁</a>
+            <a href="tropical-cyclone.html" class="nav-link font-medium text-primary">熱帶氣旋資訊</a>
+            <a href="wi.html" class="nav-link">天氣日志</a>
+            <a href="model.html" class="nav-link">模式預報（測試版）</a>
+            <a href="about.html" class="nav-link">關於我們</a>
+        </nav>
+        <button id="mobileMenuBtn" class="md:hidden p-3"><i class="fa fa-bars text-xl"></i></button>
+        <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+            <a href="index.html" class="block px-4 py-2">首頁</a>
+            <a href="tropical-cyclone.html" class="block px-4 py-2 text-primary">熱帶氣旋資訊</a>
+            <a href="wi.html" class="block px-4 py-2">天氣日志</a>
+            <a href="model.html" class="block px-4 py-2">模式預報（測試版）</a>
+            <a href="about.html" class="block px-4 py-2">關於我們</a>
         </div>
+    </div>
+</header>
 
-        <div class="card">
-            <h3 class="card-title">
-                <i class="fa-solid fa-shield-halved card-title-icon"></i>
-                熱帶氣旋路徑預報圖
-            </h3>
-            
-            <div class="tc-selector-container">
-                <label class="text-gray-700 font-medium">選擇熱帶氣旋：</label>
-                <select id="tcSelector" class="tc-select">
-                    <!--<option value="03w" selected>鸚鵡</option>
-                    <option value="97w">熱帶低氣壓</option>
-                    <option value="03w">2026年第03號 強颱風媽閣</option>-->
-                </select>
-                <button id="tcSelectBtn" class="tc-select-btn">
-                    <i class="fa-solid fa-search"></i>
-                    查看詳情
-                </button>
+<main class="container mx-auto px-4 py-6">
+    <div class="text-center mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-primary">熱帶氣旋路徑與強度預報</h2>
+        <!--<p class="text-primary font-medium">最後更新：2026-03-28 22:30</p>-->
+    </div>
+
+    <!--<div class="model-card">
+        <div class="select-container">
+            <div id="selectBox" class="select-box">
+                <span id="selectText">熱帶氣旋 A</span>
+                <i class="fa fa-caret-down text-teal-500 text-sm"></i>
             </div>
-
-            <!-- 靜態圖片展示區域（替代輪播） -->
-            <!--<div class="tc-image-container" id="tcImageContainer">
-                <img src="2026-03w/03w-4.png" alt="鸚鵡 - 最新預報圖" class="tc-image" id="tcMainImage">
-            </div>-->
-            
-            <!-- 氣旋基本信息展示 -->
-            <!--<div class="mt-4 text-sm text-gray-700">
-                <p id="tcInfo">當前顯示：鸚鵡（最新預報時間：03月11日14時）</p>
-            </div>-->
-            
-           <!-- <p class="text-xs text-gray-500 mt-4 text-center">澳門氣象中心預報</p>
+            <div id="selectDropdown" class="select-dropdown hidden">
+                <div class="select-option" data-type="A">熱帶氣旋 A</div>
+                <div class="select-option" data-type="B">熱帶氣旋 B</div>
+            </div>
         </div>-->
-    </main>
 
-    <footer class="bg-card py-6 mt-8">
-        <div class="site-container text-center text-gray-500 text-sm">
-            <p>©2026 澳門氣象中心 </p>
-            <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
-        </div>
-    </footer>
+        <!--<div class="text-center mb-6">
+            <p>預料受...</p>
+        </div>-->
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 移動端選單邏輯（保留）
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuIcon = document.getElementById('menuIcon');
-            
-            const toggleMenuIcon = (isOpen) => {
-                if (isOpen) {
-                    menuIcon.classList.remove('fa-bars');
-                    menuIcon.classList.add('fa-times');
-                } else {
-                    menuIcon.classList.remove('fa-times');
-                    menuIcon.classList.add('fa-bars');
-                }
-            };
-            
-            const toggleMobileMenu = () => {
-                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
-                mobileMenu.classList.toggle('mobile-menu-hidden');
-                toggleMenuIcon(!isHidden);
-            };
-            
-            mobileMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleMobileMenu();
-            });
-            
-            document.addEventListener('click', function(e) {
-                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
-                        mobileMenu.classList.add('mobile-menu-hidden');
-                        toggleMenuIcon(false);
-                    }
-                }
-            });
-            
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    mobileMenu.classList.add('mobile-menu-hidden');
-                    toggleMenuIcon(false);
-                });
-            });
+        <h3 class="text-lg font-bold text-primary text-center mb-2">路徑預報</h3>
+        <!--<img id="trackImg" src="TC-Track/TC-Track-A.png" class="model-img" alt="路徑預報">-->
+        <img id="trackImg" src="TC-Track/No-TC.png" class="model-img" alt="路徑預報">
 
-            // 熱帶氣旋配置（只保留每個氣旋的最新一張圖）
-            const tcConfig = {
-                '03w': {
-                    image: '2026-03w/03w-4.png',
-                    name: '鸚鵡',
-                    updateTime: '03月11日14時'
-                },
-                '97w': {
-                    image: '20260311-TD97w/97w-1.png',
-                    name: '熱帶低氣壓',
-                    updateTime: '03月11日14時'
-                },
-            };
-            
-            // 元素獲取
-            const tcSelector = document.getElementById('tcSelector');
-            const tcSelectBtn = document.getElementById('tcSelectBtn');
-            const tcMainImage = document.getElementById('tcMainImage');
-            const tcInfo = document.getElementById('tcInfo');
-            
-            // 更新氣旋信息函數 - 修正了默認值錯誤
-            const updateTcInfo = (tcCode) => {
-                const config = tcConfig[tcCode] || tcConfig['03w'];
-                
-                tcMainImage.src = config.image;
-                tcMainImage.alt = `${config.name} - 最新預報圖`;
-                
-                tcInfo.textContent = `當前顯示：${config.name}（最新預報時間：${config.updateTime}）`;
-                
-                alert(`已切換至：${config.name}`);
-            };
-            
-            tcSelectBtn.addEventListener('click', () => {
-                const selectedTc = tcSelector.value;
-                updateTcInfo(selectedTc);
-            });
+        <!--<h3 class="text-lg font-bold text-primary text-center mt-5 mb-2">強度預報</h3>
+        <img id="intensityImg" src="TC-Track/TC-Intensity-A.png" class="model-img" alt="強度預報">
+    </div>-->
+</main>
 
-            tcSelector.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const selectedTc = tcSelector.value;
-                    updateTcInfo(selectedTc);
-                }
-            });
+<footer class="bg-white py-6 mt-8 text-center text-gray-500 text-sm">
+    ©2026 澳門氣象中心<br>資料僅供參考，請以官方發布為準
+</footer>
+
+<script>
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('mobile-menu-hidden');
+    });
+
+    const selectBox = document.getElementById('selectBox');
+    const selectDropdown = document.getElementById('selectDropdown');
+    const selectText = document.getElementById('selectText');
+    const trackImg = document.getElementById('trackImg');
+    const intensityImg = document.getElementById('intensityImg');
+    const options = document.querySelectorAll('.select-option');
+
+    selectBox.addEventListener('click', () => {
+        selectDropdown.classList.toggle('hidden');
+    });
+
+    options.forEach(opt => {
+        opt.addEventListener('click', () => {
+            const t = opt.dataset.type;
+            selectText.textContent = `熱帶氣旋 ${t}`;
+            selectDropdown.classList.add('hidden');
+            
+            trackImg.src = `TC-Track/TC-Track-${t}.png`;
+            intensityImg.src = `TC-Track/TC-Intensity-${t}.png`;
+            trackImg.alt = `熱帶氣旋 ${t} 路徑`;
+            intensityImg.alt = `熱帶氣旋 ${t} 強度`;
         });
-    </script>
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!selectBox.contains(e.target)) selectDropdown.classList.add('hidden');
+    });
+</script>
 </body>
 </html>
