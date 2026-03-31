@@ -125,10 +125,6 @@
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">03-31</p>
-                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-01</p>
                                     <img src="rain2.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
@@ -152,6 +148,10 @@
                                     <p class="text-xs text-green-600">04-06</p>
                                     <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">04-07</p>
+                                    <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年03月31日14時00分)
+                        (發佈/更新時間：2026年03月31日17時00分)
                     </p>
                 </div>
             </div>
@@ -259,11 +259,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '03-31', '04-01', '04-02', '04-03', '04-04', '04-05', '04-06'],
+                    labels: ['04-01', '04-02', '04-03', '04-04', '04-05', '04-06', '04-07'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [28,27,26,27,26,26,27], 
+                            data: [27,26,27,26,26,27,28], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -271,7 +271,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [22,22,22,21,21,21,22], 
+                            data: [22,22,21,21,21,22,22], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
