@@ -103,30 +103,26 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受偏南氣流影響。多雲。部分時間有陽光。吹3至4級偏南風。氣溫約為攝氏23至30度。相對濕度介乎百分之65至95之間。
+                    受偏南氣流影響。多雲。部分時間有陽光。吹3至4級偏南風。
                     </p>
                 </div>
 
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    大致多雲。有幾陣驟雨。吹4至5級東南風及有陣風。氣溫約為攝氏23至27度。相對濕度介乎百分之75至95之間。
+                    大致多雲。有幾陣驟雨。吹4至5級東南風及有陣風。氣溫約為攝氏23至26度。相對濕度介乎百分之75至95之間。
                     </p>
                 </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                   高空反氣旋在未來數日逐漸增強，展望驟雨將會逐漸減少。明日會受偏東氣流與偏南氣流的輻合帶影響，會有幾陣驟雨。
+                   明日會受偏東氣流與偏南氣流的輻合帶影響，會有幾陣驟雨。高空反氣旋在未來數日逐漸增強，展望驟雨將會逐漸減少。
                     </p>
 
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">04-07</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-08</p>
                                     <img src="rain2.png" alt="天氣圖標" class="mmc-icon">
@@ -151,6 +147,10 @@
                                     <p class="text-xs text-green-600">04-13</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">04-14</p>
+                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,7 +168,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年04月07日11時00分)
+                        (發佈/更新時間：2026年04月07日20時00分)
                     </p>
                 </div>
             </div>
@@ -258,11 +258,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '04-07', '04-08', '04-09', '04-10', '04-11', '04-12', '04-13'],
+                    labels: [ '04-08', '04-09', '04-10', '04-11', '04-12', '04-13', '04-14'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [30,27,29,30,30,30,30], 
+                            data: [26,29,30,30,30,30,30], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -270,7 +270,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [23,23,24,24,24,24,24], 
+                            data: [23,24,24,24,24,24,24], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
