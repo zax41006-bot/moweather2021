@@ -117,17 +117,14 @@
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                   受偏南氣流影響，今明兩日本澳會有一兩陣驟雨。高空反氣旋在未來數日逐漸增強，天色逐漸好轉，本澳未來數日日間天氣炎熱。
-                   位於關島以東海域的熱帶氣旋“森拉克”，將會在未來數日影響關島附近海域，後期路徑存在較大變數。
+                   受偏南氣流影響，今日本澳會有一兩陣驟雨。高空反氣旋在未來數日逐漸增強，天色逐漸好轉，本澳未來數日日間天氣炎熱。
+                   一道低壓槽會在本周後期影響廣東地區，會為該區帶來不穩定天氣。
+                   位於關島以東海域的熱帶氣旋“森拉克”，將會在未來數日影響關島附近海域。
                     </p>
 
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">04-12</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-13</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
@@ -150,7 +147,11 @@
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-18</p>
-                                    <img src="rain2.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">04-19</p>
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
                         </div>
@@ -169,7 +170,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年04月12日00時00分)
+                        (發佈/更新時間：2026年04月13日00時00分)
                     </p>
                 </div>
             </div>
@@ -259,11 +260,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '04-12', '04-13', '04-14', '04-15', '04-16', '04-17', '04-18'],
+                    labels: [  '04-13', '04-14', '04-15', '04-16', '04-17', '04-18', '04-19'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [29,29,29,29,29,29,29], 
+                            data: [29,29,29,29,29,27,27], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
