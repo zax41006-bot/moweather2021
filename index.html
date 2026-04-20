@@ -88,7 +88,7 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受偏南氣流影響。大致多雲。有幾陣驟雨及雷暴。吹2至3級偏南風。氣溫約為攝氏23至28度。相對濕度介乎百分之75至95之間。
+                    受偏南氣流影響。多雲。短暫時間天晴。吹3至4級南至東南風。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
@@ -101,17 +101,13 @@
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                   受偏南氣流，今日本澳會有幾陣驟雨。
+                   未來兩日會持續受偏南氣流，本澳會有一兩陣驟雨天氣。
                    一道低壓槽預料於本週中後期影響廣東地區，屆時天氣轉趨不穩定。 
                     </p>
 
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">04-20</p>
-                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-21</p>
                                     <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
@@ -135,6 +131,10 @@
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-26</p>
                                     <img src="rain2.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">04-27</p>
+                                    <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
                         </div>
@@ -243,11 +243,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [  '04-20', '04-21', '04-22', '04-23', '04-24', '04-25', '04-26'],
+                    labels: [ '04-21', '04-22', '04-23', '04-24', '04-25', '04-26', '04-27'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [28,28,28,26,26,26,27], 
+                            data: [28,28,26,26,26,27,27], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -255,7 +255,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [23,24,24,23,21,21,22], 
+                            data: [24,24,23,21,21,22,22], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
