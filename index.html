@@ -103,14 +103,11 @@
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
 位於華中地區的低壓槽將會逐漸南壓並發展爲冷鋒，隨後在今日晚間移近廣東北部一帶，並會在明日稍後橫過廣東沿岸，屆時本澳受其影響，會間中有驟雨及雨勢有時頗大，並伴有幾陣雷暴。 
 隨後受冷鋒相關的冷空氣影響，星期四氣溫略降，展望本周中後期天氣以多雲為主，驟雨逐漸減少。
+下周初期，會受另一道低壓槽影響，天氣再度轉爲不穩定。
                     </p>
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">04-28</p>
-                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">04-29</p>
                                     <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
@@ -129,11 +126,15 @@
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-03</p>
-                                    <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-04</p>
-                                    <img src="cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-05</p>
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
                         </div>
@@ -152,7 +153,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年04月28日00時00分)
+                        (發佈/更新時間：2026年04月28日11時30分)
                     </p>
                 </div>
             </div>
@@ -242,11 +243,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '04-28', '04-29', '04-30', '05-01', '05-02', '05-03', '05-04'],
+                    labels: [ '04-29', '04-30', '05-01', '05-02', '05-03', '05-04', '05-05'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [27,26,25,26,27,27,28], 
+                            data: [26,25,26,27,27,27,27], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -254,7 +255,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [22,21,19,20,22,23,24], 
+                            data: [21,19,20,22,23,23,23], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
