@@ -88,42 +88,38 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受偏東氣流影響。多雲，短暫時間天晴。有幾陣驟雨。吹3至4級東至東南風。氣溫約為攝氏22至28度。相對濕度介乎百分之70至95之間。
+                    受偏東氣流影響。大致多雲。有一兩驟雨。吹3至4級東至東南風。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    大致多雲。間中有驟雨。有幾陣雷暴。吹 3 至 4 級南至西南風及有陣風，後轉偏北風。氣溫約為攝氏23至29度。相對濕度介乎百分之75至98之間。
+                    多雲。下午有驟雨及雨勢有時頗大。有幾陣雷暴。吹3至4級南至西南風及有陣風，後轉偏北風。氣溫約為攝氏22至29度。相對濕度介乎百分之75至98之間。
                     </p>
                 </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-受偏東氣流影響，今日會有幾陣驟雨。
-一道低壓槽會在今日在華中地區發展並逐漸南下廣東地區並發展為冷鋒，明日廣東地區天氣不穩定，有大驟雨及雷暴，而本澳會間中有驟雨及伴有幾陣雷暴。
-而隨後的東北季候風會為廣東內陸帶來清涼天氣。
-下周中後期，受偏東氣流影響，會有一兩陣驟雨。
+位於華中的一道低壓槽將會逐漸南下廣東地區並發展為冷鋒，明日廣東地區天氣不穩定，有大驟雨及雷暴，而本澳會間中有驟雨及伴有幾陣雷暴。
+而隨後的偏東氣流與中低層擾動會在下周初期為廣東沿岸帶來驟雨。
+下周中後期，會有一兩陣驟雨。
+而另一道低壓槽會在下周中後期南下影響廣東地區，廣東地區天氣再度轉為不穩定。
                     </p>
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">05-02</p>
-                                    <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-03</p>
                                     <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-04</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-05</p>
-                                    <img src="Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-06</p>
@@ -136,6 +132,10 @@
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-08</p>
                                     <img src="Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-09</p>
+                                    <img src="rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月02日00時00分)
+                        (發佈/更新時間：2026年05月02日17時00分)
                     </p>
                 </div>
             </div>
@@ -249,11 +249,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [  '05-02', '05-03', '05-04', '05-05', '05-06', '05-07', '05-08'],
+                    labels: [  '05-03', '05-04', '05-05', '05-06', '05-07', '05-08', '05-09'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [28,29,27,26,27,28,30], 
+                            data: [29,25,25,26,28,30,29], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -261,7 +261,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [22,23,21,22,23,24,25], 
+                            data: [22,20,20,22,24,25,24], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
