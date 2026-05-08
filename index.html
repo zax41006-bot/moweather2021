@@ -88,13 +88,13 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受低壓槽影響。多雲，間中有驟雨。有幾陣雷暴。吹微風，後轉2至3級東北風及有陣風。氣溫約為攝氏23至27度。相對濕度介乎百分之75至98之間。
+                    受低壓槽影響。多雲，稍後有幾陣驟雨及雷暴。吹微風，後轉2至3級東北風及有陣風。氣溫約為攝氏23至30度。相對濕度介乎百分之75至98之間。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    大致多雲。有驟雨。吹2至4級東至東北風。氣溫約為攝氏23至26度。相對濕度介乎百分之75至98之間。
+                    大致多雲。有幾陣驟雨。吹2至4級東至東北風。氣溫約為攝氏22至25度。相對濕度介乎百分之75至98之間。
                     </p>
                 </div>
 
@@ -108,10 +108,6 @@
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">05-08</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-09</p>
                                     <img src="weather icon/rain2.png" alt="天氣圖標" class="mmc-icon">
@@ -136,6 +132,10 @@
                                     <p class="text-xs text-green-600">05-14</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-15</p>
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月08日00時00分)
+                        (發佈/更新時間：2026年05月08日14時40分)
                     </p>
                 </div>
             </div>
@@ -248,11 +248,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [  '05-08', '05-09', '05-10', '05-11', '05-12', '05-13', '05-14'],
+                    labels: [ '05-09', '05-10', '05-11', '05-12', '05-13', '05-14', '05-15'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [27,27,29,29,30,31,30], 
+                            data: [25,27,29,31,32,31,30], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -260,7 +260,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [23,23,24,24,25,26,25], 
+                            data: [22,23,24,25,26,25,25], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
