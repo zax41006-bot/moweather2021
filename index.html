@@ -109,10 +109,6 @@
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">05-10</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-11</p>
                                     <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
@@ -135,7 +131,11 @@
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-16</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>                                
+                                </div>       
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-17</p>
+                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                </div>                           
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月10日00時00分)
+                        (發佈/更新時間：2026年05月10日14時30分)
                     </p>
                 </div>
             </div>
@@ -248,11 +248,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '05-10', '05-11', '05-12', '05-13', '05-14', '05-15', '05-16'],
+                    labels: [ '05-11', '05-12', '05-13', '05-14', '05-15', '05-16', '05-17'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [27,29,31,32,31,29,28], 
+                            data: [29,31,32,31,29,28,28], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -260,7 +260,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [23,24,25,26,25,24,24], 
+                            data: [24,25,26,25,24,24,24], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
