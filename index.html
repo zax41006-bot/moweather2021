@@ -88,7 +88,7 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受中層高壓覆蓋。多雲，部分時間天晴。吹2至3級東至東南風。氣溫約為攝氏24至29度。相對濕度介乎百分之65至90之間。
+                    受中層高壓覆蓋。多雲，部分時間天晴。吹2至3級東至東南風。氣溫約為攝氏24至29度。相對濕度介乎百分之65至95之間。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
@@ -101,7 +101,7 @@
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-受中層高壓覆蓋，展望今明兩日天色好轉。
+受中層高壓覆蓋，展望今明兩日天色炎熱。
 本周中後期，一股活躍西南氣流會爲華南地區帶來不穩定天氣。
 位於菲律賓以東海域的熱帶氣旋“黑格比”會在該區徘徊。
                     </p>
@@ -109,16 +109,12 @@
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">05-11</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-12</p>
                                     <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-13</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-14</p>
@@ -134,8 +130,12 @@
                                 </div>       
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-17</p>
+                                    <img src="weather icon/rain2.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-18</p>
                                     <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>                           
+                                </div>                              
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月11日00時00分)
+                        (發佈/更新時間：2026年05月11日13時30分)
                     </p>
                 </div>
             </div>
@@ -248,11 +248,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '05-11', '05-12', '05-13', '05-14', '05-15', '05-16', '05-17'],
+                    labels: [ '05-12', '05-13', '05-14', '05-15', '05-16', '05-17', '05-18'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [29,31,32,31,29,28,28], 
+                            data: [31,32,28,28,28,28,29], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -260,7 +260,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [24,25,26,25,24,24,24], 
+                            data: [25,26,24,24,24,24,24], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
