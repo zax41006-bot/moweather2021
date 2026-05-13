@@ -88,7 +88,7 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受中層高壓覆蓋。多雲。短暫時間天晴。稍後有一兩陣驟雨。吹3至4級南至西南風。氣溫約為攝氏24至30度。相對濕度介乎百分之65至90之間。
+                    受中層高壓覆蓋。天晴。部分時間多雲。稍後有一兩陣驟雨。吹3至4級南至西南風。氣溫約為攝氏25至31度。相對濕度介乎百分之65至90之間。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
@@ -108,10 +108,6 @@
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">05-13</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-14</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
@@ -135,7 +131,11 @@
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-19</p>
                                     <img src="weather icon/rain2.png" alt="天氣圖標" class="mmc-icon">
-                                </div>                               
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-20</p>
+                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                </div>                             
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月13日00時00分)
+                        (發佈/更新時間：2026年05月13日12時20分)
                     </p>
                 </div>
             </div>
@@ -248,11 +248,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '05-13', '05-14', '05-15', '05-16', '05-17', '05-18', '05-19'],
+                    labels: [ '05-14', '05-15', '05-16', '05-17', '05-18', '05-19', '05-20'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [30,28,28,28,28,28,28], 
+                            data: [28,28,28,28,28,28,29], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
