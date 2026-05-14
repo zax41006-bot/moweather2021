@@ -88,13 +88,13 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受西南氣流影響。多雲。間中有驟雨及雨勢有時頗大。間中有雷暴。吹3至5級南至西南風及有陣風。氣溫約為攝氏24至28度。相對濕度介乎百分之75至98之間。
+                    受西南氣流影響。多雲。間中有驟雨及雨勢有時頗大。間中有雷暴。吹3至5級南至西南風及有陣風。氣溫約為攝氏24至28度。相對濕度介乎百分之80至98之間。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    密雲。初時有大驟雨，稍後雨勢減弱。間中有雷暴。吹3至5級南至東南風及有陣風。氣溫約為攝氏24至28度。相對濕度介乎百分之80至98之間。
+                    多雲。間中有驟雨及雷暴。吹3至5級南至東南風及有陣風。氣溫約為攝氏24至28度。相對濕度介乎百分之80至98之間。
                     </p>
                 </div>
 
@@ -102,15 +102,11 @@
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
 今明兩日，一股活躍西南氣流與低壓槽共同爲華南地區帶來大驟雨及雷暴天氣，並伴隨局部強對流天氣。
-而週末至下周初期，低壓槽與偏南氣流會再次為華南地區帶來不穩定天氣。
+而週末期間，低壓槽與偏南氣流會再次為華南地區帶來大驟雨及雷暴天氣。
                     </p>
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">05-14</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-15</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
@@ -133,8 +129,12 @@
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-20</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>                             
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">05-21</p>
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                </div>                           
                             </div>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月14日00時00分)
+                        (發佈/更新時間：2026年05月14日15時10分)
                     </p>
                 </div>
             </div>
@@ -247,11 +247,11 @@
             new Chart(ctx, { 
                 type: 'line', 
                 data: { 
-                    labels: [ '05-14', '05-15', '05-16', '05-17', '05-18', '05-19', '05-20'],
+                    labels: [ '05-15', '05-16', '05-17', '05-18', '05-19', '05-20', '05-21'],
                     datasets: [ 
                         { 
                             label: '最高氣溫', 
-                            data: [28,28,28,28,28,28,29], 
+                            data: [28,28,28,28,28,29,30], 
                             borderColor: '#ef4444', 
                             backgroundColor: 'rgba(239,68,68,0.1)', 
                             tension: 0.5, 
@@ -259,7 +259,7 @@
                         }, 
                         { 
                             label: '最低氣溫', 
-                            data: [24,24,24,24,24,24,24], 
+                            data: [24,24,24,24,24,24,25], 
                             borderColor: '#3b82f6', 
                             backgroundColor: 'rgba(59,130,246,0.1)', 
                             tension: 0.5, 
