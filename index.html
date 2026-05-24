@@ -4,7 +4,7 @@
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
     <title>澳門氣象中心 | 首頁</title> 
-    <link rel="icon" href="mmclogo.jpg" type="image/jpeg"> 
+    <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg"> 
     <script src="https://cdn.tailwindcss.com"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script> 
@@ -34,6 +34,8 @@
             .forecast-container { @apply flex min-w-max justify-center; } 
             .seven-day-temp { @apply text-red-600; } 
             .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; } 
+            .map-select { @apply w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary; }
+            .weather-stat { @apply flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50; }
         } 
         body { background-color: #E3F2FD; } 
         header { position: relative; z-index: 999; } 
@@ -66,7 +68,7 @@
             </div> 
         </div> 
     </header> 
-
+ 
     <main class="container mx-auto px-4 py-8"> 
         <section class="mb-8"> 
             <h2 class="text-xl font-bold mb-4">澳門氣象中心TG</h2> 
@@ -78,6 +80,69 @@
                     <a href="https://t.me/macaommc2021" target="_blank" class="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-all">
                         <i class="fa-brands fa-telegram mr-2"></i>進入 Telegram 頻道
                     </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 實時天氣數據（澳門地球物理暨氣象局XML） -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">實時天氣</h2>
+            <div class="weather-card p-6">
+                <div id="weatherLoading" class="flex items-center justify-center py-8">
+                    <i class="fa fa-spinner fa-spin text-3xl text-primary mr-3"></i>
+                    <p class="text-gray-600">正在獲取最新天氣數據...</p>
+                </div>
+                
+                <div id="weatherData" class="hidden">
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-6">
+                        <div class="flex items-center mb-4 md:mb-0">
+                            <img id="weatherIcon" src="" alt="天氣圖標" class="w-20 h-20 mr-4">
+                            <div>
+                                <p id="weatherStatus" class="text-2xl font-bold text-gray-800"></p>
+                                <p id="feelsLike" class="text-lg text-gray-600"></p>
+                            </div>
+                        </div>
+                        <p id="updateTime" class="text-sm text-gray-500"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="weather-stat">
+                            <i class="fa fa-thermometer-half text-2xl text-red-500 mb-2"></i>
+                            <p class="text-sm text-gray-600">氣溫</p>
+                            <p id="temperature" class="text-xl font-semibold"></p>
+                        </div>
+                        <div class="weather-stat">
+                            <i class="fa fa-tint text-2xl text-blue-500 mb-2"></i>
+                            <p class="text-sm text-gray-600">相對濕度</p>
+                            <p id="humidity" class="text-xl font-semibold"></p>
+                        </div>
+                        <div class="weather-stat">
+                            <i class="fa fa-wind text-2xl text-green-500 mb-2"></i>
+                            <p class="text-sm text-gray-600">風速</p>
+                            <p id="windSpeed" class="text-xl font-semibold"></p>
+                        </div>
+                        <div class="weather-stat">
+                            <i class="fa fa-compass text-2xl text-purple-500 mb-2"></i>
+                            <p class="text-sm text-gray-600">風向</p>
+                            <p id="windDirection" class="text-xl font-semibold"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="weather-stat">
+                            <p class="text-sm text-gray-600">風力等級</p>
+                            <p id="windLevel" class="text-lg font-semibold"></p>
+                        </div>
+                        <div class="weather-stat">
+                            <p class="text-sm text-gray-600">有效時間</p>
+                            <p id="validTime" class="text-lg font-semibold"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="weatherError" class="hidden text-center py-8 text-gray-600">
+                    <i class="fa fa-exclamation-triangle text-3xl text-yellow-500 mb-3"></i>
+                    <p>無法獲取實時天氣數據，請稍後再試</p>
                 </div>
             </div>
         </section>
@@ -134,7 +199,7 @@
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">05-26</p>
                                     <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>                       
+                                </div>                      
                             </div>
                         </div>
                     </div>
@@ -162,32 +227,36 @@
                 </div>
             </div>
         </section>
-     
+      
         <section class="mb-8"> 
-            <h2 class="text-xl font-bold mb-4">MMC-GIS</h2> 
+            <h2 class="text-xl font-bold mb-4">氣象數據</h2> 
             <div class="weather-card p-6"> 
-                <iframe 
-                    src="https://zax41006-bot.github.io/MMC-GIS/" 
-                    width="100%"  
-                    height="500"  
-                    frameborder="0"  
-                    class="rounded-xl" 
-                    title="MMC-GIS"> 
-                </iframe> 
-            </div> 
-        </section> 
-         
-        <section class="mb-8"> 
-            <h2 class="text-xl font-bold mb-4">澳門地球物理氣象局實時氣象數據監測</h2> 
-            <div class="weather-card p-6"> 
-                <iframe 
-                    src="https://www.smg.gov.mo/zh/subpage/73/actualWeather"  
-                    width="100%"  
-                    height="600"  
-                    frameborder="0"  
-                    class="rounded-xl" 
-                    title="澳門地球物理氣象局實時氣象數據監測"> 
-                </iframe> 
+                <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <select id="mapSelector" class="map-select">
+                        <option value="mmc-gis">MMC-GIS 天氣雷達/衛星雲圖</option>
+                        <option value="ghmws-e-wind">GHMWS 地球風場（測試版）</option>
+                        <option value="satellite">知天衛星雲圖</option>
+                        <option value="smg-data">澳門地球物理氣象局實時數據</option>
+                    </select>
+                    <p class="text-gray-500 text-sm">選擇要查看的氣象數據</p>
+                </div>
+                <div class="relative">
+                    <div id="mapLoading" class="absolute inset-0 flex items-center justify-center bg-white/80 rounded-xl z-10 hidden">
+                        <div class="flex flex-col items-center">
+                            <i class="fa fa-spinner fa-spin text-3xl text-primary mb-2"></i>
+                            <p class="text-gray-600">載入中...</p>
+                        </div>
+                    </div>
+                    <iframe 
+                        id="contentFrame"
+                        src="https://zax41006-bot.github.io/MMC-GIS/" 
+                        width="100%"  
+                        height="600"  
+                        frameborder="0"  
+                        class="rounded-xl" 
+                        title="氣象內容"> 
+                    </iframe> 
+                </div>
             </div> 
         </section> 
     </main> 
@@ -243,47 +312,195 @@
                 }); 
             }); 
 
+            // 獲取並顯示澳門地球物理暨氣象局XML實時天氣數據
+            const fetchWeatherData = () => {
+                const weatherLoading = document.getElementById('weatherLoading');
+                const weatherData = document.getElementById('weatherData');
+                const weatherError = document.getElementById('weatherError');
+                
+                // 改用更穩定的 corsproxy.io 代理
+                const proxyUrl = 'https://corsproxy.io/?';
+                
+                // 【修復核心】加入時間戳參數以避免瀏覽器或代理伺服器快取
+                const xmlUrl = 'https://xml.smg.gov.mo/e_actual_brief.xml?t=' + new Date().getTime();
+                
+                // 【修復核心】加入 cache: 'no-store' 強制不使用快取
+                fetch(proxyUrl + encodeURIComponent(xmlUrl), { cache: 'no-store' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('網絡請求失敗');
+                        }
+                        return response.text();
+                    })
+                    .then(xmlText => {
+                        // 解析XML
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        
+                        // 提取數據
+                        const sysPubdate = xmlDoc.querySelector('SysPubdate').textContent;
+                        const validFor = xmlDoc.querySelector('ValidFor').textContent;
+                        
+                        // 獲取所有溫度數據
+                        const temperatures = xmlDoc.querySelectorAll('Temperature');
+                        let currentTemp;
+                        temperatures.forEach(temp => {
+                            const type = temp.querySelector('Type').textContent;
+                            const value = temp.querySelector('Value').textContent;
+                            const unit = temp.querySelector('MeasureUnit').textContent;
+                            
+                            if (type === '3') currentTemp = `${value}${unit}`;
+                        });
+                        
+                        const humidity = xmlDoc.querySelector('Humidity Value').textContent + '%';
+                        const windSpeed = xmlDoc.querySelector('WindSpeed Value').textContent + ' km/h';
+                        const windSpeedDesc = xmlDoc.querySelector('WindSpeedDescription').textContent;
+                        const windDir = xmlDoc.querySelector('WindDirection WindDescription').textContent;
+                        const iconUrl = xmlDoc.querySelector('IconURL').textContent;
+                        const weatherStatus = xmlDoc.querySelector('WeatherStatus').textContent;
+                        const feelsLike = xmlDoc.querySelector('FeelsLikeDescription').textContent;
+                        
+                        // 天氣狀態對應表
+                        const weatherStatusMap = {
+                            '00': '晴朗',
+                            '01': '天晴',
+                            '02': '間晴',
+                            '03': '多雲',
+                            '04': '陰天',
+                            '05': '有微雨',
+                            '06': '有雨',
+                            '07': '有大驟雨',
+                            '08': '有雷暴',
+                            '09': '有霧',
+                            '10': '有薄霧'
+                        };
+                        
+                        // 更新頁面
+                        document.getElementById('weatherIcon').src = iconUrl;
+                        document.getElementById('weatherStatus').textContent = weatherStatusMap[weatherStatus] || '天氣狀況';
+                        document.getElementById('feelsLike').textContent = `體感：${feelsLike}`;
+                        document.getElementById('updateTime').textContent = `更新時間：${sysPubdate}`;
+                        document.getElementById('temperature').textContent = currentTemp;
+                        document.getElementById('humidity').textContent = humidity;
+                        document.getElementById('windSpeed').textContent = windSpeed;
+                        document.getElementById('windDirection').textContent = windDir;
+                        document.getElementById('windLevel').textContent = windSpeedDesc;
+                        document.getElementById('validTime').textContent = validFor;
+                        
+                        // 顯示數據，隱藏加載
+                        weatherLoading.classList.add('hidden');
+                        weatherData.classList.remove('hidden');
+                        weatherError.classList.add('hidden');
+                    })
+                    .catch(error => {
+                        console.error('獲取天氣數據失敗:', error);
+                        weatherLoading.classList.add('hidden');
+                        weatherData.classList.add('hidden');
+                        weatherError.classList.remove('hidden');
+                    });
+            };
+            
+            // 頁面加載時立即獲取數據
+            fetchWeatherData();
+            
+            // 每10分鐘自動更新一次
+            setInterval(fetchWeatherData, 600000);
+
             const ctx = document.getElementById('tempChart').getContext('2d'); 
-            new Chart(ctx, { 
-                type: 'line', 
-                data: { 
-                    labels: [ '05-20', '05-21', '05-22', '05-23', '05-24', '05-25', '05-26'],
-                    datasets: [ 
-                        { 
-                            label: '最高氣溫', 
-                            data: [28,28,31,32,32,33,33], 
-                            borderColor: '#ef4444', 
-                            backgroundColor: 'rgba(239,68,68,0.1)', 
-                            tension: 0.5, 
-                            fill: true 
+            
+            fetch('temp.csv')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('無法讀取 temp.csv 檔案');
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    const lines = csvText.trim().split('\n');
+                    const labels = [];
+                    const maxTemps = [];
+                    const minTemps = [];
+
+                    for (let i = 1; i < lines.length; i++) {
+                        const columns = lines[i].split(',');
+                        if (columns.length >= 3) {
+                            labels.push(columns[0].trim());            
+                            maxTemps.push(parseFloat(columns[1].trim())); 
+                            minTemps.push(parseFloat(columns[2].trim())); 
+                        }
+                    }
+
+                    new Chart(ctx, { 
+                        type: 'line', 
+                        data: { 
+                            labels: labels, 
+                            datasets: [ 
+                                { 
+                                    label: '最高氣溫', 
+                                    data: maxTemps, 
+                                    borderColor: '#ef4444', 
+                                    backgroundColor: 'rgba(239,68,68,0.1)', 
+                                    tension: 0.5, 
+                                    fill: true 
+                                }, 
+                                { 
+                                    label: '最低氣溫', 
+                                    data: minTemps, 
+                                    borderColor: '#3b82f6', 
+                                    backgroundColor: 'rgba(59,130,246,0.1)', 
+                                    tension: 0.5, 
+                                    fill: true 
+                                } 
+                            ] 
                         }, 
-                        { 
-                            label: '最低氣溫', 
-                            data: [24,24,26,27,27,28,28], 
-                            borderColor: '#3b82f6', 
-                            backgroundColor: 'rgba(59,130,246,0.1)', 
-                            tension: 0.5, 
-                            fill: true 
-                        } 
-                    ] 
-                }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { 
-                        y: { 
-                            min: 15, 
-                            max: 35, 
-                            ticks: { 
-                                stepSize: 1, 
-                                callback: function(value) { 
-                                    return value + '°C'; 
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: false, 
+                            scales: { 
+                                y: { 
+                                    min: 15, 
+                                    max: 35, 
+                                    ticks: { 
+                                        stepSize: 1, 
+                                        callback: function(value) { 
+                                            return value + '°C'; 
+                                        } 
+                                    } 
                                 } 
                             } 
                         } 
-                    } 
-                } 
-            }); 
+                    }); 
+                })
+                .catch(error => {
+                    console.error('氣溫圖表加載失敗:', error);
+                });
+
+            const mapSelector = document.getElementById('mapSelector');
+            const contentFrame = document.getElementById('contentFrame');
+            const mapLoading = document.getElementById('mapLoading');
+            
+            const contentUrls = {
+                'mmc-gis': 'https://zax41006-bot.github.io/MMC-GIS/',
+                'ghmws-e-wind': 'https://eknlau5897.github.io/Earth_windy_2.0/demo/demo.html',
+                'satellite': 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU&fbclid=IwY2xjawRtg6pleHRuA2FlbQIxMABicmlkETFUM1dDU21ZRUNydTVrOGNUc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHst3Z44pZDhsE42UuupKJXyPNPb1oj0dOv84mGlb8jzeVwDNAdJbOBDxOxe1_aem_GhC4mXaRRE2txnyqnMe7Kw&brid=YWdncwEKt9oU5mgH8jfiP4F2KDXZ',
+                'smg-data': 'https://www.smg.gov.mo/zh/subpage/73/actualWeather'
+            };
+            
+            mapSelector.addEventListener('change', function() {
+                const selectedValue = this.value;
+                const url = contentUrls[selectedValue];
+                
+                if (url) {
+                    mapLoading.classList.remove('hidden');
+                    contentFrame.src = url;
+                    contentFrame.onload = function() {
+                        mapLoading.classList.add('hidden');
+                    };
+                    setTimeout(function() {
+                        mapLoading.classList.add('hidden');
+                    }, 10000);
+                }
+            });
         }); 
     </script> 
 </body> 
