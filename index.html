@@ -85,7 +85,7 @@
         </section>
 
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">實時天氣</h2>
+            <h2 id="liveWeatherHeading" class="text-xl font-bold mb-4">實時天氣</h2>
             <div class="weather-card p-6">
                 <div id="weatherLoading" class="flex items-center justify-center py-8">
                     <i class="fa fa-spinner fa-spin text-3xl text-primary mr-3"></i>
@@ -107,33 +107,33 @@
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div class="weather-stat">
                             <i class="fa fa-thermometer-half text-2xl text-red-500 mb-2"></i>
-                            <p class="text-sm text-gray-600">氣溫</p>
+                            <p id="labelTemp" class="text-sm text-gray-600">氣溫</p>
                             <p id="temperature" class="text-xl font-semibold"></p>
                         </div>
                         <div class="weather-stat">
                             <i class="fa fa-tint text-2xl text-blue-500 mb-2"></i>
-                            <p class="text-sm text-gray-600">相對濕度</p>
+                            <p id="labelHumidity" class="text-sm text-gray-600">相對濕度</p>
                             <p id="humidity" class="text-xl font-semibold"></p>
                         </div>
                         <div class="weather-stat">
                             <i class="fa fa-wind text-2xl text-green-500 mb-2"></i>
-                            <p class="text-sm text-gray-600">風速</p>
+                            <p id="labelWindSpeed" class="text-sm text-gray-600">風速</p>
                             <p id="windSpeed" class="text-xl font-semibold"></p>
                         </div>
                         <div class="weather-stat">
                             <i class="fa fa-compass text-2xl text-purple-500 mb-2"></i>
-                            <p class="text-sm text-gray-600">風向</p>
+                            <p id="labelWindDir" class="text-sm text-gray-600">風向</p>
                             <p id="windDirection" class="text-xl font-semibold"></p>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div class="weather-stat">
-                            <p class="text-sm text-gray-600">風力等級</p>
+                            <p id="labelWindLevel" class="text-sm text-gray-600">風力等級</p>
                             <p id="windLevel" class="text-lg font-semibold"></p>
                         </div>
                         <div class="weather-stat">
-                            <p class="text-sm text-gray-600">有效時間</p>
+                            <p id="labelValidTime" class="text-sm text-gray-600">有效時間</p>
                             <p id="validTime" class="text-lg font-semibold"></p>
                         </div>
                     </div>
@@ -214,11 +214,6 @@
                                 <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
                             </a>
                         </div>
-                        <!--<div class="mt-4 text-center">
-                            <a href="MMCWA.pdf" class="weather-draft-btn inline-block">
-                                <i class="fa fa-file-text-o mr-1"></i>查看重點天氣預報（05-19 01：15發佈）
-                            </a>
-                        </div>-->
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
@@ -266,7 +261,6 @@
             <p>©2026 澳門氣象中心 </p> 
             <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p> 
         </div> 
-    </footer> 
  
     <script> 
         document.addEventListener('DOMContentLoaded', () => { 
@@ -318,7 +312,6 @@
                 const weatherError = document.getElementById('weatherError');
 
                 const proxyUrl = 'https://corsproxy.io/?';
-
                 const xmlUrl = 'https://xml.smg.gov.mo/e_actual_brief.xml?t=' + new Date().getTime();
 
                 fetch(proxyUrl + encodeURIComponent(xmlUrl), { cache: 'no-store' })
@@ -354,29 +347,67 @@
                         const feelsLike = xmlDoc.querySelector('FeelsLikeDescription').textContent;
 
                         const weatherStatusMap = {
-                            '00': '晴朗',
-                            '01': '天晴',
-                            '02': '間晴',
-                            '03': '多雲',
-                            '04': '陰天',
-                            '05': '有微雨',
-                            '06': '有雨',
-                            '07': '有大驟雨',
-                            '08': '有雷暴',
-                            '09': '有霧',
-                            '10': '有薄霧'
+                            '00': '晴朗', '01': '天晴', '02': '間晴', '03': '多雲', '04': '陰天',
+                            '05': '有微雨', '06': '有雨', '07': '有大驟雨', '08': '有雷暴', '09': '有霧', '10': '有薄霧'
                         };
 
-                        document.getElementById('weatherIcon').src = iconUrl;
-                        document.getElementById('weatherStatus').textContent = weatherStatusMap[weatherStatus] || '天氣狀況';
-                        document.getElementById('feelsLike').textContent = `體感：${feelsLike}`;
+                        const feelsLikeMap = {
+                            'Very Cold': '非常寒冷', 'Cold': '寒冷', 'Cool': '清涼',
+                            'Comfortable': '舒適', 'Warm': '溫暖', 'Hot': '酷熱', 'Very Hot': '非常酷熱'
+                        };
+
+                        const windDirMap = {
+                            'Northerly': '偏北風', 'North-easterly': '東北風', 'Easterly': '偏東風',
+                            'South-easterly': '東南風', 'Southerly': '偏南風', 'South-westerly': '西南風',
+                            'Westerly': '偏西風', 'North-westerly': '西北風', 'Variable': '無定向風'
+                        };
+
+                        const statusCode = weatherStatus.replace(/[^0-9]/g, '');
+                        const normalizedStatus = String(Number(statusCode) % 50).padStart(2, '0');
+
+                        let windLevelCn = windSpeedDesc;
+                        if (windSpeedDesc.toLowerCase().includes('force')) {
+                            windLevelCn = windSpeedDesc.replace(/Force\s+/i, '') + '級';
+                        } else if (windSpeedDesc === 'Light') {
+                            windLevelCn = '微風';
+                        }
+
+                        document.getElementById('liveWeatherHeading').textContent = '實時天氣';
+                        document.getElementById('weatherStatus').textContent = weatherStatusMap[normalizedStatus] || '天氣狀況';
+                        document.getElementById('feelsLike').textContent = `體感：${feelsLikeMap[feelsLike] || feelsLike}`;
                         document.getElementById('updateTime').textContent = `更新時間：${sysPubdate}`;
+                        document.getElementById('labelTemp').textContent = '氣溫';
+                        document.getElementById('labelHumidity').textContent = '相對濕度';
+                        document.getElementById('labelWindSpeed').textContent = '風速';
+                        document.getElementById('labelWindDir').textContent = '風向';
+                        document.getElementById('windDirection').textContent = windDirMap[windDir] || windDir;
+                        document.getElementById('labelWindLevel').textContent = '風力等級';
+                        document.getElementById('windLevel').textContent = windLevelCn;
+                        document.getElementById('labelValidTime').textContent = '有效時間';
+
+                        document.getElementById('weatherIcon').src = iconUrl;
                         document.getElementById('temperature').textContent = currentTemp;
                         document.getElementById('humidity').textContent = humidity;
                         document.getElementById('windSpeed').textContent = windSpeed;
-                        document.getElementById('windDirection').textContent = windDir;
-                        document.getElementById('windLevel').textContent = windSpeedDesc;
                         document.getElementById('validTime').textContent = validFor;
+
+                        let isNight = false;
+                        const timeMatch = sysPubdate.match(/(\d{2}):(\d{2})/);
+                        if (timeMatch) {
+                            const hour = parseInt(timeMatch[1], 10);
+                            isNight = (hour >= 18 || hour < 6);
+                        }
+                        
+                        const statsContainers = weatherData.querySelectorAll('.weather-stat');
+                        statsContainers.forEach(el => {
+                            if (isNight) {
+                                el.classList.remove('bg-blue-50');
+                                el.classList.add('bg-slate-900/5', 'border', 'border-slate-100/50');
+                            } else {
+                                el.classList.remove('bg-slate-900/5', 'border', 'border-slate-100/50');
+                                el.classList.add('bg-blue-50');
+                            }
+                        });
 
                         weatherLoading.classList.add('hidden');
                         weatherData.classList.remove('hidden');
@@ -391,7 +422,6 @@
             };
 
             fetchWeatherData();
-
             setInterval(fetchWeatherData, 600000);
 
             const ctx = document.getElementById('tempChart').getContext('2d'); 
@@ -492,4 +522,4 @@
         }); 
     </script> 
 </body> 
-</html>
+</html> 
