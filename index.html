@@ -356,13 +356,6 @@
                             'Comfortable': '舒適', 'Warm': '溫暖', 'Hot': '炎熱', 'Very Hot': '酷熱', 'Extremely Hot': '非常酷熱'
                         };
 
-                        const windDirMap = {
-                        'Northerly': '偏北風','North': '正北風','North-easterly': '東北風','Northeasterly': '東北風','Easterly': '偏東風',
-                        'East': '正東風','South-easterly': '東南風','Southeasterly': '東南風','Southerly': '偏南風','South': '正南風','South-westerly': '西南風',
-                        'Southwesterly': '西南風','Westerly': '偏西風','West': '正西風','North-westerly': '西北風','Northwesterly': '西北風','Variable': '無定向風',
-                        'Light': '微風','Calm': '靜止無風'
-                    };
-
                         const statusCode = weatherStatus.replace(/[^0-9]/g, '');
                         const normalizedStatus = String(Number(statusCode) % 50).padStart(2, '0');
 
@@ -381,7 +374,10 @@
                         document.getElementById('labelHumidity').textContent = '相對濕度';
                         document.getElementById('labelWindSpeed').textContent = '風速';
                         document.getElementById('labelWindDir').textContent = '風向';
-                        document.getElementById('windDirection').textContent = windDirMap[windDir] || windDir;
+                        
+                        // 直接顯示氣象局英文XML原始風向，不翻譯
+                        document.getElementById('windDirection').textContent = windDir;
+                        
                         document.getElementById('labelWindLevel').textContent = '風力等級';
                         document.getElementById('windLevel').textContent = windLevelCn;
                         document.getElementById('labelValidTime').textContent = '有效時間';
@@ -523,4 +519,4 @@
         }); 
     </script> 
 </body> 
-</html> 
+</html>
