@@ -152,13 +152,13 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受中層高壓覆蓋。多雲，部份時間天晴。吹3至4級南至西南風。氣溫約為攝氏27至32度。相對濕度介乎百分之70至95之間。
+                    受中層高壓覆蓋。多雲，部份時間天晴。吹3至4級南至西南風。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    多雲。部分時間天晴。吹3至4級南至西南風及有陣風。氣溫約為攝氏27至32度。相對濕度介乎百分之65至90之間。
+                    天氣酷熱。多雲。部分時間天晴。吹3至4級南至西南風及有陣風。氣溫約為攝氏27至32度。相對濕度介乎百分之65至90之間。
                     </p>
                 </div>
 
@@ -222,7 +222,7 @@
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年05月24日12時00分)
+                        (發佈/更新時間：2026年05月24日18時00分)
                     </p>
                 </div>
             </div>
@@ -312,19 +312,15 @@
                 }); 
             }); 
 
-            // 獲取並顯示澳門地球物理暨氣象局XML實時天氣數據
             const fetchWeatherData = () => {
                 const weatherLoading = document.getElementById('weatherLoading');
                 const weatherData = document.getElementById('weatherData');
                 const weatherError = document.getElementById('weatherError');
-                
-                // 改用更穩定的 corsproxy.io 代理
+
                 const proxyUrl = 'https://corsproxy.io/?';
-                
-                // 【修復核心】加入時間戳參數以避免瀏覽器或代理伺服器快取
+
                 const xmlUrl = 'https://xml.smg.gov.mo/e_actual_brief.xml?t=' + new Date().getTime();
-                
-                // 【修復核心】加入 cache: 'no-store' 強制不使用快取
+
                 fetch(proxyUrl + encodeURIComponent(xmlUrl), { cache: 'no-store' })
                     .then(response => {
                         if (!response.ok) {
@@ -333,15 +329,12 @@
                         return response.text();
                     })
                     .then(xmlText => {
-                        // 解析XML
                         const parser = new DOMParser();
                         const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
                         
-                        // 提取數據
                         const sysPubdate = xmlDoc.querySelector('SysPubdate').textContent;
                         const validFor = xmlDoc.querySelector('ValidFor').textContent;
                         
-                        // 獲取所有溫度數據
                         const temperatures = xmlDoc.querySelectorAll('Temperature');
                         let currentTemp;
                         temperatures.forEach(temp => {
@@ -359,8 +352,7 @@
                         const iconUrl = xmlDoc.querySelector('IconURL').textContent;
                         const weatherStatus = xmlDoc.querySelector('WeatherStatus').textContent;
                         const feelsLike = xmlDoc.querySelector('FeelsLikeDescription').textContent;
-                        
-                        // 天氣狀態對應表
+
                         const weatherStatusMap = {
                             '00': '晴朗',
                             '01': '天晴',
@@ -374,8 +366,7 @@
                             '09': '有霧',
                             '10': '有薄霧'
                         };
-                        
-                        // 更新頁面
+
                         document.getElementById('weatherIcon').src = iconUrl;
                         document.getElementById('weatherStatus').textContent = weatherStatusMap[weatherStatus] || '天氣狀況';
                         document.getElementById('feelsLike').textContent = `體感：${feelsLike}`;
@@ -386,8 +377,7 @@
                         document.getElementById('windDirection').textContent = windDir;
                         document.getElementById('windLevel').textContent = windSpeedDesc;
                         document.getElementById('validTime').textContent = validFor;
-                        
-                        // 顯示數據，隱藏加載
+
                         weatherLoading.classList.add('hidden');
                         weatherData.classList.remove('hidden');
                         weatherError.classList.add('hidden');
@@ -399,11 +389,9 @@
                         weatherError.classList.remove('hidden');
                     });
             };
-            
-            // 頁面加載時立即獲取數據
+
             fetchWeatherData();
-            
-            // 每10分鐘自動更新一次
+
             setInterval(fetchWeatherData, 600000);
 
             const ctx = document.getElementById('tempChart').getContext('2d'); 
