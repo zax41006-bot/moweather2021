@@ -229,6 +229,7 @@
             <div class="weather-card p-6"> 
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <select id="mapSelector" class="map-select">
+                        <option value="mmc-tc-gis">熱帶氣旋預報路徑</option>
                         <option value="mmc-gis">MMC-GIS 天氣雷達/衛星雲圖</option>
                         <option value="ghmws-e-wind">GHMWS 地球風場（測試版）</option>
                         <option value="satellite">知天衛星雲圖</option>
@@ -496,6 +497,7 @@
             const mapLoading = document.getElementById('mapLoading');
             
             const contentUrls = {
+                'mmc-tc-gis': 'https://zax41006-bot.github.io/MMC-TC-GIS/',
                 'mmc-gis': 'https://zax41006-bot.github.io/MMC-GIS/',
                 'ghmws-e-wind': 'https://eknlau5897.github.io/Earth_windy_2.0/demo/demo.html',
                 'satellite': 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU&fbclid=IwY2xjawRtg6pleHRuA2FlbQIxMABicmlkETFUM1dDU21ZRUNydTVrOGNUc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHst3Z44pZDhsE42UuupKJXyPNPb1oj0dOv84mGlb8jzeVwDNAdJbOBDxOxe1_aem_GhC4mXaRRE2txnyqnMe7Kw&brid=YWdncwEKt9oU5mgH8jfiP4F2KDXZ',
