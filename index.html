@@ -229,7 +229,7 @@
             <div class="weather-card p-6"> 
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <select id="mapSelector" class="map-select">
-                        <option value="mmc-tc-gis">熱帶氣旋預報路徑</option>
+                        <option value="mmc-tc-gis" selected>熱帶氣旋預報路徑</option>
                         <option value="mmc-gis">MMC-GIS 天氣雷達/衛星雲圖</option>
                         <option value="ghmws-e-wind">GHMWS 地球風場（測試版）</option>
                         <option value="satellite">知天衛星雲圖</option>
@@ -246,7 +246,7 @@
                     </div>
                     <iframe 
                         id="contentFrame"
-                        src="https://zax41006-bot.github.io/MMC-GIS/" 
+                        src="https://zax41006-bot.github.io/MMC-TC-GIS/" 
                         width="100%"  
                         height="600"  
                         frameborder="0"  
@@ -514,6 +514,7 @@
                     contentFrame.onload = function() {
                         mapLoading.classList.add('hidden');
                     };
+                    // 10秒超時保護
                     setTimeout(function() {
                         mapLoading.classList.add('hidden');
                     }, 10000);
