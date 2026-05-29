@@ -37,23 +37,25 @@
             .map-select { @apply w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary; }
             .weather-stat { @apply flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50; }
         } 
-        body { background-color: #E3F2FD; } 
+        /* body { background-color: #E3F2FD; } */
+        body { background-color: #f3f5f69d; }
         header { position: relative; z-index: 999; } 
     </style> 
 </head> 
-<body class="font-sans text-gray-800 min-h-screen"> 
-    <header class="bg-white shadow-sm sticky top-0"> 
+<body class="font-sans text-gray-800 min-h-screen">
+        <header class="bg-white shadow-sm sticky top-0"> 
         <div class="container mx-auto px-4 py-3 flex justify-between items-center"> 
             <div class="flex items-center gap-2"> 
                 <img src="mmclogo-b.jpg" alt="澳門氣象中心" class="w-8 h-8"> 
-                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1> 
+                <!--<h1 class="text-xl font-bold text-primary">澳門氣象中心</h1> -->
+                <h1 class="text-xl font-bold text-gray-600">澳門氣象中心</h1>
             </div> 
              
             <nav class="hidden md:flex items-center gap-1"> 
-                <a href="index.html" class="nav-link font-medium text-primary">首頁</a> 
+                <a href="index.html" class="nav-link">首頁</a> 
                 <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="nav-link">熱帶氣旋資訊</a> 
                 <a href="https://eknlau5897.github.io/GHMWS-global-model/index.html" class="nav-link">模式預報（GHMWS）</a> 
-                <a href="about.html" class="nav-link">關於我們</a> 
+                <a href="about.html" class="nav-link font-medium text-primary">關於我們</a> 
             </nav> 
              
             <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"> 
@@ -71,11 +73,11 @@
  
     <main class="container mx-auto px-4 py-8"> 
         <section class="mb-8"> 
-            <h2 class="text-xl font-bold mb-4">澳門氣象中心TG</h2> 
+            <h2 class="text-xl font-bold mb-4 text-black">澳門氣象中心TG</h2> 
             <div class="weather-card p-6">
                 <div class="bg-gray-50 rounded-xl p-6 text-center">
                     <i class="fa-brands fa-telegram text-4xl text-blue-500 mb-3"></i>
-                    <h3 class="text-lg font-semibold mb-2">歡迎加入我們的 Telegram 頻道</h3>
+                    <h3 class="text-lg font-semibold mb-2 text-black">歡迎加入我們的 Telegram 頻道</h3>
                     <p class="text-gray-600 mb-4">即時接收澳門天氣、熱帶氣旋、氣象分析資訊</p>
                     <a href="https://t.me/macaommc2021" target="_blank" class="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-all">
                         <i class="fa-brands fa-telegram mr-2"></i>進入 Telegram 頻道
@@ -85,7 +87,7 @@
         </section>
 
         <section class="mb-8">
-            <h2 id="liveWeatherHeading" class="text-xl font-bold mb-4">實時天氣</h2>
+            <h2 id="liveWeatherHeading" class="text-xl font-bold mb-4 text-black">實時天氣</h2>
             <div class="weather-card p-6">
                 <div id="weatherLoading" class="flex items-center justify-center py-8">
                     <i class="fa fa-spinner fa-spin text-3xl text-primary mr-3"></i>
@@ -97,7 +99,7 @@
                         <div class="flex items-center mb-4 md:mb-0">
                             <img id="weatherIcon" src="" alt="天氣圖標" class="w-20 h-20 mr-4">
                             <div>
-                                <p id="weatherStatus" class="text-2xl font-bold text-gray-800"></p>
+                                <p id="weatherStatus" class="text-2xl font-bold text-black"></p>
                                 <p id="feelsLike" class="text-lg text-gray-600"></p>
                             </div>
                         </div>
@@ -147,23 +149,23 @@
         </section>
 
         <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4">天氣預報（本中心）</h2>
+            <h2 class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
             <div class="weather-card overflow-hidden">
                 <div class="p-6 border-b border-gray-100">
-                    <h3 class="font-semibold text-lg mb-3 text-gray-800">今日天氣</h3>
+                    <h3 class="font-semibold text-lg mb-3 text-black">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
                     受中層高壓覆蓋。天氣極端酷熱。天晴。部分時間多雲。晚間有一兩陣驟雨。吹2至3級西至西南風。氣溫約為攝氏26至36度。相對濕度介乎百分之65至95之間。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
-                    <h3 class="font-semibold text-lg mb-3 text-gray-800">明日天氣</h3>
+                    <h3 class="font-semibold text-lg mb-3 text-black">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
                     多雲。有幾陣驟雨及雷暴。吹2至4級偏北風，後轉偏東風。氣溫約為攝氏25至30度。相對濕度介乎百分之70至95之間。
                     </p>
                 </div>
 
                 <div class="p-6">
-                    <h3 class="font-semibold text-lg mb-3 text-gray-800">七日天氣展望</h3>
+                    <h3 class="font-semibold text-lg mb-3 text-black">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
 一個中層高壓正覆蓋廣東地區，預料今日天氣極端酷熱。
 而週末期間，受地面低壓槽影響，有幾陣驟雨。
@@ -207,7 +209,7 @@
                     </div>
 
                     <div class="p-4 border border-gray-100 rounded-lg bg-gray-50">
-                        <h3 class="text-base font-semibold mb-3">七日氣溫預報</h3>
+                        <h3 class="text-base font-semibold mb-3 text-black">七日氣溫預報</h3>
                         <div class="h-56 bg-white p-2 rounded-lg">
                             <canvas id="tempChart"></canvas>
                         </div>
@@ -226,7 +228,7 @@
         </section>
       
         <section class="mb-8"> 
-            <h2 class="text-xl font-bold mb-4">氣象數據</h2> 
+            <h2 class="text-xl font-bold mb-4 text-black">氣象數據</h2> 
             <div class="weather-card p-6"> 
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <select id="mapSelector" class="map-select">
