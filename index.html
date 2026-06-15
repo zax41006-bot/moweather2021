@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
     <title>澳門氣象中心 | 首頁</title> 
     <link class="js-meta-tag" rel="icon" href="mmclogo-b.jpg" type="image/jpeg"> 
-    <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdn.tailwindcss.com">
+    </script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script> 
-     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js">
+    </script> 
+
     <script> 
         tailwind.config = { 
             theme: { 
@@ -21,7 +23,7 @@
             } 
         } 
     </script> 
-     
+
     <style type="text/tailwindcss"> 
         @layer utilities { 
             .weather-card { @apply bg-white rounded-xl shadow-md; } 
@@ -43,25 +45,25 @@
     </style> 
 </head> 
 <body class="font-sans text-gray-800 min-h-screen">
-        <header class="bg-white shadow-sm sticky top-0"> 
+    <header class="bg-white shadow-sm sticky top-0"> 
         <div class="container mx-auto px-4 py-3 flex justify-between items-center"> 
             <div class="flex items-center gap-2"> 
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8"> 
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
                 <!--<h1 class="text-xl font-bold text-gray-600">澳門氣象中心</h1>-->
             </div> 
-             
+
             <nav class="hidden md:flex items-center gap-1"> 
                 <a href="index.html" class="nav-link">首頁</a> 
                 <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="nav-link">熱帶氣旋資訊</a> 
                 <a href="https://eknlau5897.github.io/GHMWS-global-model/index.html" class="nav-link">模式預報（GHMWS）</a> 
                 <a href="about.html" class="nav-link font-medium text-primary">關於我們</a> 
             </nav> 
-             
+
             <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"> 
                 <i id="menuIcon" class="fa fa-bars text-xl"></i> 
             </button> 
- 
+
             <div id="mobileMenu" class="mobile-menu mobile-menu-hidden"> 
                 <a href="index.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">首頁</a> 
                 <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a> 
@@ -70,7 +72,7 @@
             </div> 
         </div> 
     </header> 
- 
+
     <main class="container mx-auto px-4 py-8"> 
         <section class="mb-8"> 
             <h2 class="text-xl font-bold mb-4 text-black">澳門氣象中心TG</h2> 
@@ -93,7 +95,7 @@
                     <i class="fa fa-spinner fa-spin text-3xl text-primary mr-3"></i>
                     <p class="text-gray-600">正在獲取最新天氣數據...</p>
                 </div>
-                
+
                 <div id="weatherData" class="hidden">
                     <div class="flex flex-col md:flex-row items-center justify-between mb-6">
                         <div class="flex items-center mb-4 md:mb-0">
@@ -105,7 +107,7 @@
                         </div>
                         <p id="updateTime" class="text-sm text-gray-500"></p>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div class="weather-stat">
                             <i class="fa fa-thermometer-half text-2xl text-red-500 mb-2"></i>
@@ -128,7 +130,7 @@
                             <p id="windDirection" class="text-xl font-semibold"></p>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-4">
                         <div class="weather-stat">
                             <p id="labelWindLevel" class="text-sm text-gray-600">風力等級</p>
@@ -140,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="weatherError" class="hidden text-center py-8 text-gray-600">
                     <i class="fa fa-exclamation-triangle text-3xl text-yellow-500 mb-3"></i>
                     <p>無法獲取實時天氣數據，請稍後再試</p>
@@ -154,52 +156,52 @@
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-black">今日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    受熱帶低氣壓相關下沉氣流，隨後受地面低壓槽影響。天氣極端酷熱。多雲。部分時間天晴。稍後有幾陣驟雨及雷暴。吹2至4級西至西南風。氣溫約為攝氏28至35度。相對濕度介乎百分之60至95之間。
+                        受地面低壓槽及低層西南氣流影響。天氣不穩定。多雲。間中有驟雨及雨勢有時頗大。間中有雷暴。吹3至5級西南風及有陣風。氣溫約為攝氏25至31度。相對濕度介乎百分之75至99之間。
                     </p>
                 </div>
                 <div class="p-6 border-b border-gray-100">
                     <h3 class="font-semibold text-lg mb-3 text-black">明日天氣</h3>
                     <p class="text-gray-700 text-base leading-relaxed">
-                    天氣酷熱。多雲。部分時間天晴，有幾陣驟雨及雷暴。吹2至4級西至西南風。氣溫約為攝氏27至33度。相對濕度介乎百分之65至95之間。
+                        天氣不穩定。多雲。間中有大驟雨及雷暴。吹3至5級西南風及有陣風。氣溫約為攝氏25至29度。相對濕度介乎百分之75至99之間。
                     </p>
                 </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-black">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-位於南海東部的熱帶低氣壓會緩慢發展並大致趨向台灣及琉球群島一帶，而廣東地區受其相關下沉氣流影響，天氣極端酷熱，午後可能會有高溫觸發及地面低壓槽相關的雷雨影響。
-另一道地面低壓槽及一股低層西南氣流會在下周共同為廣東地區帶來不穩定天氣。
+                        預料未來數日將會持續受地面低壓槽徘徊及低層西南氣流影響，廣東地區會有持續的驟雨及雷暴天氣。
+                        展望本周後期，中層高壓逐漸增強並覆蓋華南沿岸，天色逐步好轉，但仍有一兩陣驟雨。
                     </p>
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">       
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-05</p>
+                                    <p class="text-xs text-green-600">06-16</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-06</p>
+                                    <p class="text-xs text-green-600">06-17</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>  
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-07</p>
+                                    <p class="text-xs text-green-600">06-18</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-08</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                    <p class="text-xs text-green-600">06-19</p>
+                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-09</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                    <p class="text-xs text-green-600">06-20</p>
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div> 
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-10</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                    <p class="text-xs text-green-600">06-21</p>
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">06-11</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                    <p class="text-xs text-green-600">06-22</p>
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>       
                             </div>
                         </div>
@@ -215,30 +217,30 @@
                                 <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
                             </a>
                         </div>
-                        <div class="mt-4 text-center">
+                        <!--<div class="mt-4 text-center">
                             <a href="MMCWA.pdf" class="weather-draft-btn inline-block">
                                 <i class="fa fa-file-text-o mr-1"></i>重點天氣預報（05-29 23：00發佈）
                             </a>
-                        </div>
+                        </div>-->
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年06月05日00時00分)
+                        (發佈/更新時間：2026年06月15日12時00分)
                     </p>
                 </div>
             </div>
         </section>
-      
+
         <section class="mb-8"> 
             <h2 class="text-xl font-bold mb-4 text-black">氣象數據</h2> 
             <div class="weather-card p-6"> 
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <select id="mapSelector" class="map-select">
-                        <option value="mmc-tc-gis" selected>熱帶氣旋預報路徑</option>
+                        <option value="smg-data" selected>澳門實時天氣</option>
+                        <!--<option value="mmc-tc-gis">熱帶氣旋預報路徑</option>-->
                         <option value="mmc-gis">MMC-GIS 天氣雷達/衛星雲圖</option>
                         <option value="ghmws-e-wind">GHMWS 地球風場（測試版）</option>
                         <option value="satellite">知天衛星雲圖</option>
-                        <option value="smg-data">澳門地球物理氣象局實時數據</option>
                     </select>
                     <p class="text-gray-500 text-sm">選擇要查看的氣象數據</p>
                 </div>
@@ -251,7 +253,7 @@
                     </div>
                     <iframe 
                         id="contentFrame"
-                        src="https://zax41006-bot.github.io/MMC-TC-GIS/" 
+                        src="https://zax41006-bot.github.io/MMC-MOWMAP/" 
                         width="100%"  
                         height="600"  
                         frameborder="0"  
@@ -262,19 +264,20 @@
             </div> 
         </section> 
     </main> 
- 
+
     <footer class="bg-white py-6 mt-8"> 
         <div class="container mx-auto px-4 text-center text-gray-500 text-sm"> 
             <p>©2026 澳門氣象中心 </p> 
             <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p> 
         </div> 
- 
+    </footer>
+
     <script> 
         document.addEventListener('DOMContentLoaded', () => { 
             const mobileMenuBtn = document.getElementById('mobileMenuBtn'); 
             const mobileMenu = document.getElementById('mobileMenu'); 
             const menuIcon = document.getElementById('menuIcon'); 
-             
+
             const toggleMenuIcon = (isOpen) => { 
                 if (isOpen) { 
                     menuIcon.classList.remove('fa-bars'); 
@@ -284,18 +287,18 @@
                     menuIcon.classList.add('fa-bars'); 
                 } 
             }; 
-             
+
             const toggleMobileMenu = () => { 
                 const isHidden = mobileMenu.classList.contains('mobile-menu-hidden'); 
                 mobileMenu.classList.toggle('mobile-menu-hidden'); 
                 toggleMenuIcon(!isHidden); 
             }; 
-             
+
             mobileMenuBtn.addEventListener('click', function(e) { 
                 e.stopPropagation(); 
                 toggleMobileMenu(); 
             }); 
-             
+
             document.addEventListener('click', function(e) { 
                 if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) { 
                     if (!mobileMenu.classList.contains('mobile-menu-hidden')) { 
@@ -304,7 +307,7 @@
                     } 
                 } 
             }); 
-             
+
             const menuLinks = mobileMenu.querySelectorAll('a'); 
             menuLinks.forEach(link => { 
                 link.addEventListener('click', function() { 
@@ -331,20 +334,20 @@
                     .then(xmlText => {
                         const parser = new DOMParser();
                         const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                        
+
                         const sysPubdate = xmlDoc.querySelector('SysPubdate').textContent;
                         const validFor = xmlDoc.querySelector('ValidFor').textContent;
-                        
+
                         const temperatures = xmlDoc.querySelectorAll('Temperature');
                         let currentTemp;
                         temperatures.forEach(temp => {
                             const type = temp.querySelector('Type').textContent;
                             const value = temp.querySelector('Value').textContent;
                             const unit = temp.querySelector('MeasureUnit').textContent;
-                            
+
                             if (type === '3') currentTemp = `${value}${unit}`;
                         });
-                        
+
                         const humidity = xmlDoc.querySelector('Humidity Value').textContent + '%';
                         const windSpeed = xmlDoc.querySelector('WindSpeed Value').textContent + ' km/h';
                         const windSpeedDesc = xmlDoc.querySelector('WindSpeedDescription').textContent;
@@ -381,10 +384,10 @@
                         document.getElementById('labelHumidity').textContent = '相對濕度';
                         document.getElementById('labelWindSpeed').textContent = '風速';
                         document.getElementById('labelWindDir').textContent = '風向';
-                        
+
                         // 直接顯示氣象局英文XML原始風向，不翻譯
                         document.getElementById('windDirection').textContent = windDir;
-                        
+
                         document.getElementById('labelWindLevel').textContent = '風力等級';
                         document.getElementById('windLevel').textContent = windLevelCn;
                         document.getElementById('labelValidTime').textContent = '有效時間';
@@ -401,7 +404,7 @@
                             const hour = parseInt(timeMatch[1], 10);
                             isNight = (hour >= 18 || hour < 6);
                         }
-                        
+
                         const statsContainers = weatherData.querySelectorAll('.weather-stat');
                         statsContainers.forEach(el => {
                             if (isNight) {
@@ -429,7 +432,7 @@
             setInterval(fetchWeatherData, 600000);
 
             const ctx = document.getElementById('tempChart').getContext('2d'); 
-            
+
             fetch('temp.csv')
                 .then(response => {
                     if (!response.ok) {
@@ -500,19 +503,19 @@
             const mapSelector = document.getElementById('mapSelector');
             const contentFrame = document.getElementById('contentFrame');
             const mapLoading = document.getElementById('mapLoading');
-            
+
             const contentUrls = {
-                'mmc-tc-gis': 'https://zax41006-bot.github.io/MMC-TC-GIS/',
+                'smg-data': 'https://zax41006-bot.github.io/MMC-MOWMAP/',
+                // 'mmc-tc-gis': 'https://zax41006-bot.github.io/MMC-TC-GIS/',
                 'mmc-gis': 'https://zax41006-bot.github.io/MMC-GIS/',
                 'ghmws-e-wind': 'https://eknlau5897.github.io/Earth_windy_2.0/demo/demo.html',
                 'satellite': 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU&fbclid=IwY2xjawRtg6pleHRuA2FlbQIxMABicmlkETFUM1dDU21ZRUNydTVrOGNUc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHst3Z44pZDhsE42UuupKJXyPNPb1oj0dOv84mGlb8jzeVwDNAdJbOBDxOxe1_aem_GhC4mXaRRE2txnyqnMe7Kw&brid=YWdncwEKt9oU5mgH8jfiP4F2KDXZ',
-                'smg-data': 'https://www.smg.gov.mo/zh/subpage/73/actualWeather'
             };
-            
+
             mapSelector.addEventListener('change', function() {
                 const selectedValue = this.value;
                 const url = contentUrls[selectedValue];
-                
+
                 if (url) {
                     mapLoading.classList.remove('hidden');
                     contentFrame.src = url;
