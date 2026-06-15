@@ -40,7 +40,6 @@
             .weather-stat { @apply flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50; }
         } 
         body { background-color: #E3F2FD; } 
-        /*body { background-color: #f3f5f69d; }*/
         header { position: relative; z-index: 999; } 
     </style> 
 </head> 
@@ -50,7 +49,6 @@
             <div class="flex items-center gap-2"> 
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8"> 
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
-                <!--<h1 class="text-xl font-bold text-gray-600">澳門氣象中心</h1>-->
             </div> 
 
             <nav class="hidden md:flex items-center gap-1"> 
@@ -88,67 +86,7 @@
             </div>
         </section>
 
-        <section class="mb-8">
-            <h2 id="liveWeatherHeading" class="text-xl font-bold mb-4 text-black">實時天氣</h2>
-            <div class="weather-card p-6">
-                <div id="weatherLoading" class="flex items-center justify-center py-8">
-                    <i class="fa fa-spinner fa-spin text-3xl text-primary mr-3"></i>
-                    <p class="text-gray-600">正在獲取最新天氣數據...</p>
-                </div>
-
-                <div id="weatherData" class="hidden">
-                    <div class="flex flex-col md:flex-row items-center justify-between mb-6">
-                        <div class="flex items-center mb-4 md:mb-0">
-                            <img id="weatherIcon" src="" alt="天氣圖標" class="w-20 h-20 mr-4">
-                            <div>
-                                <p id="weatherStatus" class="text-2xl font-bold text-black"></p>
-                                <p id="feelsLike" class="text-lg text-gray-600"></p>
-                            </div>
-                        </div>
-                        <p id="updateTime" class="text-sm text-gray-500"></p>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="weather-stat">
-                            <i class="fa fa-thermometer-half text-2xl text-red-500 mb-2"></i>
-                            <p id="labelTemp" class="text-sm text-gray-600">氣溫</p>
-                            <p id="temperature" class="text-xl font-semibold"></p>
-                        </div>
-                        <div class="weather-stat">
-                            <i class="fa fa-tint text-2xl text-blue-500 mb-2"></i>
-                            <p id="labelHumidity" class="text-sm text-gray-600">相對濕度</p>
-                            <p id="humidity" class="text-xl font-semibold"></p>
-                        </div>
-                        <div class="weather-stat">
-                            <i class="fa fa-wind text-2xl text-green-500 mb-2"></i>
-                            <p id="labelWindSpeed" class="text-sm text-gray-600">風速</p>
-                            <p id="windSpeed" class="text-xl font-semibold"></p>
-                        </div>
-                        <div class="weather-stat">
-                            <i class="fa fa-compass text-2xl text-purple-500 mb-2"></i>
-                            <p id="labelWindDir" class="text-sm text-gray-600">風向</p>
-                            <p id="windDirection" class="text-xl font-semibold"></p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="weather-stat">
-                            <p id="labelWindLevel" class="text-sm text-gray-600">風力等級</p>
-                            <p id="windLevel" class="text-lg font-semibold"></p>
-                        </div>
-                        <div class="weather-stat">
-                            <p id="labelValidTime" class="text-sm text-gray-600">有效時間</p>
-                            <p id="validTime" class="text-lg font-semibold"></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="weatherError" class="hidden text-center py-8 text-gray-600">
-                    <i class="fa fa-exclamation-triangle text-3xl text-yellow-500 mb-3"></i>
-                    <p>無法獲取實時天氣數據，請稍後再試</p>
-                </div>
-            </div>
-        </section>
+        <!-- 實時天氣 section 已完全移除 -->
 
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
@@ -217,11 +155,6 @@
                                 <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
                             </a>
                         </div>
-                        <!--<div class="mt-4 text-center">
-                            <a href="MMCWA.pdf" class="weather-draft-btn inline-block">
-                                <i class="fa fa-file-text-o mr-1"></i>重點天氣預報（05-29 23：00發佈）
-                            </a>
-                        </div>-->
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
@@ -237,7 +170,6 @@
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <select id="mapSelector" class="map-select">
                         <option value="smg-data" selected>澳門實時天氣</option>
-                        <!--<option value="mmc-tc-gis">熱帶氣旋預報路徑</option>-->
                         <option value="mmc-gis">MMC-GIS 天氣雷達/衛星雲圖</option>
                         <option value="ghmws-e-wind">GHMWS 地球風場（測試版）</option>
                         <option value="satellite">知天衛星雲圖</option>
@@ -316,120 +248,7 @@
                 }); 
             }); 
 
-            const fetchWeatherData = () => {
-                const weatherLoading = document.getElementById('weatherLoading');
-                const weatherData = document.getElementById('weatherData');
-                const weatherError = document.getElementById('weatherError');
-
-                const proxyUrl = 'https://corsproxy.io/?';
-                const xmlUrl = 'https://xml.smg.gov.mo/e_actual_brief.xml?t=' + new Date().getTime();
-
-                fetch(proxyUrl + encodeURIComponent(xmlUrl), { cache: 'no-store' })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('網絡請求失敗');
-                        }
-                        return response.text();
-                    })
-                    .then(xmlText => {
-                        const parser = new DOMParser();
-                        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-
-                        const sysPubdate = xmlDoc.querySelector('SysPubdate').textContent;
-                        const validFor = xmlDoc.querySelector('ValidFor').textContent;
-
-                        const temperatures = xmlDoc.querySelectorAll('Temperature');
-                        let currentTemp;
-                        temperatures.forEach(temp => {
-                            const type = temp.querySelector('Type').textContent;
-                            const value = temp.querySelector('Value').textContent;
-                            const unit = temp.querySelector('MeasureUnit').textContent;
-
-                            if (type === '3') currentTemp = `${value}${unit}`;
-                        });
-
-                        const humidity = xmlDoc.querySelector('Humidity Value').textContent + '%';
-                        const windSpeed = xmlDoc.querySelector('WindSpeed Value').textContent + ' km/h';
-                        const windSpeedDesc = xmlDoc.querySelector('WindSpeedDescription').textContent;
-                        const windDir = xmlDoc.querySelector('WindDirection WindDescription').textContent;
-                        const iconUrl = xmlDoc.querySelector('IconURL').textContent;
-                        const weatherStatus = xmlDoc.querySelector('WeatherStatus').textContent;
-                        const feelsLike = xmlDoc.querySelector('FeelsLikeDescription').textContent;
-
-                        const weatherStatusMap = {
-                            '00': '晴朗', '01': '天晴', '02': '間晴', '03': '多雲', '04': '陰天',
-                            '05': '有微雨', '06': '有雨', '07': '有大驟雨', '08': '有雷暴', '09': '有霧', '10': '有薄霧'
-                        };
-
-                        const feelsLikeMap = {
-                            'Extremely Cold': '極端寒冷','Very Cold': '嚴寒', 'Cold': '寒冷', 'Cool': '清涼',
-                            'Comfortable': '舒適', 'Warm': '溫暖', 'Hot': '炎熱', 'Very Hot': '酷熱', 'Extremely Hot': '極端酷熱'
-                        };
-
-                        const statusCode = weatherStatus.replace(/[^0-9]/g, '');
-                        const normalizedStatus = String(Number(statusCode) % 50).padStart(2, '0');
-
-                        let windLevelCn = windSpeedDesc;
-                        if (windSpeedDesc.toLowerCase().includes('force')) {
-                            windLevelCn = windSpeedDesc.replace(/Force\s+/i, '') + '級';
-                        } else if (windSpeedDesc === 'Light') {
-                            windLevelCn = '微風';
-                        }
-
-                        document.getElementById('liveWeatherHeading').textContent = '實時天氣';
-                        document.getElementById('weatherStatus').textContent = weatherStatusMap[normalizedStatus] || '天氣狀況';
-                        document.getElementById('feelsLike').textContent = `體感：${feelsLikeMap[feelsLike] || feelsLike}`;
-                        document.getElementById('updateTime').textContent = `更新時間：${sysPubdate}`;
-                        document.getElementById('labelTemp').textContent = '氣溫';
-                        document.getElementById('labelHumidity').textContent = '相對濕度';
-                        document.getElementById('labelWindSpeed').textContent = '風速';
-                        document.getElementById('labelWindDir').textContent = '風向';
-
-                        // 直接顯示氣象局英文XML原始風向，不翻譯
-                        document.getElementById('windDirection').textContent = windDir;
-
-                        document.getElementById('labelWindLevel').textContent = '風力等級';
-                        document.getElementById('windLevel').textContent = windLevelCn;
-                        document.getElementById('labelValidTime').textContent = '有效時間';
-
-                        document.getElementById('weatherIcon').src = iconUrl;
-                        document.getElementById('temperature').textContent = currentTemp;
-                        document.getElementById('humidity').textContent = humidity;
-                        document.getElementById('windSpeed').textContent = windSpeed;
-                        document.getElementById('validTime').textContent = validFor;
-
-                        let isNight = false;
-                        const timeMatch = sysPubdate.match(/(\d{2}):(\d{2})/);
-                        if (timeMatch) {
-                            const hour = parseInt(timeMatch[1], 10);
-                            isNight = (hour >= 18 || hour < 6);
-                        }
-
-                        const statsContainers = weatherData.querySelectorAll('.weather-stat');
-                        statsContainers.forEach(el => {
-                            if (isNight) {
-                                el.classList.remove('bg-blue-50');
-                                el.classList.add('bg-slate-900/5', 'border', 'border-slate-100/50');
-                            } else {
-                                el.classList.remove('bg-slate-900/5', 'border', 'border-slate-100/50');
-                                el.classList.add('bg-blue-50');
-                            }
-                        });
-
-                        weatherLoading.classList.add('hidden');
-                        weatherData.classList.remove('hidden');
-                        weatherError.classList.add('hidden');
-                    })
-                    .catch(error => {
-                        console.error('獲取天氣數據失敗:', error);
-                        weatherLoading.classList.add('hidden');
-                        weatherData.classList.add('hidden');
-                        weatherError.classList.remove('hidden');
-                    });
-            };
-
-            fetchWeatherData();
-            setInterval(fetchWeatherData, 600000);
+            // fetchWeatherData 函數和相關調用已完全移除
 
             const ctx = document.getElementById('tempChart').getContext('2d'); 
 
@@ -506,7 +325,6 @@
 
             const contentUrls = {
                 'smg-data': 'https://zax41006-bot.github.io/MMC-MOWMAP/',
-                // 'mmc-tc-gis': 'https://zax41006-bot.github.io/MMC-TC-GIS/',
                 'mmc-gis': 'https://zax41006-bot.github.io/MMC-GIS/',
                 'ghmws-e-wind': 'https://lc2nz3kv-5500.asse.devtunnels.ms/demo/',
                 'satellite': 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU&fbclid=IwY2xjawRtg6pleHRuA2FlbQIxMABicmlkETFUM1dDU21ZRUNydTVrOGNUc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHst3Z44pZDhsE42UuupKJXyPNPb1oj0dOv84mGlb8jzeVwDNAdJbOBDxOxe1_aem_GhC4mXaRRE2txnyqnMe7Kw&brid=YWdncwEKt9oU5mgH8jfiP4F2KDXZ',
