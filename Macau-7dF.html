@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七日天氣稿</title>
+    <style>
+        /* 徹底去除頁面預設邊距和捲軸 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* iframe 鋪滿整個視窗 */
+        .embed-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* 返回首頁按鈕 - 浮動在左上角，不遮擋主要內容 */
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            color: #2d3748;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s ease;
+            font-family: system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        .btn-back:hover {
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+            color: #1a202c;
+        }
+
+        .btn-back:active {
+            transform: scale(0.96);
+        }
+
+        .btn-back .arrow {
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .btn-back:hover .arrow {
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 全螢幕嵌入 Canva 設計 -->
+    <iframe 
+        class="embed-frame" 
+        src="https://www.canva.com/design/DAHOh57ILW8/zV0GXt_U-guR9qC2CogK2g/view?embed" 
+        allowfullscreen
+        allow="fullscreen"
+        loading="lazy"
+        title="天氣稿設計">
+    </iframe>
+
+    <!-- 返回首頁按鈕 - 連結暫時為 #，您之後直接替換網址即可 -->
+    <a href="index.html" class="btn-back" title="返回首頁">
+        <span class="arrow">←</span> 返回首頁
+    </a>
+
+</body>
+</html>
