@@ -1,79 +1,124 @@
-<!DOCTYPE html> 
-<html lang="zh-Hant"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> 
-    <title>澳門氣象中心 | 首頁</title> 
-    <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg"> 
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>澳門氣象中心 | 首頁</title>
+    <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com">
-    </script> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js">
-    </script> 
+    </script>
 
-    <script> 
-        tailwind.config = { 
-            theme: { 
-                extend: { 
-                    colors: { 
-                        primary: '#1E88E5', 
-                        secondary: '#E3F2FD', 
-                    }, 
-                } 
-            } 
-        } 
-    </script> 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E88E5',
+                        secondary: '#E3F2FD',
+                    },
+                }
+            }
+        }
+    </script>
 
-    <style type="text/tailwindcss"> 
-        @layer utilities { 
-            .weather-card { @apply bg-white rounded-xl shadow-md; } 
-            .forecast-day { @apply w-28 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; } 
-            .mmc-icon { @apply w-16 h-16 my-2 object-contain; } 
-            .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; } 
-            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; } 
-            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; } 
-            .mobile-menu-hidden { @apply hidden; } 
-            .forecast-container { @apply flex min-w-max justify-center; } 
-            .seven-day-temp { @apply text-red-600; } 
-            .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; } 
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .weather-card { @apply bg-white rounded-xl shadow-md; }
+            .forecast-day { @apply w-28 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; }
+            .mmc-icon { @apply w-16 h-16 my-2 object-contain; }
+            .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; }
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
+            .mobile-menu-hidden { @apply hidden; }
+            .forecast-container { @apply flex min-w-max justify-center; }
+            .seven-day-temp { @apply text-red-600; }
+            .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; }
             .map-select { @apply w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary; }
             .weather-stat { @apply flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50; }
-        } 
-        body { background-color: #E3F2FD; } 
-        header { position: relative; z-index: 999; } 
-    </style> 
-</head> 
+            /* 美化并拉宽 Canva 嵌入容器 */
+            .canva-embed-wrapper {
+                position: relative;
+                width: 100%;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                transition: box-shadow 0.3s ease;
+                background: #ffffff;
+            }
+            .canva-embed-wrapper:hover {
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            }
+            .canva-embed-wrapper .aspect-container {
+                position: relative;
+                width: 100%;
+                height: 0;
+                padding-top: 45%; /* 调整为更宽的比例，视觉上左右拉长 */
+            }
+            .canva-embed-wrapper iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+            .canva-embed-wrapper .credit-link {
+                display: block;
+                text-align: center;
+                padding: 6px 0 8px;
+                font-size: 11px;
+                color: #9ca3af;
+                background: #fafafa;
+                border-top: 1px solid #f3f4f6;
+                transition: color 0.2s;
+                text-decoration: none;
+                letter-spacing: 0.3px;
+            }
+            .canva-embed-wrapper .credit-link:hover {
+                color: #1E88E5;
+            }
+        }
+        body { background-color: #E3F2FD; }
+        header { position: relative; z-index: 999; }
+    </style>
+</head>
 <body class="font-sans text-gray-800 min-h-screen">
-    <header class="bg-white shadow-sm sticky top-0"> 
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center"> 
-            <div class="flex items-center gap-2"> 
-                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8"> 
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
-            </div> 
+            </div>
 
-            <nav class="hidden md:flex items-center gap-1"> 
-                <a href="index.html" class="nav-link">首頁</a> 
-                <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="nav-link">熱帶氣旋資訊</a> 
-                <a href="#" class="nav-link">模式預報（GHMWS）[暫不開放]</a> 
-                <a href="about.html" class="nav-link font-medium text-primary">關於我們</a> 
-            </nav> 
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="nav-link">熱帶氣旋資訊</a>
+                <a href="https://eknlau5897.github.io/GHMWS-global-model/index.html" class="nav-link">模式預報（GHMWS）</a>
+                <a href="about.html" class="nav-link font-medium text-primary">關於我們</a>
+            </nav>
 
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"> 
-                <i id="menuIcon" class="fa fa-bars text-xl"></i> 
-            </button> 
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
+                <i id="menuIcon" class="fa fa-bars text-xl"></i>
+            </button>
 
-            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden"> 
-                <a href="index.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">首頁</a> 
-                <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a> 
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">模式預報（GHMWS）[内部調整，暫不開放]</a> 
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a> 
-            </div> 
-        </div> 
-    </header> 
+            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
+                <a href="index.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a>
+                <a href="https://eknlau5897.github.io/GHMWS-global-model/index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">模式預報（GHMWS）</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
+            </div>
+        </div>
+    </header>
 
-    <main class="container mx-auto px-4 py-8"> 
-        <section class="mb-8"> 
-            <h2 class="text-xl font-bold mb-4 text-black">澳門氣象中心TG</h2> 
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 text-black">澳門氣象中心TG</h2>
             <div class="weather-card p-6">
                 <div class="bg-gray-50 rounded-xl p-6 text-center">
                     <i class="fa-brands fa-telegram text-4xl text-blue-500 mb-3"></i>
@@ -89,40 +134,33 @@
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
             <div class="weather-card overflow-hidden">
-                <!-- 今明兩日天氣預報 Canva 嵌入區塊 -->
-                <div class="p-6 border-b border-gray-100">
-                    <div style="position: relative; width: 100%; height: 0; padding-top: 70.7071%;
- padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
- border-radius: 8px; will-change: transform;">
-                        <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
-                            src="https://www.canva.com/design/DAHO57YGGr0/4T2LOqn5zzfMs2O-ziZd4w/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
-                        </iframe>
+                <div class="p-5 border-b border-gray-100">
+                    <div class="canva-embed-wrapper">
+                        <div class="aspect-container">
+                            <iframe loading="lazy"
+                                src="https://www.canva.com/design/DAHPFzMvQ9w/8ttT6gogvI10_A69cvbNTw/view?embed"
+                                allowfullscreen="allowfullscreen" allow="fullscreen">
+                            </iframe>
+                        </div>
+                        <a href="https://www.canva.com/design/DAHPFzMvQ9w/8ttT6gogvI10_A69cvbNTw/view?utm_content=DAHPFzMvQ9w&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
+                           target="_blank" rel="noopener" class="credit-link">
+                            <i class="fa-regular fa-pen-to-square mr-1"></i> Macau 2dF
+                        </a>
                     </div>
                 </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-black">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-偏南氣流會在今日為華南地區帶來不穩定天氣。預料中層高壓會在今日逐漸向西伸展覆蓋華南地區，今日稍後天色逐步好轉。位於菲律賓以東海域的熱帶氣旋“巴威”會在本周後期大致移向台灣島及華東地區一帶，本澳將會受其相關外圍下沉氣流影響，展望周五至周六天氣極端酷熱。隨後一道廣闊低壓槽會在下周初期為南海北部及廣東沿岸帶來不穩定天氣。
+                        受位於華東地區的熱帶氣旋“巴威”外圍下沉氣流影響，今日天氣極端酷熱，高溫亦有機會觸發驟雨，展望今日稍後會有一兩陣驟雨。
+                        一道季風槽會在未來數日為南海北部及廣東沿岸帶來不穩定天氣，槽内可能有低壓區發展。
                     </p>
                     <div class="mb-4">
                         <div class="overflow-x-auto">
-                            <div class="forecast-container">       
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">07-09</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">07-10</p>
-                                    <img src="weather icon/Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">07-11</p>
-                                    <img src="weather icon/Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
+                            <div class="forecast-container">
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">07-12</p>
-                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">07-13</p>
@@ -134,6 +172,18 @@
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">07-15</p>
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">07-16</p>
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">07-17</p>
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">07-18</p>
                                     <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
@@ -150,23 +200,23 @@
                                 <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
                             </a>
                         </div>
-                        <!--<div class="mt-4 text-center">
-                            <a href="MMCWA.pdf" class="weather-draft-btn inline-block">
-                                <i class="fa fa-file-text-o mr-1"></i>查看重點天氣預報（06-26 22：30發佈）
+                        <div class="mt-4 text-center">
+                            <a href="GHMWS.html" class="weather-draft-btn inline-block">
+                                <i class="fa fa-file-text-o mr-1"></i>GHMWS天氣公報
                             </a>
-                        </div>-->
+                        </div>
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年07月09日00時00分)
+                        (發佈/更新時間：2026年07月12日00時00分)
                     </p>
                 </div>
             </div>
         </section>
 
-        <section class="mb-8"> 
-            <h2 class="text-xl font-bold mb-4 text-black">氣象數據</h2> 
-            <div class="weather-card p-6"> 
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 text-black">氣象數據</h2>
+            <div class="weather-card p-6">
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <select id="mapSelector" class="map-select">
                         <option value="smg-data" selected>澳門實時天氣</option>
@@ -183,72 +233,72 @@
                             <p class="text-gray-600">載入中...</p>
                         </div>
                     </div>
-                    <iframe 
+                    <iframe
                         id="contentFrame"
-                        src="https://zax41006-bot.github.io/MMC-MOWMAP/" 
-                        width="100%"  
-                        height="600"  
-                        frameborder="0"  
-                        class="rounded-xl" 
-                        title="氣象內容"> 
-                    </iframe> 
+                        src="https://zax41006-bot.github.io/MMC-MOWMAP/"
+                        width="100%"
+                        height="600"
+                        frameborder="0"
+                        class="rounded-xl"
+                        title="氣象內容">
+                    </iframe>
                 </div>
-            </div> 
-        </section> 
-    </main> 
+            </div>
+        </section>
+    </main>
 
-    <footer class="bg-white py-6 mt-8"> 
-        <div class="container mx-auto px-4 text-center text-gray-500 text-sm"> 
-            <p>©2026 澳門氣象中心 </p> 
-            <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p> 
-        </div> 
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2026 澳門氣象中心 </p>
+            <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
+        </div>
     </footer>
 
-    <script> 
-        document.addEventListener('DOMContentLoaded', () => { 
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn'); 
-            const mobileMenu = document.getElementById('mobileMenu'); 
-            const menuIcon = document.getElementById('menuIcon'); 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
 
-            const toggleMenuIcon = (isOpen) => { 
-                if (isOpen) { 
-                    menuIcon.classList.remove('fa-bars'); 
-                    menuIcon.classList.add('fa-times'); 
-                } else { 
-                    menuIcon.classList.remove('fa-times'); 
-                    menuIcon.classList.add('fa-bars'); 
-                } 
-            }; 
+            const toggleMenuIcon = (isOpen) => {
+                if (isOpen) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                } else {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            };
 
-            const toggleMobileMenu = () => { 
-                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden'); 
-                mobileMenu.classList.toggle('mobile-menu-hidden'); 
-                toggleMenuIcon(!isHidden); 
-            }; 
+            const toggleMobileMenu = () => {
+                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
+                mobileMenu.classList.toggle('mobile-menu-hidden');
+                toggleMenuIcon(!isHidden);
+            };
 
-            mobileMenuBtn.addEventListener('click', function(e) { 
-                e.stopPropagation(); 
-                toggleMobileMenu(); 
-            }); 
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
 
-            document.addEventListener('click', function(e) { 
-                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) { 
-                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) { 
-                        mobileMenu.classList.add('mobile-menu-hidden'); 
-                        toggleMenuIcon(false); 
-                    } 
-                } 
-            }); 
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
+                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
+                        mobileMenu.classList.add('mobile-menu-hidden');
+                        toggleMenuIcon(false);
+                    }
+                }
+            });
 
-            const menuLinks = mobileMenu.querySelectorAll('a'); 
-            menuLinks.forEach(link => { 
-                link.addEventListener('click', function() { 
-                    mobileMenu.classList.add('mobile-menu-hidden'); 
-                    toggleMenuIcon(false); 
-                }); 
-            }); 
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('mobile-menu-hidden');
+                    toggleMenuIcon(false);
+                });
+            });
 
-            const ctx = document.getElementById('tempChart').getContext('2d'); 
+            const ctx = document.getElementById('tempChart').getContext('2d');
 
             fetch('temp.csv')
                 .then(response => {
@@ -266,52 +316,52 @@
                     for (let i = 1; i < lines.length; i++) {
                         const columns = lines[i].split(',');
                         if (columns.length >= 3) {
-                            labels.push(columns[0].trim());            
-                            maxTemps.push(parseFloat(columns[1].trim())); 
-                            minTemps.push(parseFloat(columns[2].trim())); 
+                            labels.push(columns[0].trim());
+                            maxTemps.push(parseFloat(columns[1].trim()));
+                            minTemps.push(parseFloat(columns[2].trim()));
                         }
                     }
 
-                    new Chart(ctx, { 
-                        type: 'line', 
-                        data: { 
-                            labels: labels, 
-                            datasets: [ 
-                                { 
-                                    label: '最高氣溫', 
-                                    data: maxTemps, 
-                                    borderColor: '#ef4444', 
-                                    backgroundColor: 'rgba(239,68,68,0.1)', 
-                                    tension: 0.5, 
-                                    fill: true 
-                                }, 
-                                { 
-                                    label: '最低氣溫', 
-                                    data: minTemps, 
-                                    borderColor: '#3b82f6', 
-                                    backgroundColor: 'rgba(59,130,246,0.1)', 
-                                    tension: 0.5, 
-                                    fill: true 
-                                } 
-                            ] 
-                        }, 
-                        options: { 
-                            responsive: true, 
-                            maintainAspectRatio: false, 
-                            scales: { 
-                                y: { 
-                                    min: 20, 
-                                    max: 40, 
-                                    ticks: { 
-                                        stepSize: 1, 
-                                        callback: function(value) { 
-                                            return value + '°C'; 
-                                        } 
-                                    } 
-                                } 
-                            } 
-                        } 
-                    }); 
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: '最高氣溫',
+                                    data: maxTemps,
+                                    borderColor: '#ef4444',
+                                    backgroundColor: 'rgba(239,68,68,0.1)',
+                                    tension: 0.5,
+                                    fill: true
+                                },
+                                {
+                                    label: '最低氣溫',
+                                    data: minTemps,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59,130,246,0.1)',
+                                    tension: 0.5,
+                                    fill: true
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    min: 20,
+                                    max: 40,
+                                    ticks: {
+                                        stepSize: 1,
+                                        callback: function(value) {
+                                            return value + '°C';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
                 })
                 .catch(error => {
                     console.error('氣溫圖表加載失敗:', error);
@@ -343,7 +393,7 @@
                     }, 10000);
                 }
             });
-        }); 
-    </script> 
-</body> 
+        });
+    </script>
+</body>
 </html>
