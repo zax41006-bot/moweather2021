@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>澳門氣象中心 | 首頁</title>
     <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg">
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -37,8 +35,9 @@
             .seven-day-temp { @apply text-red-600; }
             .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; }
             .map-select { @apply w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary; }
-            .weather-stat { @apply flex flex-col items-center justify-center p-3 rounded-lg bg-blue-50; }
-            /* 美化并拉宽 Canva 嵌入容器 */
+            .weather-stat { @apply flex flex-col items-center justify-center p-4 rounded-lg bg-blue-50; }
+            
+            /* 美化並拉寬 Canva 嵌入容器 */
             .canva-embed-wrapper {
                 position: relative;
                 width: 100%;
@@ -55,7 +54,7 @@
                 position: relative;
                 width: 100%;
                 height: 0;
-                padding-top: 45%; /* 调整为更宽的比例，视觉上左右拉长 */
+                padding-top: 45%;
             }
             .canva-embed-wrapper iframe {
                 position: absolute;
@@ -117,6 +116,7 @@
     </header>
 
     <main class="container mx-auto px-4 py-8">
+        <!-- 1. 澳門氣象中心TG (已移至最上方) -->
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4 text-black">澳門氣象中心TG</h2>
             <div class="weather-card p-6">
@@ -131,56 +131,79 @@
             </div>
         </section>
 
-    <section class="mb-8">
-        <h2 class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
-           <div class="weather-card overflow-hidden">
-            <div class="canva-embed-wrapper">
-            <div class="aspect-container">
-                <iframe 
-                    src="Macau-2dF.html" 
-                    title="今明兩日天氣預報"
-                    loading="lazy">
-                </iframe>
+        <!-- 2. 澳門實時天氣 (SMG) - 包含發佈/更新時間 -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 text-black">澳門實時天氣 (SMG)</h2>
+            <div class="weather-card p-6">
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="weather-stat">
+                        <i class="fa-solid fa-temperature-high text-3xl text-red-500 mb-2"></i>
+                        <span class="text-gray-500 text-sm">即時氣溫</span>
+                        <span id="smg-temp" class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">載入中...</span>
+                    </div>
+                    <div class="weather-stat">
+                        <i class="fa-solid fa-droplet text-3xl text-blue-500 mb-2"></i>
+                        <span class="text-gray-500 text-sm">相對濕度</span>
+                        <span id="smg-humidity" class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">載入中...</span>
+                    </div>
+                </div>
+                <p class="text-gray-500 text-xs text-center mt-4">
+                    (更新時間：<span id="smg-time">載入中...</span>)
+                </p>
             </div>
-        </div>
+        </section>
+
+        <!-- 3. 天氣預報（本中心） -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
+            <div class="weather-card overflow-hidden">
+                <div class="canva-embed-wrapper">
+                    <div class="aspect-container">
+                        <iframe 
+                            src="Macau-2dF.html" 
+                            title="今明兩日天氣預報"
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
 
                 <div class="p-6">
                     <h3 class="font-semibold text-lg mb-3 text-black">七日天氣展望</h3>
                     <p class="text-gray-700 text-base leading-relaxed mb-4">
-                        現時位於海南島附近的潛在熱帶氣旋的低壓區正為該區帶來不穩定天氣。
-                        熱帶氣旋“白海豚”將會趨向華東沿海一帶，受其外圍下沉氣流影響，華南沿岸日間極端酷熱，高溫天氣持續至下週中期，但有機會在午後觸發雷雨。
-                        展望西南氣流會在下週中後期為廣東沿岸帶來幾陣驟雨。
+                        受内陸氣流影響，今日廣東地區天氣極端酷熱。
+                        預料本周中後期受西南氣流影響，廣東地區天氣漸轉不穩定，有驟雨及雷暴。
+                        下周初期受内陸氣流影響，天色逐步好轉。
                     </p>
                     <div class="mb-4">
                         <div class="overflow-x-auto">
                             <div class="forecast-container">
                                 <div class="forecast-day">
-                                    <p class="text-xs text-green-600">08-08</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">08-09</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">08-10</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
                                     <p class="text-xs text-green-600">08-11</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">08-12</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">08-13</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                                 <div class="forecast-day">
                                     <p class="text-xs text-green-600">08-14</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">08-15</p>
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">08-16</p>
+                                    <img src="weather icon/rain3_thunder.png" alt="天氣圖標" class="mmc-icon">
+                                </div>
+                                <div class="forecast-day">
+                                    <p class="text-xs text-green-600">08-17</p>
+                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
                                 </div>
                             </div>
                         </div>
@@ -196,20 +219,16 @@
                                 <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
                             </a>
                         </div>
-                        <div class="mt-4 text-center">
-                            <a href="GHMWS.html" class="weather-draft-btn inline-block">
-                                <i class="fa fa-file-text-o mr-1"></i>GHMWS天氣公報
-                            </a>
-                        </div>
                     </div>
 
                     <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年08月08日00時00分)
+                        (發佈/更新時間：2026年08月11日00時00分)
                     </p>
                 </div>
             </div>
         </section>
 
+        <!-- 4. 氣象數據 -->
         <section class="mb-8">
             <h2 class="text-xl font-bold mb-4 text-black">氣象數據</h2>
             <div class="weather-card p-6">
@@ -294,6 +313,82 @@
                 });
             });
 
+            // 抓取並解析 SMG 實時 XML (包含氣溫、濕度與更新時間)
+            async function fetchSmgActualWeather() {
+                const targetUrl = 'https://xml.smg.gov.mo/p_actual_brief.xml';
+                
+                const proxies = [
+                    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+                    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+                ];
+
+                const fetchWithTimeout = async (url, timeoutMs = 3000) => {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), timeoutMs);
+                    try {
+                        const res = await fetch(url, { signal: controller.signal });
+                        clearTimeout(timer);
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        return await res.text();
+                    } catch (err) {
+                        clearTimeout(timer);
+                        throw err;
+                    }
+                };
+
+                function parseXmlData(xmlText) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+                    // 解析發佈/更新時間
+                    const validForNode = xmlDoc.getElementsByTagName('ValidFor')[0];
+                    const sysPubdateNode = xmlDoc.getElementsByTagName('SysPubdate')[0];
+                    const timeText = validForNode?.textContent || sysPubdateNode?.textContent || '--';
+
+                    // 解析氣溫 (Type = 3)
+                    let temp = '--';
+                    const tempNodes = xmlDoc.getElementsByTagName('Temperature');
+                    for (let node of tempNodes) {
+                        const type = node.querySelector('Type')?.textContent;
+                        if (type === '3') {
+                            temp = node.querySelector('Value')?.textContent || '--';
+                            break;
+                        }
+                    }
+                    if (temp === '--' && tempNodes.length > 0) {
+                        temp = tempNodes[0].querySelector('Value')?.textContent || '--';
+                    }
+
+                    // 解析濕度
+                    const humidityNode = xmlDoc.getElementsByTagName('Humidity')[0];
+                    const humidity = humidityNode ? (humidityNode.querySelector('Value')?.textContent || '--') : '--';
+
+                    document.getElementById('smg-temp').textContent = temp !== '--' ? `${temp} °C` : '-- °C';
+                    document.getElementById('smg-humidity').textContent = humidity !== '--' ? `${humidity} %` : '-- %';
+                    document.getElementById('smg-time').textContent = timeText;
+                }
+
+                for (const proxyUrl of proxies) {
+                    try {
+                        const xmlText = await fetchWithTimeout(proxyUrl, 3000);
+                        if (xmlText && xmlText.includes('ActualWeatherBrief')) {
+                            parseXmlData(xmlText);
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn('代理節點回應失敗，嘗試下一節點:', proxyUrl);
+                    }
+                }
+
+                document.getElementById('smg-temp').textContent = '讀取失敗';
+                document.getElementById('smg-humidity').textContent = '讀取失敗';
+                document.getElementById('smg-time').textContent = '讀取失敗';
+            }
+
+            fetchSmgActualWeather();
+
+            // 7日氣溫圖表加載
             const ctx = document.getElementById('tempChart').getContext('2d');
 
             fetch('temp.csv')
@@ -363,6 +458,7 @@
                     console.error('氣溫圖表加載失敗:', error);
                 });
 
+            // 地圖/數據選擇器
             const mapSelector = document.getElementById('mapSelector');
             const contentFrame = document.getElementById('contentFrame');
             const mapLoading = document.getElementById('mapLoading');
