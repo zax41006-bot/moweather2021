@@ -188,9 +188,10 @@
             .embed-frame-wrap { min-height: 360px; }
         }
 
+        /* ★ seven-grid 第一欄加寬，讓「相對濕度」可在一行內顯示 */
         .seven-grid {
             display: grid;
-            grid-template-columns: 3.5rem repeat(7, 1fr);
+            grid-template-columns: 5.5rem repeat(7, 1fr);
             gap: 0;
             align-items: center;
         }
@@ -200,6 +201,7 @@
             font-weight: 500;
             text-align: right;
             padding-right: 0.75rem;
+            white-space: nowrap;   /* ★ 不換行 */
         }
         .seven-grid .grid-cell { text-align: center; }
 
@@ -262,7 +264,7 @@
         }
 
         @media (max-width: 640px) {
-            .seven-grid { grid-template-columns: 2.5rem repeat(7, 1fr); }
+            .seven-grid { grid-template-columns: 4.5rem repeat(7, 1fr); }
             .seven-grid .grid-label { font-size: 0.7rem; padding-right: 0.4rem; }
             .day-head .day-date { font-size: 0.72rem; }
             .day-head img { width: 1.5rem; height: 1.5rem; }
@@ -388,7 +390,8 @@
         <section class="mb-8" aria-labelledby="forecast-heading">
             <h2 id="forecast-heading" class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <!-- ★ 左右比例 2:4（共 6 欄） -->
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
 
                 <div class="weather-card p-4 md:col-span-2 flex flex-col">
                     <h3 class="block-title">今明兩日天氣預報</h3>
@@ -401,7 +404,7 @@
                     </div>
                 </div>
 
-                <div class="md:col-span-3 flex flex-col gap-4">
+                <div class="md:col-span-4 flex flex-col gap-4">
 
                     <div class="weather-card p-5">
                         <h3 class="block-title">七日天氣展望</h3>
@@ -411,7 +414,7 @@
                     </div>
 
                     <div class="weather-card p-5">
-                        <h3 class="sub-title">七日氣溫及濕度預報</h3>
+                        <h3 class="sub-title">七日氣溫及相對濕度預報</h3>
 
                         <div class="flex justify-center">
                             <div class="chart-tabs" role="tablist" aria-label="選擇預報類型">
@@ -427,7 +430,7 @@
                                         :aria-selected="chartMode === 'humidity'"
                                         :class="{ active: chartMode === 'humidity' }"
                                         @click="switchChart('humidity')">
-                                    濕度預報
+                                    相對濕度預報
                                 </button>
                             </div>
                         </div>
@@ -443,7 +446,7 @@
                         <div class="divider-line"></div>
 
                         <div class="seven-grid">
-                            <div class="grid-label">{{ chartMode === 'temp' ? '溫度' : '濕度' }}</div>
+                            <div class="grid-label">{{ chartMode === 'temp' ? '溫度' : '相對濕度' }}</div>
                             <div class="temp-chart-wrap">
                                 <canvas id="mainChart" role="img" :aria-label="chartAriaLabel"></canvas>
                             </div>
@@ -536,7 +539,6 @@
           desktopClass: 'font-medium text-primary-dark', mobileClass: 'text-gray-700 hover:bg-blue-50' }
     ];
 
-    /* ★ 第二項已改為「港澳天氣站 熱帶氣旋TC-GIS」 */
     const CONTENT_OPTIONS = [
         { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖',
           url: 'https://zax41006-bot.github.io/MMC-GIS/',
@@ -989,7 +991,7 @@
                         plugins: [ChartDataLabels]
                     }));
                 } catch (error) {
-                    console.error('圖表加載失敗:', error);
+                    console.error('圖表載入失敗:', error);
                     this.chartAriaLabel = '預報圖表暫時無法載入。';
                 }
             }
