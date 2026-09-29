@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今明兩日天氣預報 | 澳門氣象中心</title>
+    <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+
+    <style>
+        [v-cloak] { display: none; }
+
+        body {
+            background: #ffffff;
+            padding: 1.25rem;
+            font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            color: #1f2937;
+            line-height: 1.9;
+            font-size: 0.95rem;
+        }
+
+        .weather-text {
+            white-space: pre-wrap;      /* 保留換行與空白 */
+            word-break: break-word;
+            max-width: 48rem;
+            margin: 0 auto;
+            color: #1f2937;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 1rem; font-size: 0.9rem; line-height: 1.85; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" v-cloak>
+
+    <div class="weather-text">{{ text }}</div>
+
+</div>
+
+<script>
+    const { createApp } = Vue;
+
+    createApp({
+        data() {
+            return {
+                text: '載入中…'
+            };
+        },
+
+        mounted() {
+            this.loadText();
+        },
+
+        methods: {
+            async loadText() {
+                try {
+                    const res = await fetch('weather2d.txt', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const raw = await res.text();
+                    this.text = raw.replace(/^\uFEFF/, '').trim();
+                } catch (e) {
+                    console.error('讀取 weather2d.txt 失敗:', e);
+                    this.text = '（天氣資料暫時無法載入）';
+                }
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
