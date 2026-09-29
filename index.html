@@ -2,12 +2,14 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>澳門氣象中心 | 首頁</title>
     <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
 
     <script>
         tailwind.config = {
@@ -15,6 +17,7 @@
                 extend: {
                     colors: {
                         primary: '#1E88E5',
+                        'primary-dark': '#1565C0',
                         secondary: '#E3F2FD',
                     },
                 }
@@ -25,236 +28,471 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .weather-card { @apply bg-white rounded-xl shadow-md; }
-            .forecast-day { @apply w-28 py-3 border-r border-gray-100 last:border-0 flex flex-col items-center justify-center text-center; }
-            .mmc-icon { @apply w-16 h-16 my-2 object-contain; }
-            .forecast-outlook { @apply p-4 bg-blue-50 border-b border-gray-100 rounded-t-xl; }
-            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary-dark transition-colors; }
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
             .mobile-menu-hidden { @apply hidden; }
-            .forecast-container { @apply flex min-w-max justify-center; }
-            .seven-day-temp { @apply text-red-600; }
-            .weather-draft-btn { @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md text-sm; }
+            .weather-draft-btn { @apply bg-primary-dark text-white px-4 py-2 rounded-lg hover:bg-primary-dark/90 transition-all shadow-md text-sm; }
             .map-select { @apply w-full md:w-64 px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary; }
-            .weather-stat { @apply flex flex-col items-center justify-center p-4 rounded-lg bg-blue-50; }
-            
-            /* 美化並拉寬 Canva 嵌入容器 */
-            .canva-embed-wrapper {
-                position: relative;
-                width: 100%;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-                transition: box-shadow 0.3s ease;
-                background: #ffffff;
-            }
-            .canva-embed-wrapper:hover {
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            }
-            .canva-embed-wrapper .aspect-container {
-                position: relative;
-                width: 100%;
-                height: 0;
-                padding-top: 45%;
-            }
-            .canva-embed-wrapper iframe {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border: none;
-                padding: 0;
-                margin: 0;
-                display: block;
-            }
-            .canva-embed-wrapper .credit-link {
-                display: block;
-                text-align: center;
-                padding: 6px 0 8px;
-                font-size: 11px;
-                color: #9ca3af;
-                background: #fafafa;
-                border-top: 1px solid #f3f4f6;
-                transition: color 0.2s;
-                text-decoration: none;
-                letter-spacing: 0.3px;
-            }
-            .canva-embed-wrapper .credit-link:hover {
-                color: #1E88E5;
-            }
         }
+    </style>
+
+    <style>
+        [v-cloak] { display: none; }
         body { background-color: #E3F2FD; }
         header { position: relative; z-index: 999; }
+
+        a:focus-visible,
+        button:focus-visible,
+        select:focus-visible,
+        input:focus-visible,
+        iframe:focus-visible,
+        [tabindex]:focus-visible {
+            outline: 3px solid #1565C0;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        @media (forced-colors: active) {
+            .weather-card { border: 1px solid CanvasText; }
+        }
+
+        .block-title {
+            text-align: center;
+            font-weight: 700;
+            color: #000;
+            font-size: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 0.9rem;
+        }
+        .sub-title {
+            text-align: center;
+            font-weight: 700;
+            color: #000;
+            font-size: 0.95rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 0.75rem;
+        }
+
+        /* ★ 天氣警告卡片 */
+        .warning-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            background: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+        .warning-card:last-child { margin-bottom: 0; }
+        .warning-head {
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            letter-spacing: 0.03em;
+        }
+        .warning-body {
+            padding: 0.9rem 1rem;
+            color: #1f2937;
+            line-height: 1.85;
+            font-size: 0.9rem;
+        }
+        .warning-tag {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #1f2937;
+            background: rgba(0,0,0,0.06);
+            padding: 0.15rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .warning-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .warning-inactive {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .warning-inactive .warning-head { background: #9ca3af; color: #ffffff; }
+        .warning-inactive .warning-body {
+            background: #f9fafb;
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        /* ★ 特別天氣提示卡片（深紅，無標籤） */
+        .tip-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #991b1b;
+            background: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+        .tip-card:last-child { margin-bottom: 0; }
+        .tip-head {
+            background: #991b1b;
+            color: #ffffff;
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            letter-spacing: 0.03em;
+        }
+        .tip-body {
+            padding: 0.9rem 1rem;
+            background: #fef2f2;
+            color: #1f2937;
+            line-height: 1.85;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        @media (max-width: 640px) {
+            .tip-head, .warning-head { font-size: 0.875rem; padding: 0.5rem 0.85rem; }
+            .tip-body, .warning-body { font-size: 0.85rem; padding: 0.75rem 0.85rem; }
+        }
+
+        .embed-frame-wrap {
+            width: 100%;
+            height: 100%;
+            min-height: 420px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .embed-frame-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .embed-frame-wrap { min-height: 360px; }
+        }
+
+        .seven-grid {
+            display: grid;
+            grid-template-columns: 3.5rem repeat(7, 1fr);
+            gap: 0;
+            align-items: center;
+        }
+        .seven-grid .grid-label {
+            color: #6b7280;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: right;
+            padding-right: 0.75rem;
+        }
+        .seven-grid .grid-cell { text-align: center; }
+
+        .day-head .day-date {
+            color: #1f2937;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .day-head img {
+            width: 1.9rem;
+            height: 1.9rem;
+            object-fit: contain;
+            margin: 0.35rem auto 0;
+            display: block;
+        }
+
+        .temp-chart-wrap {
+            grid-column: 2 / -1;
+            position: relative;
+            height: 200px;
+            overflow: visible;
+        }
+
+        .divider-line {
+            border-top: 1px solid #e5e7eb;
+            margin: 0.75rem 0;
+        }
+
+        .chart-tabs {
+            display: inline-flex;
+            background: #f3f4f6;
+            border-radius: 9999px;
+            padding: 3px;
+            margin: 0 auto 0.75rem;
+            gap: 2px;
+        }
+        .chart-tabs button {
+            border: 0;
+            background: transparent;
+            padding: 0.4rem 1.1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b7280;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .chart-tabs button:hover { color: #1f2937; }
+        .chart-tabs button.active {
+            background: #1565C0;
+            color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .issued-note {
+            color: #6b7280;
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 640px) {
+            .seven-grid { grid-template-columns: 2.5rem repeat(7, 1fr); }
+            .seven-grid .grid-label { font-size: 0.7rem; padding-right: 0.4rem; }
+            .day-head .day-date { font-size: 0.72rem; }
+            .day-head img { width: 1.5rem; height: 1.5rem; }
+            .temp-chart-wrap { height: 170px; }
+            .chart-tabs button { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
+
+<div id="app" v-cloak>
+
+    <a href="#main-content"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[1001]
+              focus:bg-white focus:text-primary-dark focus:px-4 focus:py-2 focus:rounded-lg
+              focus:shadow-lg focus:font-medium">
+        跳至主要內容
+    </a>
+
     <header class="bg-white shadow-sm sticky top-0">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
-                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
+                <h1 class="text-xl font-bold text-primary-dark">澳門氣象中心</h1>
             </div>
 
-            <nav class="hidden md:flex items-center gap-1">
-                <a href="index.html" class="nav-link">首頁</a>
-                <a href="https://zax41006-bot.github.io/HKMO_MET-TC-GIS/" class="nav-link">HKMO熱帶氣旋資訊</a>
-                <a href="#" class="nav-link">模式預報（GHMWS）</a>
-                <a href="about.html" class="nav-link font-medium text-primary">關於我們</a>
+            <nav class="hidden md:flex items-center gap-1" aria-label="主要導覽">
+                <a v-for="item in navItems"
+                   :key="'d-' + item.text"
+                   :href="item.href"
+                   class="nav-link"
+                   :class="item.desktopClass"
+                   :aria-current="item.current ? 'page' : null">{{ item.text }}</a>
             </nav>
 
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all">
-                <i id="menuIcon" class="fa fa-bars text-xl"></i>
+            <button id="mobileMenuBtn"
+                    ref="mobileMenuBtn"
+                    type="button"
+                    class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"
+                    :aria-expanded="mobileOpen ? 'true' : 'false'"
+                    aria-controls="mobileMenu"
+                    :aria-label="mobileOpen ? '關閉主選單' : '開啟主選單'"
+                    @click.stop="toggleMobileMenu">
+                <i id="menuIcon"
+                   class="fa text-xl"
+                   :class="mobileOpen ? 'fa-times' : 'fa-bars'"
+                   aria-hidden="true"></i>
             </button>
 
-            <div id="mobileMenu" class="mobile-menu mobile-menu-hidden">
-                <a href="index.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">首頁</a>
-                <a href="https://zax41006-bot.github.io/HKMO_MET-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">HKMO熱帶氣旋資訊</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">模式預報（GHMWS）</a>
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
+            <div id="mobileMenu"
+                 ref="mobileMenuEl"
+                 class="mobile-menu"
+                 :class="{ 'mobile-menu-hidden': !mobileOpen }">
+                <a v-for="item in navItems"
+                   :key="'m-' + item.text"
+                   :href="item.href"
+                   class="block px-4 py-2 transition-colors"
+                   :class="item.mobileClass"
+                   :aria-current="item.current ? 'page' : null"
+                   @click="closeMobileMenu">{{ item.text }}</a>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
-        <!-- 1. 澳門氣象中心TG (已移至最上方) -->
-        <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4 text-black">澳門氣象中心TG</h2>
-            <div class="weather-card p-6">
-                <div class="bg-gray-50 rounded-xl p-6 text-center">
-                    <i class="fa-brands fa-telegram text-4xl text-blue-500 mb-3"></i>
-                    <h3 class="text-lg font-semibold mb-2 text-black">歡迎加入我們的 Telegram 頻道</h3>
-                    <p class="text-gray-600 mb-4">即時接收澳門天氣、熱帶氣旋、氣象分析資訊</p>
-                    <a href="https://t.me/macaommc2021" target="_blank" class="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-all">
-                        <i class="fa-brands fa-telegram mr-2"></i>進入 Telegram 頻道
-                    </a>
+    <main id="main-content" class="container mx-auto px-4 py-8">
+
+        <!-- ★ 特別天氣提示（深紅色） -->
+        <section v-if="specialTipsList.length"
+                 class="mb-8"
+                 aria-labelledby="special-tips-heading">
+            <h2 id="special-tips-heading" class="sr-only">特別天氣提示</h2>
+            <div class="weather-card p-3">
+                <div v-for="(tip, i) in specialTipsList"
+                     :key="i"
+                     class="tip-card">
+                    <div class="tip-head">
+                        <i class="fa-solid fa-bullhorn" aria-hidden="true"></i>
+                        <span>特別天氣提示</span>
+                    </div>
+                    <div class="tip-body">{{ tip }}</div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. 澳門實時天氣 (SMG) - 包含發佈/更新時間 -->
-        <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4 text-black">澳門實時天氣 (SMG)</h2>
-            <div class="weather-card p-6">
-                <div class="grid grid-cols-2 gap-4 text-center">
-                    <div class="weather-stat">
-                        <i class="fa-solid fa-temperature-high text-3xl text-red-500 mb-2"></i>
-                        <span class="text-gray-500 text-sm">即時氣溫</span>
-                        <span id="smg-temp" class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">載入中...</span>
+        <!-- ★ 天氣警告（直接渲染，無 iframe） -->
+        <section class="mb-8" aria-labelledby="warning-heading">
+            <h2 id="warning-heading" class="sr-only">天氣警告</h2>
+            <div class="weather-card p-3">
+
+                <!-- 有警告 -->
+                <template v-if="warnings.length">
+                    <div v-for="(w, i) in warnings"
+                         :key="i"
+                         class="warning-card"
+                         :style="{ borderColor: colorOf(w.level).border }">
+
+                        <div class="warning-head"
+                             :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text }">
+                            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                            <span>{{ w.title || '天氣警告' }}</span>
+                        </div>
+
+                        <div class="warning-body" :style="{ background: colorOf(w.level).body }">
+                            <span v-if="w.tag" class="warning-tag">{{ w.tag }}</span>
+                            <div class="warning-content">{{ w.content }}</div>
+                        </div>
                     </div>
-                    <div class="weather-stat">
-                        <i class="fa-solid fa-droplet text-3xl text-blue-500 mb-2"></i>
-                        <span class="text-gray-500 text-sm">相對濕度</span>
-                        <span id="smg-humidity" class="text-2xl md:text-3xl font-bold text-gray-800 mt-1">載入中...</span>
+                </template>
+
+                <!-- 無警告 -->
+                <div v-else class="warning-inactive">
+                    <div class="warning-head">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        <span>現時無特別天氣警告</span>
                     </div>
+                    <div class="warning-body">本澳現時無特別天氣警告。</div>
                 </div>
-                <p class="text-gray-500 text-xs text-center mt-4">
-                    (更新時間：<span id="smg-time">載入中...</span>)
-                </p>
+
             </div>
         </section>
 
-        <!-- 3. 天氣預報（本中心） -->
-        <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
-            <div class="weather-card overflow-hidden">
-                <div class="canva-embed-wrapper">
-                    <div class="aspect-container">
-                        <iframe 
-                            src="Macau-2dF.html" 
+        <!-- 天氣預報（本中心） -->
+        <section class="mb-8" aria-labelledby="forecast-heading">
+            <h2 id="forecast-heading" class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+                <div class="weather-card p-4 md:col-span-2 flex flex-col">
+                    <h3 class="block-title">今明兩日天氣預報</h3>
+                    <div class="embed-frame-wrap flex-1">
+                        <iframe
+                            src="weather2d.html"
                             title="今明兩日天氣預報"
                             loading="lazy">
                         </iframe>
                     </div>
                 </div>
 
-                <div class="p-6">
-                    <h3 class="font-semibold text-lg mb-3 text-black">七日天氣展望</h3>
-                    <p class="text-gray-700 text-base leading-relaxed mb-4">
-                        反氣旋會未來數日覆蓋華南地區，未來數日天氣酷熱。
-                        位於西北太平洋的熱帶氣旋“舒力基”會在下周初期大致趨向琉球群島附近海域一帶。
-                    </p>
-                    <div class="mb-4">
-                        <div class="overflow-x-auto">
-                            <div class="forecast-container">
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">09-26</p>
-                                    <img src="weather icon/Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">09-27</p>
-                                    <img src="weather icon/Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">09-28</p>
-                                    <img src="weather icon/Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">09-29</p>
-                                    <img src="weather icon/Sun.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">09-30</p>
-                                    <img src="weather icon/Sun_cloud.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">10-01</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
-                                <div class="forecast-day">
-                                    <p class="text-xs text-green-600">10-02</p>
-                                    <img src="weather icon/Sun_cloud_rain.png" alt="天氣圖標" class="mmc-icon">
-                                </div>
+                <div class="md:col-span-3 flex flex-col gap-4">
+
+                    <div class="weather-card p-5">
+                        <h3 class="block-title">七日天氣展望</h3>
+                        <p class="text-gray-700 text-base leading-relaxed">
+                            {{ outlookText }}
+                        </p>
+                    </div>
+
+                    <div class="weather-card p-5">
+                        <h3 class="sub-title">七日氣溫及濕度預報</h3>
+
+                        <div class="flex justify-center">
+                            <div class="chart-tabs" role="tablist" aria-label="選擇預報類型">
+                                <button type="button"
+                                        role="tab"
+                                        :aria-selected="chartMode === 'temp'"
+                                        :class="{ active: chartMode === 'temp' }"
+                                        @click="switchChart('temp')">
+                                    氣溫預報
+                                </button>
+                                <button type="button"
+                                        role="tab"
+                                        :aria-selected="chartMode === 'humidity'"
+                                        :class="{ active: chartMode === 'humidity' }"
+                                        @click="switchChart('humidity')">
+                                    濕度預報
+                                </button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="p-4 border border-gray-100 rounded-lg bg-gray-50">
-                        <h3 class="text-base font-semibold mb-3 text-black">七日氣溫預報</h3>
-                        <div class="h-56 bg-white p-2 rounded-lg">
-                            <canvas id="tempChart"></canvas>
+                        <div class="seven-grid day-head mb-1">
+                            <div></div>
+                            <div v-for="day in sevenDays" :key="'h-' + day.date" class="grid-cell">
+                                <div class="day-date">{{ day.date }}</div>
+                                <img :src="day.icon" :alt="day.date + ' 天氣圖標'">
+                            </div>
                         </div>
+
+                        <div class="divider-line"></div>
+
+                        <div class="seven-grid">
+                            <div class="grid-label">{{ chartMode === 'temp' ? '溫度' : '濕度' }}</div>
+                            <div class="temp-chart-wrap">
+                                <canvas id="mainChart" role="img" :aria-label="chartAriaLabel"></canvas>
+                            </div>
+                        </div>
+
                         <div class="mt-4 text-center">
-                            <a href="Macau-7dF.html" class="weather-draft-btn inline-block">
-                                <i class="fa fa-file-text-o mr-1"></i>查看天氣稿
+                            <a href="weather7d.html" class="weather-draft-btn inline-block">
+                                <i class="fa fa-file-text-o mr-1" aria-hidden="true"></i>查看天氣稿
                             </a>
                         </div>
-                    </div>
 
-                    <p class="text-gray-600 text-sm text-center mt-4">
-                        (發佈/更新時間：2026年09月26日00時00分)
-                    </p>
+                        <p class="issued-note">(發佈/更新時間：{{ issued7dText }})</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. 氣象數據 -->
-        <section class="mb-8">
-            <h2 class="text-xl font-bold mb-4 text-black">氣象數據</h2>
+        <!-- 氣象數據 -->
+        <section class="mb-8" aria-labelledby="data-heading">
+            <h2 id="data-heading" class="text-xl font-bold mb-4 text-black">氣象數據</h2>
             <div class="weather-card p-6">
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <select id="mapSelector" class="map-select">
-                        <option value="smg-data" selected>澳門實時天氣</option>
-                        <option value="mmc-gis">MMC-GIS 天氣雷達/衛星雲圖</option>
-                        <option value="ghmws-e-wind">GHMWS 地球風場（測試版）</option>
-                        <option value="satellite">知天衛星雲圖</option>
+                    <select id="mapSelector"
+                            class="map-select"
+                            v-model="selectedMap"
+                            aria-labelledby="mapSelectorHint">
+                        <option v-for="opt in contentOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                     </select>
-                    <p class="text-gray-500 text-sm">選擇要查看的氣象數據</p>
+                    <p id="mapSelectorHint" class="text-gray-500 text-sm">選擇要查看的氣象數據</p>
                 </div>
                 <div class="relative">
-                    <div id="mapLoading" class="absolute inset-0 flex items-center justify-center bg-white/80 rounded-xl z-10 hidden">
+                    <div v-show="mapLoading"
+                         class="absolute inset-0 flex items-center justify-center bg-white/80 rounded-xl z-10"
+                         role="status"
+                         aria-live="polite">
                         <div class="flex flex-col items-center">
-                            <i class="fa fa-spinner fa-spin text-3xl text-primary mb-2"></i>
+                            <i class="fa fa-spinner fa-spin text-3xl text-primary mb-2" aria-hidden="true"></i>
                             <p class="text-gray-600">載入中...</p>
                         </div>
                     </div>
                     <iframe
                         id="contentFrame"
-                        src="https://zax41006-bot.github.io/MMC-MOWMAP/"
+                        :src="currentFrameUrl"
                         width="100%"
                         height="600"
                         frameborder="0"
                         class="rounded-xl"
-                        title="氣象內容">
+                        :title="currentFrameTitle"
+                        @load="onFrameLoad">
                     </iframe>
                 </div>
             </div>
@@ -268,223 +506,495 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuIcon = document.getElementById('menuIcon');
+</div>
 
-            const toggleMenuIcon = (isOpen) => {
-                if (isOpen) {
-                    menuIcon.classList.remove('fa-bars');
-                    menuIcon.classList.add('fa-times');
-                } else {
-                    menuIcon.classList.remove('fa-times');
-                    menuIcon.classList.add('fa-bars');
-                }
+<script>
+    const { createApp, markRaw } = Vue;
+
+    if (window.ChartDataLabels) {
+        Chart.register(ChartDataLabels);
+    }
+
+    /* 六種顏色 */
+    const COLOR_MAP = {
+        green:  { border: '#16a34a', head: '#16a34a', body: '#f0fdf4', text: '#ffffff' },
+        blue:   { border: '#2563eb', head: '#2563eb', body: '#eff6ff', text: '#ffffff' },
+        yellow: { border: '#eab308', head: '#eab308', body: '#fefce8', text: '#1f2937' },
+        orange: { border: '#ea580c', head: '#ea580c', body: '#fff7ed', text: '#ffffff' },
+        red:    { border: '#dc2626', head: '#dc2626', body: '#fef2f2', text: '#ffffff' },
+        black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' }
+    };
+
+    const NAV_ITEMS = [
+        { text: '首頁', href: 'index.html', current: true,
+          desktopClass: '', mobileClass: 'text-primary-dark font-medium hover:bg-blue-50' },
+        { text: 'HKMO熱帶氣旋資訊', href: 'https://zax41006-bot.github.io/HKMO_MET-TC-GIS/', current: false,
+          desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' },
+        { text: '模式預報（HKMO_MET）', href: '#', current: false,
+          desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' },
+        { text: '關於我們', href: 'about.html', current: false,
+          desktopClass: 'font-medium text-primary-dark', mobileClass: 'text-gray-700 hover:bg-blue-50' }
+    ];
+
+    /* ★ 第二項已改為「港澳天氣站 熱帶氣旋TC-GIS」 */
+    const CONTENT_OPTIONS = [
+        { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖',
+          url: 'https://zax41006-bot.github.io/MMC-GIS/',
+          frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
+        { value: 'ghmws-e-wind', label: '港澳天氣站 熱帶氣旋TC-GIS',
+          url: 'https://zax41006-bot.github.io/HKMO_MET-TC-GIS/',
+          frameTitle: '港澳天氣站 熱帶氣旋TC-GIS' },
+        { value: 'satellite', label: '知天衛星雲圖',
+          url: 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU',
+          frameTitle: '知天衛星雲圖' }
+    ];
+
+    createApp({
+        data() {
+            return {
+                navItems: NAV_ITEMS,
+                contentOptions: CONTENT_OPTIONS,
+
+                weatherData: [],
+                tempData: [],
+                humidityData: [],
+                outlookText: '載入中...',
+                issued7dText: '載入中...',
+
+                /* ★ 天氣警告 */
+                warningsText: '',
+
+                /* ★ 特別天氣提示 */
+                specialTipsText: '',
+
+                chartMode: 'temp',
+
+                mobileOpen: false,
+                selectedMap: 'mmc-gis',
+                mapLoading: false,
+
+                chart: null,
+                chartAriaLabel: '七日氣溫預報折線圖，載入中。',
+                mapLoadTimer: null
             };
+        },
 
-            const toggleMobileMenu = () => {
-                const isHidden = mobileMenu.classList.contains('mobile-menu-hidden');
-                mobileMenu.classList.toggle('mobile-menu-hidden');
-                toggleMenuIcon(!isHidden);
-            };
+        computed: {
+            currentFrame() {
+                return this.contentOptions.find(o => o.value === this.selectedMap) || this.contentOptions[0];
+            },
+            currentFrameUrl() { return this.currentFrame.url; },
+            currentFrameTitle() { return this.currentFrame.frameTitle; },
 
-            mobileMenuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleMobileMenu();
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn && !mobileMenuBtn.contains(e.target)) {
-                    if (!mobileMenu.classList.contains('mobile-menu-hidden')) {
-                        mobileMenu.classList.add('mobile-menu-hidden');
-                        toggleMenuIcon(false);
-                    }
-                }
-            });
-
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    mobileMenu.classList.add('mobile-menu-hidden');
-                    toggleMenuIcon(false);
+            sevenDays() {
+                if (!this.weatherData.length) return [];
+                return this.weatherData.slice(0, 7).map((w, i) => {
+                    const t = this.tempData[i] || {};
+                    const h = this.humidityData[i] || {};
+                    return {
+                        date: w.date,
+                        weather: w.weather,
+                        icon: 'weather icon/' + this.matchIcon(w.weather),
+                        tempMax: (typeof t.tempMax === 'number') ? t.tempMax : null,
+                        tempMin: (typeof t.tempMin === 'number') ? t.tempMin : null,
+                        humidMax: (typeof h.humidMax === 'number') ? h.humidMax : null,
+                        humidMin: (typeof h.humidMin === 'number') ? h.humidMin : null
+                    };
                 });
-            });
+            },
 
-            // 抓取並解析 SMG 實時 XML (包含氣溫、濕度與更新時間)
-            async function fetchSmgActualWeather() {
-                const targetUrl = 'https://xml.smg.gov.mo/p_actual_brief.xml';
-                
-                const proxies = [
-                    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-                    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
-                ];
+            /* ★ 解析天氣警告（多警告以 `--` 或 `---` 分隔） */
+            warnings() {
+                const raw = (this.warningsText || '').trim();
+                if (!raw || raw === '-') return [];
 
-                const fetchWithTimeout = async (url, timeoutMs = 3000) => {
-                    const controller = new AbortController();
-                    const timer = setTimeout(() => controller.abort(), timeoutMs);
-                    try {
-                        const res = await fetch(url, { signal: controller.signal });
-                        clearTimeout(timer);
-                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                        return await res.text();
-                    } catch (err) {
-                        clearTimeout(timer);
-                        throw err;
-                    }
-                };
+                const blocks = raw.split(/\n\s*-{2,}\s*\n/);
 
-                function parseXmlData(xmlText) {
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                return blocks
+                    .map(b => this.parseWarningBlock(b))
+                    .filter(w => w !== null);
+            },
 
-                    // 解析發佈/更新時間
-                    const validForNode = xmlDoc.getElementsByTagName('ValidFor')[0];
-                    const sysPubdateNode = xmlDoc.getElementsByTagName('SysPubdate')[0];
-                    const timeText = validForNode?.textContent || sysPubdateNode?.textContent || '--';
+            /* ★ 特別天氣提示（多條以空行分隔） */
+            specialTipsList() {
+                const t = (this.specialTipsText || '').trim();
+                if (!t || t === '-') return [];
 
-                    // 解析氣溫 (Type = 3)
-                    let temp = '--';
-                    const tempNodes = xmlDoc.getElementsByTagName('Temperature');
-                    for (let node of tempNodes) {
-                        const type = node.querySelector('Type')?.textContent;
-                        if (type === '3') {
-                            temp = node.querySelector('Value')?.textContent || '--';
-                            break;
-                        }
-                    }
-                    if (temp === '--' && tempNodes.length > 0) {
-                        temp = tempNodes[0].querySelector('Value')?.textContent || '--';
-                    }
-
-                    // 解析濕度
-                    const humidityNode = xmlDoc.getElementsByTagName('Humidity')[0];
-                    const humidity = humidityNode ? (humidityNode.querySelector('Value')?.textContent || '--') : '--';
-
-                    document.getElementById('smg-temp').textContent = temp !== '--' ? `${temp} °C` : '-- °C';
-                    document.getElementById('smg-humidity').textContent = humidity !== '--' ? `${humidity} %` : '-- %';
-                    document.getElementById('smg-time').textContent = timeText;
-                }
-
-                for (const proxyUrl of proxies) {
-                    try {
-                        const xmlText = await fetchWithTimeout(proxyUrl, 3000);
-                        if (xmlText && xmlText.includes('ActualWeatherBrief')) {
-                            parseXmlData(xmlText);
-                            return;
-                        }
-                    } catch (e) {
-                        console.warn('代理節點回應失敗，嘗試下一節點:', proxyUrl);
-                    }
-                }
-
-                document.getElementById('smg-temp').textContent = '讀取失敗';
-                document.getElementById('smg-humidity').textContent = '讀取失敗';
-                document.getElementById('smg-time').textContent = '讀取失敗';
+                return t.split(/\n\s*\n/)
+                        .map(s => s.trim())
+                        .filter(Boolean);
             }
+        },
 
-            fetchSmgActualWeather();
+        watch: {
+            selectedMap() {
+                this.mapLoading = true;
+                clearTimeout(this.mapLoadTimer);
+                this.mapLoadTimer = setTimeout(() => {
+                    this.mapLoading = false;
+                }, 10000);
+            },
+            tempData() {
+                this.$nextTick(() => this.initChart());
+            },
+            humidityData() {
+                this.$nextTick(() => this.initChart());
+            }
+        },
 
-            // 7日氣溫圖表加載
-            const ctx = document.getElementById('tempChart').getContext('2d');
+        mounted() {
+            document.addEventListener('click', this.handleDocumentClick);
+            document.addEventListener('keydown', this.handleKeydown);
 
-            fetch('temp.csv')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('無法讀取 temp.csv 檔案');
-                    }
-                    return response.text();
-                })
-                .then(csvText => {
+            this.loadForecastCsv();
+            this.loadTempCsv();
+            this.loadHumidityCsv();
+            this.loadOutlook();
+            this.loadIssued7d();
+            this.loadSpecialTipsText();
+            this.loadWarningsText();
+        },
+
+        beforeUnmount() {
+            document.removeEventListener('click', this.handleDocumentClick);
+            document.removeEventListener('keydown', this.handleKeydown);
+
+            clearTimeout(this.mapLoadTimer);
+            if (this.chart) this.chart.destroy();
+        },
+
+        methods: {
+            /* ★ 顏色 */
+            colorOf(level) {
+                return COLOR_MAP[level] || COLOR_MAP.yellow;
+            },
+
+            /* ★ 解析單一天氣警告塊 */
+            parseWarningBlock(block) {
+                const text = block.trim();
+                if (!text || text === '-') return null;
+
+                const lines = text.split('\n');
+
+                const title = (lines[0] || '').trim();
+                let idx = 1;
+
+                let tag = '';
+                if (lines[idx] && lines[idx].trim().startsWith('#')) {
+                    tag = lines[idx].trim().replace(/^#/, '');
+                    idx++;
+                }
+
+                const content = lines.slice(idx).join('\n').trim();
+
+                return {
+                    title,
+                    tag,
+                    content,
+                    level: this.detectWarningLevel(text)
+                };
+            },
+
+            /* ★ 顏色偵測（黑 > 紅 > 橙 > 黃 > 藍 > 綠） */
+            detectWarningLevel(text) {
+                if (/黑色/.test(text)) return 'black';
+                if (/紅色/.test(text)) return 'red';
+                if (/橙色/.test(text)) return 'orange';
+                if (/黃色/.test(text)) return 'yellow';
+                if (/藍色/.test(text)) return 'blue';
+                if (/綠色/.test(text)) return 'green';
+                return 'yellow';
+            },
+
+            /* ★ 讀取天氣警告 */
+            async loadWarningsText() {
+                try {
+                    const res = await fetch('warnings.txt', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const raw = await res.text();
+                    this.warningsText = raw.replace(/^\uFEFF/, '').trim();
+                } catch (e) {
+                    console.error('讀取 warnings.txt 失敗:', e);
+                    this.warningsText = '';
+                }
+            },
+
+            /* ★ 讀取特別天氣提示 */
+            async loadSpecialTipsText() {
+                try {
+                    const res = await fetch('special-tips.txt', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const raw = await res.text();
+                    this.specialTipsText = raw.replace(/^\uFEFF/, '').trim();
+                } catch (e) {
+                    console.error('讀取 special-tips.txt 失敗:', e);
+                    this.specialTipsText = '';
+                }
+            },
+
+            async loadForecastCsv() {
+                try {
+                    const res = await fetch('forecast.csv', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    let csvText = await res.text();
+                    csvText = csvText.replace(/^\uFEFF/, '');
                     const lines = csvText.trim().split('\n');
-                    const labels = [];
-                    const maxTemps = [];
-                    const minTemps = [];
-
+                    const parsed = [];
                     for (let i = 1; i < lines.length; i++) {
-                        const columns = lines[i].split(',');
-                        if (columns.length >= 3) {
-                            labels.push(columns[0].trim());
-                            maxTemps.push(parseFloat(columns[1].trim()));
-                            minTemps.push(parseFloat(columns[2].trim()));
+                        const line = lines[i].trim();
+                        if (!line) continue;
+                        const idx = line.indexOf(',');
+                        if (idx === -1) continue;
+                        const date = line.slice(0, idx).trim();
+                        const weather = line.slice(idx + 1).trim();
+                        if (date && weather) parsed.push({ date, weather });
+                    }
+                    this.weatherData = parsed;
+                } catch (e) {
+                    console.error('讀取 forecast.csv 失敗:', e);
+                }
+            },
+
+            async loadTempCsv() {
+                try {
+                    const res = await fetch('temp.csv', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    let csvText = await res.text();
+                    csvText = csvText.replace(/^\uFEFF/, '');
+                    const lines = csvText.trim().split('\n');
+                    const parsed = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const cols = lines[i].split(',');
+                        if (cols.length >= 3) {
+                            parsed.push({
+                                date: cols[0].trim(),
+                                tempMax: parseFloat(cols[1].trim()),
+                                tempMin: parseFloat(cols[2].trim())
+                            });
                         }
                     }
+                    this.tempData = parsed;
+                } catch (e) {
+                    console.error('讀取 temp.csv 失敗:', e);
+                }
+            },
 
-                    new Chart(ctx, {
+            async loadHumidityCsv() {
+                try {
+                    const res = await fetch('humidity.csv', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    let csvText = await res.text();
+                    csvText = csvText.replace(/^\uFEFF/, '');
+                    const lines = csvText.trim().split('\n');
+                    const parsed = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const cols = lines[i].split(',');
+                        if (cols.length >= 3) {
+                            parsed.push({
+                                date: cols[0].trim(),
+                                humidMax: parseFloat(cols[1].trim()),
+                                humidMin: parseFloat(cols[2].trim())
+                            });
+                        }
+                    }
+                    this.humidityData = parsed;
+                } catch (e) {
+                    console.error('讀取 humidity.csv 失敗:', e);
+                }
+            },
+
+            async loadOutlook() {
+                try {
+                    const res = await fetch('outlook.txt', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const text = await res.text();
+                    this.outlookText = text.trim();
+                } catch (e) {
+                    console.error('讀取 outlook.txt 失敗:', e);
+                    this.outlookText = '（天氣展望暫時無法載入）';
+                }
+            },
+
+            async loadIssued7d() {
+                try {
+                    const res = await fetch('issued-7d.txt', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const text = await res.text();
+                    this.issued7dText = text.trim();
+                } catch (e) {
+                    console.error('讀取 issued-7d.txt 失敗:', e);
+                    this.issued7dText = '（時間暫時無法載入）';
+                }
+            },
+
+            matchIcon(text) {
+                if (!text) return 'cloud.png';
+                const t = text;
+                const hasThunder = /雷暴/.test(t);
+                const hasRain    = /(幾陣驟雨|間中有驟雨|有驟雨|有幾陣雨|間中有雨|有雨)/.test(t);
+                const hasSunny   = /(天晴)/.test(t);
+                const hasBriefSunny = /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴)/.test(t);
+
+                if (hasThunder) return 'rain3_thunder.png';
+                if (hasRain && hasSunny) return 'Sun_cloud_rain.png';
+                if (hasRain) return 'rain2.png';
+                if (hasBriefSunny) return 'Sun_cloud.png';
+                if (hasSunny) return 'Sun.png';
+                if (/(大致多雲|多雲|密雲|陰)/.test(t)) return 'cloud.png';
+                return 'cloud.png';
+            },
+
+            switchChart(mode) {
+                if (this.chartMode === mode) return;
+                this.chartMode = mode;
+                this.$nextTick(() => this.initChart());
+            },
+
+            toggleMobileMenu() { this.mobileOpen = !this.mobileOpen; },
+            closeMobileMenu() { this.mobileOpen = false; },
+            handleDocumentClick(e) {
+                if (!this.mobileOpen) return;
+                const menu = this.$refs.mobileMenuEl;
+                const btn = this.$refs.mobileMenuBtn;
+                if (menu && menu.contains(e.target)) return;
+                if (btn && btn.contains(e.target)) return;
+                this.closeMobileMenu();
+            },
+            handleKeydown(e) {
+                if (e.key === 'Escape' && this.mobileOpen) {
+                    this.closeMobileMenu();
+                    if (this.$refs.mobileMenuBtn) this.$refs.mobileMenuBtn.focus();
+                }
+            },
+
+            onFrameLoad() {
+                clearTimeout(this.mapLoadTimer);
+                this.mapLoading = false;
+            },
+
+            initChart() {
+                const canvas = document.getElementById('mainChart');
+                if (!canvas) return;
+
+                const isTemp = this.chartMode === 'temp';
+                const srcData = isTemp ? this.tempData : this.humidityData;
+                if (!srcData.length) return;
+
+                if (this.chart) {
+                    this.chart.destroy();
+                    this.chart = null;
+                }
+
+                try {
+                    const labels = srcData.map(d => d.date);
+                    const maxValues = srcData.map(d => isTemp ? d.tempMax : d.humidMax);
+                    const minValues = srcData.map(d => isTemp ? d.tempMin : d.humidMin);
+
+                    const unit = isTemp ? '°C' : '%';
+                    const maxLabel = isTemp ? '最高氣溫' : '最高濕度';
+                    const minLabel = isTemp ? '最低氣溫' : '最低濕度';
+
+                    if (labels.length) {
+                        this.chartAriaLabel =
+                            `七日${isTemp ? '氣溫' : '濕度'}預報折線圖。日期：${labels.join('、')}。` +
+                            `${maxLabel}介乎 ${Math.min(...maxValues)} 至 ${Math.max(...maxValues)} ${isTemp ? '度' : '百分比'}；` +
+                            `${minLabel}介乎 ${Math.min(...minValues)} 至 ${Math.max(...minValues)} ${isTemp ? '度' : '百分比'}。`;
+                    }
+
+                    const yMin = Math.min(...minValues);
+                    const yMax = Math.max(...maxValues);
+                    const range = (yMax - yMin) || 1;
+
+                    const ctx = canvas.getContext('2d');
+
+                    this.chart = markRaw(new Chart(ctx, {
                         type: 'line',
                         data: {
                             labels: labels,
                             datasets: [
                                 {
-                                    label: '最高氣溫',
-                                    data: maxTemps,
+                                    label: maxLabel,
+                                    data: maxValues,
                                     borderColor: '#ef4444',
-                                    backgroundColor: 'rgba(239,68,68,0.1)',
-                                    tension: 0.5,
-                                    fill: true
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2.5,
+                                    tension: 0.35,
+                                    fill: false,
+                                    pointRadius: 5,
+                                    pointBackgroundColor: '#ef4444',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    datalabels: {
+                                        align: 'top',
+                                        anchor: 'end',
+                                        offset: 6,
+                                        color: '#1f2937',
+                                        font: { weight: '700', size: 12 },
+                                        formatter: v => v + unit,
+                                        clip: false
+                                    }
                                 },
                                 {
-                                    label: '最低氣溫',
-                                    data: minTemps,
+                                    label: minLabel,
+                                    data: minValues,
                                     borderColor: '#3b82f6',
-                                    backgroundColor: 'rgba(59,130,246,0.1)',
-                                    tension: 0.5,
-                                    fill: true
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2.5,
+                                    tension: 0.35,
+                                    fill: false,
+                                    pointRadius: 5,
+                                    pointBackgroundColor: '#3b82f6',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    datalabels: {
+                                        align: 'bottom',
+                                        anchor: 'start',
+                                        offset: 6,
+                                        color: '#1f2937',
+                                        font: { weight: '700', size: 12 },
+                                        formatter: v => v + unit,
+                                        clip: false
+                                    }
                                 }
                             ]
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    min: 20,
-                                    max: 40,
-                                    ticks: {
-                                        stepSize: 1,
-                                        callback: function(value) {
-                                            return value + '°C';
-                                        }
+                            clip: false,
+                            layout: {
+                                padding: { top: 34, bottom: 34, left: 0, right: 0 }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}${unit}`
                                     }
+                                },
+                                datalabels: { clip: false }
+                            },
+                            scales: {
+                                x: {
+                                    display: false,
+                                    offset: true
+                                },
+                                y: {
+                                    display: false,
+                                    min: yMin - range * 0.4,
+                                    max: yMax + range * 0.4
                                 }
                             }
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('氣溫圖表加載失敗:', error);
-                });
-
-            // 地圖/數據選擇器
-            const mapSelector = document.getElementById('mapSelector');
-            const contentFrame = document.getElementById('contentFrame');
-            const mapLoading = document.getElementById('mapLoading');
-
-            const contentUrls = {
-                'smg-data': 'https://zax41006-bot.github.io/MMC-MOWMAP/',
-                'mmc-gis': 'https://zax41006-bot.github.io/MMC-GIS/',
-                'ghmws-e-wind': 'https://lc2nz3kv-5500.asse.devtunnels.ms/demo/',
-                'satellite': 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU&fbclid=IwY2xjawRtg6pleHRuA2FlbQIxMABicmlkETFUM1dDU21ZRUNydTVrOGNUc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHst3Z44pZDhsE42UuupKJXyPNPb1oj0dOv84mGlb8jzeVwDNAdJbOBDxOxe1_aem_GhC4mXaRRE2txnyqnMe7Kw&brid=YWdncwEKt9oU5mgH8jfiP4F2KDXZ',
-            };
-
-            mapSelector.addEventListener('change', function() {
-                const selectedValue = this.value;
-                const url = contentUrls[selectedValue];
-
-                if (url) {
-                    mapLoading.classList.remove('hidden');
-                    contentFrame.src = url;
-                    contentFrame.onload = function() {
-                        mapLoading.classList.add('hidden');
-                    };
-                    setTimeout(function() {
-                        mapLoading.classList.add('hidden');
-                    }, 10000);
+                        },
+                        plugins: [ChartDataLabels]
+                    }));
+                } catch (error) {
+                    console.error('圖表加載失敗:', error);
+                    this.chartAriaLabel = '預報圖表暫時無法載入。';
                 }
-            });
-        });
-    </script>
+            }
+        }
+    }).mount('#app');
+</script>
 </body>
 </html>
