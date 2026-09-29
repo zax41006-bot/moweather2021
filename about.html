@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>澳門氣象中心 | 關於我們</title>
-    <link rel="icon" href="mmclogo-b.jpg" type="image/jpeg">
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -14,6 +14,7 @@
                 extend: {
                     colors: {
                         primary: '#1E88E5',
+                        'primary-dark': '#1565C0',
                         secondary: '#E3F2FD',
                     },
                 }
@@ -23,42 +24,43 @@
     
     <style type="text/tailwindcss">
         @layer utilities {
-            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary transition-colors; }
-            .nav-link-active { @apply px-3 py-2 text-primary font-medium; } 
+            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary-dark transition-colors; }
+            .nav-link-active { @apply px-3 py-2 text-primary-dark font-medium; } 
             .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
             .mobile-menu-hidden { @apply hidden; }
             .about-card { @apply bg-white rounded-xl shadow-md p-6 mb-6; }
         }
         body { background-color: #E3F2FD; } 
-        /*body { background-color: #f3f5f69d; }*/
         header { position: relative; z-index: 999; }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
-        <header class="bg-white shadow-sm sticky top-0"> 
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center"> 
-            <div class="flex items-center gap-2"> 
-                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8"> 
-                <h1 class="text-xl font-bold text-primary">澳門氣象中心</h1>
-                <!--<h1 class="text-xl font-bold text-gray-600">澳門氣象中心</h1>-->
-            </div> 
-             
-            <nav class="hidden md:flex items-center gap-1"> 
-                <a href="index.html" class="nav-link">首頁</a> 
-                <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="nav-link">熱帶氣旋資訊</a> 
-                <a href="#" class="nav-link">模式預報（GHMWS）</a> 
-                <a href="about.html" class="nav-link font-medium text-primary">關於我們</a> 
-            </nav> 
+
+    <header class="bg-white shadow-sm sticky top-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <p class="text-xl font-bold text-primary-dark">澳門氣象中心</p>
+            </div>
+
+            <!-- ★ 桌面導航：與首頁一致 -->
+            <nav class="hidden md:flex items-center gap-1" aria-label="主要導覽">
+                <a href="index.html" class="nav-link">首頁</a>
+                <a href="https://zax41006-bot.github.io/HKMO_MET-TC-GIS/" class="nav-link">HKMO熱帶氣旋資訊</a>
+                <a href="#" class="nav-link">模式預報（HKMO_MET）</a>
+                <a href="about.html" class="nav-link font-medium text-primary-dark">關於我們</a>
+            </nav>
              
             <button id="mobileMenuBtn" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"> 
                 <i id="menuIcon" class="fa fa-bars text-xl"></i> 
             </button> 
  
+            <!-- ★ 手機導航：與首頁一致的結構與樣式 -->
             <div id="mobileMenu" class="mobile-menu mobile-menu-hidden"> 
-                <a href="index.html" class="block px-4 py-2 text-primary font-medium hover:bg-blue-50 transition-colors">首頁</a> 
-                <a href="https://zax41006-bot.github.io/MMC-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">熱帶氣旋資訊</a> 
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">模式預報（GHMWS）</a> 
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a> 
+                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">首頁</a>
+                <a href="https://zax41006-bot.github.io/HKMO_MET-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">HKMO熱帶氣旋資訊</a>
+                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">模式預報（HKMO_MET）</a>
+                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition-colors">關於我們</a>
             </div> 
         </div> 
     </header> 
@@ -156,5 +158,3 @@
     </script>
 </body>
 </html>
-
-
