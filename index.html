@@ -201,7 +201,7 @@
             font-weight: 500;
             text-align: right;
             padding-right: 0.75rem;
-            white-space: nowrap;   /* ★ 不換行 */
+            white-space: nowrap;
         }
         .seven-grid .grid-cell { text-align: center; }
 
@@ -518,14 +518,15 @@
         Chart.register(ChartDataLabels);
     }
 
-    /* 六種顏色 */
+    /* ★ 七種顏色（新增 cancelled 灰色） */
     const COLOR_MAP = {
         green:  { border: '#16a34a', head: '#16a34a', body: '#f0fdf4', text: '#ffffff' },
         blue:   { border: '#2563eb', head: '#2563eb', body: '#eff6ff', text: '#ffffff' },
         yellow: { border: '#eab308', head: '#eab308', body: '#fefce8', text: '#1f2937' },
         orange: { border: '#ea580c', head: '#ea580c', body: '#fff7ed', text: '#ffffff' },
         red:    { border: '#dc2626', head: '#dc2626', body: '#fef2f2', text: '#ffffff' },
-        black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' }
+        black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' },
+        cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }
     };
 
     const NAV_ITEMS = [
@@ -563,10 +564,7 @@
                 outlookText: '載入中...',
                 issued7dText: '載入中...',
 
-                /* ★ 天氣警告 */
                 warningsText: '',
-
-                /* ★ 特別天氣提示 */
                 specialTipsText: '',
 
                 chartMode: 'temp',
@@ -605,7 +603,6 @@
                 });
             },
 
-            /* ★ 解析天氣警告（多警告以 `--` 或 `---` 分隔） */
             warnings() {
                 const raw = (this.warningsText || '').trim();
                 if (!raw || raw === '-') return [];
@@ -617,7 +614,6 @@
                     .filter(w => w !== null);
             },
 
-            /* ★ 特別天氣提示（多條以空行分隔） */
             specialTipsList() {
                 const t = (this.specialTipsText || '').trim();
                 if (!t || t === '-') return [];
@@ -666,12 +662,10 @@
         },
 
         methods: {
-            /* ★ 顏色 */
             colorOf(level) {
                 return COLOR_MAP[level] || COLOR_MAP.yellow;
             },
 
-            /* ★ 解析單一天氣警告塊 */
             parseWarningBlock(block) {
                 const text = block.trim();
                 if (!text || text === '-') return null;
@@ -697,8 +691,9 @@
                 };
             },
 
-            /* ★ 顏色偵測（黑 > 紅 > 橙 > 黃 > 藍 > 綠） */
+            /* ★ 顏色偵測（取消 > 黑 > 紅 > 橙 > 黃 > 藍 > 綠） */
             detectWarningLevel(text) {
+                if (/取消/.test(text)) return 'cancelled';
                 if (/黑色/.test(text)) return 'black';
                 if (/紅色/.test(text)) return 'red';
                 if (/橙色/.test(text)) return 'orange';
@@ -708,7 +703,6 @@
                 return 'yellow';
             },
 
-            /* ★ 讀取天氣警告 */
             async loadWarningsText() {
                 try {
                     const res = await fetch('warnings.txt', { cache: 'no-store' });
@@ -721,7 +715,6 @@
                 }
             },
 
-            /* ★ 讀取特別天氣提示 */
             async loadSpecialTipsText() {
                 try {
                     const res = await fetch('special-tips.txt', { cache: 'no-store' });
