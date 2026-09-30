@@ -93,23 +93,49 @@
         }
 
         .forecast-table { width: 100%; font-size: 0.9rem; }
+
+        /* ★ 用 stretch：讓每個 cell 都撐滿整行高度，再由 cell 內部居中 */
         .forecast-row {
             display: grid;
-            grid-template-columns: 90px 72px 1fr 140px 150px;
-            align-items: center;
+            grid-template-columns: 90px 86px 1fr 140px 150px;
+            align-items: stretch;             /* ★ center → stretch */
             gap: 0.75rem;
             padding: 0.85rem 0.25rem;
+            min-height: 5rem;
             border-bottom: 1px solid #e5e7eb;
         }
         .forecast-row:last-child { border-bottom: 0; }
 
+        /* ★ 表頭：統一所有 cell 的字級/字重/行高，高度與資料行一致 */
         .forecast-header {
             font-weight: 700;
             color: #000;
             border-bottom: 2px solid #cbd5e1;
-            padding-top: 0;
-            padding-bottom: 0.6rem;
+            padding-top: 0.9rem;
+            padding-bottom: 0.9rem;
             font-size: 0.85rem;
+            line-height: 1.4;
+            min-height: 4rem;
+        }
+        /* 表頭內所有 cell 都繼承相同字級，避免個別縮放造成視覺不一致 */
+        .forecast-header .forecast-col-date,
+        .forecast-header .forecast-col-icon,
+        .forecast-header .forecast-col-text,
+        .forecast-header .forecast-col-temp,
+        .forecast-header .forecast-col-humid {
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-variant-numeric: normal;     /* 表頭不需要 tabular */
+        }
+
+        /* ★ 每個 cell 都撐滿整行高度並居中內容 */
+        .forecast-col-date,
+        .forecast-col-icon,
+        .forecast-col-text,
+        .forecast-col-temp,
+        .forecast-col-humid {
+            display: flex;
+            align-items: center;               /* 內容垂直居中 */
         }
 
         .forecast-col-date {
@@ -118,13 +144,17 @@
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
         }
-        .forecast-col-icon { display: flex; justify-content: center; }
+        .forecast-col-icon { justify-content: center; }
         .forecast-col-icon img {
             width: 2.25rem;
             height: 2.25rem;
             object-fit: contain;
+            display: block;
         }
-        .forecast-col-text { color: #1f2937; line-height: 1.6; }
+        .forecast-col-text {
+            color: #1f2937;
+            line-height: 1.6;
+        }
         .forecast-col-temp,
         .forecast-col-humid {
             color: #1f2937;
@@ -142,13 +172,14 @@
                     ". humid";
                 gap: 0.35rem 0.75rem;
                 padding: 1rem 0.25rem;
+                min-height: 0;
             }
             .forecast-header { display: none; }
             .forecast-col-icon { grid-area: icon; align-self: start; padding-top: 0.15rem; }
-            .forecast-col-date { grid-area: date; }
-            .forecast-col-text { grid-area: text; }
-            .forecast-col-temp { grid-area: temp; }
-            .forecast-col-humid { grid-area: humid; }
+            .forecast-col-date { grid-area: date; display: block; }
+            .forecast-col-text { grid-area: text; display: block; }
+            .forecast-col-temp { grid-area: temp; display: block; }
+            .forecast-col-humid { grid-area: humid; display: block; }
             .forecast-col-temp::before { content: "氣溫："; color: #6b7280; font-weight: 400; }
             .forecast-col-humid::before { content: "濕度："; color: #6b7280; font-weight: 400; }
         }
@@ -162,7 +193,7 @@
                 padding: 0 !important;
             }
             .weather-doc { font-size: 11pt; }
-            .forecast-row { padding: 0.5rem 0.25rem; }
+            .forecast-row { padding: 0.5rem 0.25rem; min-height: 0; }
             .forecast-col-icon img { width: 1.6rem; height: 1.6rem; }
         }
     </style>
