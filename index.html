@@ -266,6 +266,73 @@
             margin-top: 0.75rem;
         }
 
+        /* ★ 手機版專用氣溫顯示 (桌面版預設隱藏) */
+        .mobile-temp {
+            display: none;
+        }
+
+        /* ★ 手機版專屬設計 (螢幕寬度小於 768px) */
+        @media (max-width: 768px) {
+            /* 1. 隱藏折線圖、切換 Tabs、分隔線、底部灰字標籤 */
+            .chart-tabs, 
+            .temp-chart-wrap, 
+            .divider-line,
+            .grid-label,
+            .chart-row-grid {
+                display: none !important;
+            }
+
+            /* 2. 將七日天氣預報的 Grid 改為垂直列表 */
+            .seven-grid.day-head {
+                display: block !important;
+                margin-bottom: 0 !important;
+            }
+
+            /* 3. 隱藏原本用來對齊的第一個空 div */
+            .seven-grid.day-head > div:first-child {
+                display: none;
+            }
+
+            /* 4. 每一列改為 Flex 佈局，左右對齊 */
+            .seven-grid.day-head .grid-cell {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 0.5rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            /* 5. 左側：日期與天氣圖示 */
+            .seven-grid.day-head .grid-cell .day-date {
+                font-size: 1rem;
+                text-align: left;
+                margin-bottom: 0;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .seven-grid.day-head .grid-cell img {
+                display: inline-block;
+                vertical-align: middle;
+                width: 2rem;
+                height: 2rem;
+                margin: 0 0 0 0.5rem;
+            }
+
+            /* 6. 右側：氣溫 */
+            .mobile-temp {
+                display: block;
+                font-weight: 700;
+                font-size: 1rem;
+                color: #1f2937;
+            }
+
+            /* 7. 確保天氣稿按鈕在列表下方正常顯示 */
+            .mt-4.text-center {
+                margin-top: 1.5rem;
+            }
+        }
+
         @media (max-width: 640px) {
             .seven-grid { grid-template-columns: 4.5rem repeat(7, 1fr); }
             .seven-grid .grid-label { font-size: 0.7rem; padding-right: 0.4rem; }
@@ -453,7 +520,10 @@
                     </div>
 
                     <div class="weather-card p-5">
-                        <h3 class="sub-title">七日氣溫及相對濕度預報</h3>
+                        <!-- 桌面版標題 -->
+                        <h3 class="sub-title hidden md:block">七日氣溫及相對濕度預報</h3>
+                        <!-- 手機版標題 -->
+                        <h3 class="sub-title md:hidden">七日天氣預報</h3>
 
                         <div class="flex justify-center">
                             <div class="chart-tabs" role="tablist" aria-label="選擇預報類型">
@@ -474,17 +544,21 @@
                             </div>
                         </div>
 
+                        <!-- 七日天氣列表 (手機版會自動變成垂直列表) -->
                         <div class="seven-grid day-head mb-1">
                             <div></div>
                             <div v-for="day in sevenDays" :key="'h-' + day.date" class="grid-cell">
                                 <div class="day-date">{{ day.date }}</div>
                                 <img :src="day.icon" :alt="day.date + ' 天氣圖標'">
+                                <!-- ★ 手機版專用氣溫顯示 (桌面版會被 CSS 隱藏) -->
+                                <div class="mobile-temp">{{ day.tempMin }}°C - {{ day.tempMax }}°C</div>
                             </div>
                         </div>
 
                         <div class="divider-line"></div>
 
-                        <div class="seven-grid">
+                        <!-- 折線圖 (手機版會被 CSS 隱藏，包含下方「氣溫」灰字) -->
+                        <div class="seven-grid chart-row-grid">
                             <div class="grid-label">{{ chartMode === 'temp' ? '氣溫' : '相對濕度' }}</div>
                             <div class="temp-chart-wrap">
                                 <canvas id="mainChart" role="img" :aria-label="chartAriaLabel"></canvas>
