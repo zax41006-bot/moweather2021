@@ -133,6 +133,9 @@
             background: #f9fafb;
             color: #6b7280;
             font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* ★ 特別天氣提示卡片（深紅，無標籤） */
@@ -271,6 +274,45 @@
             .temp-chart-wrap { height: 170px; }
             .chart-tabs button { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
         }
+
+        /* ★ 移動端專屬設計 */
+        @media (max-width: 768px) {
+            .warning-head,
+            .tip-head {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+            .warning-body,
+            .tip-body {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            .weather-card {
+                border-radius: 16px;
+            }
+            .warning-card,
+            .tip-card {
+                border-radius: 12px;
+            }
+            .temp-chart-wrap {
+                height: 220px;
+            }
+            .map-select {
+                width: 100%;
+                padding: 0.7rem 1rem;
+                font-size: 0.95rem;
+            }
+            main.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .seven-grid { grid-template-columns: 4rem repeat(7, 1fr); }
+            .day-head .day-date { font-size: 0.68rem; }
+            .day-head img { width: 1.3rem; height: 1.3rem; }
+        }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
@@ -349,12 +391,11 @@
             </div>
         </section>
 
-        <!-- ★ 天氣警告（直接渲染，無 iframe） -->
+        <!-- ★ 天氣警告 -->
         <section class="mb-8" aria-labelledby="warning-heading">
             <h2 id="warning-heading" class="sr-only">天氣警告</h2>
             <div class="weather-card p-3">
 
-                <!-- 有警告 -->
                 <template v-if="warnings.length">
                     <div v-for="(w, i) in warnings"
                          :key="i"
@@ -374,13 +415,12 @@
                     </div>
                 </template>
 
-                <!-- 無警告 -->
+                <!-- ★ 無警告 -->
                 <div v-else class="warning-inactive">
-                    <div class="warning-head">
+                    <div class="warning-body">
                         <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                        <span>現時無特別天氣警告</span>
+                        <span>無天氣警報</span>
                     </div>
-                    <div class="warning-body">本澳現時無特別天氣警告。</div>
                 </div>
 
             </div>
@@ -390,7 +430,6 @@
         <section class="mb-8" aria-labelledby="forecast-heading">
             <h2 id="forecast-heading" class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
 
-            <!-- ★ 左右比例 2:4（共 6 欄） -->
             <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
 
                 <div class="weather-card p-4 md:col-span-2 flex flex-col">
@@ -518,7 +557,6 @@
         Chart.register(ChartDataLabels);
     }
 
-    /* ★ 七種顏色（新增 cancelled 灰色） */
     const COLOR_MAP = {
         green:  { border: '#16a34a', head: '#16a34a', body: '#f0fdf4', text: '#ffffff' },
         blue:   { border: '#2563eb', head: '#2563eb', body: '#eff6ff', text: '#ffffff' },
@@ -691,7 +729,6 @@
                 };
             },
 
-            /* ★ 顏色偵測（取消 > 黑 > 紅 > 橙 > 黃 > 藍 > 綠） */
             detectWarningLevel(text) {
                 if (/取消/.test(text)) return 'cancelled';
                 if (/黑色/.test(text)) return 'black';
