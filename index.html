@@ -638,6 +638,8 @@
         orange: { border: '#ea580c', head: '#ea580c', body: '#fff7ed', text: '#ffffff' },
         red:    { border: '#dc2626', head: '#dc2626', body: '#fef2f2', text: '#ffffff' },
         black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' },
+        // ★ 新增：淺灰白（適用於潛在熱帶氣旋的低壓區影響警報）
+        lightgray: { border: '#d1d5db', head: '#e5e7eb', body: '#f9fafb', text: '#1f2937' },
         cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }
     };
 
@@ -803,14 +805,49 @@
                 };
             },
 
+            // ★ 已調整：
+            //   - 強季風固定黃色
+            //   - 潛在熱帶氣旋／低壓區影響 → 淺灰白
+            //   - 只認「酷熱X色警報」行
+            //   - 跳過「改發／轉發」行
             detectWarningLevel(text) {
-                if (/取消/.test(text)) return 'cancelled';
-                if (/黑色/.test(text)) return 'black';
-                if (/紅色/.test(text)) return 'red';
-                if (/橙色/.test(text)) return 'orange';
-                if (/黃色/.test(text)) return 'yellow';
-                if (/藍色/.test(text)) return 'blue';
-                if (/綠色/.test(text)) return 'green';
+                const raw = (text || '').replace(/^\uFEFF/, '').trim();
+                const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+
+                // ★ 潛在熱帶氣旋／低壓區影響 → 淺灰白（優先於其他顏色判斷）
+                if (/潛在熱帶氣旋|潜在热带气旋|低壓區影響|低压区影响|低壓區警告|低压区警告|低壓區警報|低压区警报/.test(raw)) {
+                    return 'lightgray';
+                }
+
+                // ★ 強季風固定黃色（不受內文其他顏色字眼影響）
+                if (/強季風/.test(raw)) return 'yellow';
+
+                const COLOR_KEY = {
+                    '黑色': 'black',
+                    '紅色': 'red',
+                    '橙色': 'orange',
+                    '黃色': 'yellow',
+                    '藍色': 'blue',
+                    '綠色': 'green'
+                };
+                const COLOR_RE = '(黑色|紅色|橙色|黃色|藍色|綠色)';
+
+                // 1) 優先只認「酷熱X色警報」這一行（例如：酷熱黃色警報仍然生效）
+                for (const line of lines) {
+                    const m = line.match(new RegExp('酷熱' + COLOR_RE + '警報'));
+                    if (m) return COLOR_KEY[m[1]];
+                }
+
+                // 2) 其次認第一個「X色警報」，但跳過提及「改發／轉發」的行，
+                //    避免最後一行「將改發X色颱風警報」蓋掉真正的警報顏色
+                for (const line of lines) {
+                    if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
+                    const m = line.match(new RegExp(COLOR_RE + '警報'));
+                    if (m) return COLOR_KEY[m[1]];
+                }
+
+                // 3) 最後才判斷「取消」，其餘預設黃色
+                if (/取消/.test(raw)) return 'cancelled';
                 return 'yellow';
             },
 
