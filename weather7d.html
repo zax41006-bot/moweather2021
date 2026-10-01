@@ -36,7 +36,6 @@
 
     <style>
         [v-cloak] { display: none; }
-        /* ★ 純白背景 */
         body { background-color: #ffffff; }
         header { position: relative; z-index: 999; }
 
@@ -94,11 +93,10 @@
 
         .forecast-table { width: 100%; font-size: 0.9rem; }
 
-        /* ★ 用 stretch：讓每個 cell 都撐滿整行高度，再由 cell 內部居中 */
         .forecast-row {
             display: grid;
             grid-template-columns: 90px 86px 1fr 140px 150px;
-            align-items: stretch;             /* ★ center → stretch */
+            align-items: stretch;
             gap: 0.75rem;
             padding: 0.85rem 0.25rem;
             min-height: 5rem;
@@ -106,7 +104,6 @@
         }
         .forecast-row:last-child { border-bottom: 0; }
 
-        /* ★ 表頭：統一所有 cell 的字級/字重/行高，高度與資料行一致 */
         .forecast-header {
             font-weight: 700;
             color: #000;
@@ -117,7 +114,6 @@
             line-height: 1.4;
             min-height: 4rem;
         }
-        /* 表頭內所有 cell 都繼承相同字級，避免個別縮放造成視覺不一致 */
         .forecast-header .forecast-col-date,
         .forecast-header .forecast-col-icon,
         .forecast-header .forecast-col-text,
@@ -125,17 +121,16 @@
         .forecast-header .forecast-col-humid {
             font-size: 0.85rem;
             font-weight: 700;
-            font-variant-numeric: normal;     /* 表頭不需要 tabular */
+            font-variant-numeric: normal;
         }
 
-        /* ★ 每個 cell 都撐滿整行高度並居中內容 */
         .forecast-col-date,
         .forecast-col-icon,
         .forecast-col-text,
         .forecast-col-temp,
         .forecast-col-humid {
             display: flex;
-            align-items: center;               /* 內容垂直居中 */
+            align-items: center;
         }
 
         .forecast-col-date {
@@ -273,7 +268,7 @@
                     <div class="forecast-col-humid" role="columnheader">相對濕度預報</div>
                 </div>
 
-                <div v-for="(day, i) in mergedDays"
+                <div v-for="day in mergedDays"
                      :key="day.date"
                      class="forecast-row"
                      role="row">
@@ -347,8 +342,6 @@
                 FORECAST_TITLE,
 
                 weatherData: [],
-                tempData: [],
-                humidityData: [],
                 outlookText: '載入中...',
                 issuedText: '載入中...',
 
@@ -363,18 +356,14 @@
 
         computed: {
             mergedDays() {
-                return this.weatherData.map((w, i) => {
-                    const t = this.tempData[i] || {};
-                    const h = this.humidityData[i] || {};
-                    return {
-                        date: w.date,
-                        weather: w.weather,
-                        tempMax: (typeof t.tempMax === 'number') ? t.tempMax : null,
-                        tempMin: (typeof t.tempMin === 'number') ? t.tempMin : null,
-                        humidMax: (typeof h.humidMax === 'number') ? h.humidMax : null,
-                        humidMin: (typeof h.humidMin === 'number') ? h.humidMin : null
-                    };
-                });
+                return this.weatherData.map(w => ({
+                    date: w.date,
+                    weather: w.weather,
+                    tempMax: Number.isFinite(w.tempMax) ? w.tempMax : null,
+                    tempMin: Number.isFinite(w.tempMin) ? w.tempMin : null,
+                    humidMax: Number.isFinite(w.humidMax) ? w.humidMax : null,
+                    humidMin: Number.isFinite(w.humidMin) ? w.humidMin : null
+                }));
             },
 
             fullText() {
@@ -402,10 +391,7 @@
             document.addEventListener('keydown', this.handleKeydown);
 
             this.loadForecastCsv();
-            this.loadTempCsv();
-            this.loadHumidityCsv();
-            this.loadOutlook();
-            this.loadIssued();
+            this.loadWeather7dText();
         },
 
         beforeUnmount() {
@@ -416,23 +402,58 @@
         },
 
         methods: {
+            parseCsvRow(line) {
+                const cols = [];
+                let cur = '';
+                let inQuote = false;
+
+                for (let i = 0; i < line.length; i++) {
+                    const ch = line[i];
+                    if (inQuote) {
+                        if (ch === '"') {
+                            if (line[i + 1] === '"') { cur += '"'; i++; }
+                            else inQuote = false;
+                        } else {
+                            cur += ch;
+                        }
+                    } else if (ch === ',') {
+                        cols.push(cur);
+                        cur = '';
+                    } else if (ch === '"') {
+                        inQuote = true;
+                    } else {
+                        cur += ch;
+                    }
+                }
+                cols.push(cur);
+                return cols.map(s => s.trim());
+            },
+
             async loadForecastCsv() {
                 try {
                     const res = await fetch('forecast.csv', { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    let csvText = await res.text();
-                    csvText = csvText.replace(/^\uFEFF/, '');
+                    const csvText = (await res.text()).replace(/^\uFEFF/, '');
+                    const lines = csvText.split(/\r?\n/).filter(l => l.trim());
 
-                    const lines = csvText.trim().split('\n');
                     const parsed = [];
                     for (let i = 1; i < lines.length; i++) {
-                        const line = lines[i].trim();
-                        if (!line) continue;
-                        const idx = line.indexOf(',');
-                        if (idx === -1) continue;
-                        const date = line.slice(0, idx).trim();
-                        const weather = line.slice(idx + 1).trim();
-                        if (date && weather) parsed.push({ date, weather });
+                        const c = this.parseCsvRow(lines[i]);
+                        if (c.length < 6 || !c[0]) continue;
+
+                        const tempMax  = parseFloat(c[2]);
+                        const tempMin  = parseFloat(c[3]);
+                        const humidMax = parseFloat(c[4]);
+                        const humidMin = parseFloat(c[5]);
+
+                        parsed.push({
+                            date: c[0],
+                            weather: c[1],
+                            tempMax:  Number.isFinite(tempMax)  ? tempMax  : null,
+                            tempMin:  Number.isFinite(tempMin)  ? tempMin  : null,
+                            humidMax: Number.isFinite(humidMax) ? humidMax : null,
+                            humidMin: Number.isFinite(humidMin) ? humidMin : null
+                        });
                     }
                     this.weatherData = parsed;
                 } catch (e) {
@@ -440,77 +461,25 @@
                 }
             },
 
-            async loadTempCsv() {
+            async loadWeather7dText() {
                 try {
-                    const res = await fetch('temp.csv', { cache: 'no-store' });
+                    const res = await fetch('weather7d.txt', { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    let csvText = await res.text();
-                    csvText = csvText.replace(/^\uFEFF/, '');
+                    const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
 
-                    const lines = csvText.trim().split('\n');
-                    const parsed = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const cols = lines[i].split(',');
-                        if (cols.length >= 3) {
-                            parsed.push({
-                                date: cols[0].trim(),
-                                tempMax: parseFloat(cols[1].trim()),
-                                tempMin: parseFloat(cols[2].trim())
-                            });
-                        }
+                    const idx = raw.search(/\n\s*\n/);
+
+                    if (idx === -1) {
+                        this.issuedText = '（時間暫時無法載入）';
+                        this.outlookText = raw || '（天氣展望暫時無法載入）';
+                    } else {
+                        this.issuedText = raw.slice(0, idx).trim() || '（時間暫時無法載入）';
+                        this.outlookText = raw.slice(idx).trim() || '（天氣展望暫時無法載入）';
                     }
-                    this.tempData = parsed;
                 } catch (e) {
-                    console.error('讀取 temp.csv 失敗:', e);
-                }
-            },
-
-            async loadHumidityCsv() {
-                try {
-                    const res = await fetch('humidity.csv', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    let csvText = await res.text();
-                    csvText = csvText.replace(/^\uFEFF/, '');
-
-                    const lines = csvText.trim().split('\n');
-                    const parsed = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const cols = lines[i].split(',');
-                        if (cols.length >= 3) {
-                            parsed.push({
-                                date: cols[0].trim(),
-                                humidMax: parseFloat(cols[1].trim()),
-                                humidMin: parseFloat(cols[2].trim())
-                            });
-                        }
-                    }
-                    this.humidityData = parsed;
-                } catch (e) {
-                    console.error('讀取 humidity.csv 失敗:', e);
-                }
-            },
-
-            async loadOutlook() {
-                try {
-                    const res = await fetch('outlook.txt', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const text = await res.text();
-                    this.outlookText = text.trim();
-                } catch (e) {
-                    console.error('讀取 outlook.txt 失敗:', e);
-                    this.outlookText = '（天氣展望暫時無法載入）';
-                }
-            },
-
-            async loadIssued() {
-                try {
-                    const res = await fetch('issued-7d.txt', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const text = await res.text();
-                    this.issuedText = text.trim();
-                } catch (e) {
-                    console.error('讀取 issued-7d.txt 失敗:', e);
+                    console.error('讀取 weather7d.txt 失敗:', e);
                     this.issuedText = '（時間暫時無法載入）';
+                    this.outlookText = '（天氣展望暫時無法載入）';
                 }
             },
 
