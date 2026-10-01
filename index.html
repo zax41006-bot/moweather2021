@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>澳門氣象中心 | 首頁</title>
-    <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -84,7 +84,6 @@
             margin-bottom: 0.75rem;
         }
 
-        /* ★ 天氣警告卡片 */
         .warning-card {
             border-radius: 10px;
             overflow: hidden;
@@ -138,7 +137,6 @@
             gap: 0.5rem;
         }
 
-        /* ★ 特別天氣提示卡片（深紅，無標籤） */
         .tip-card {
             border-radius: 10px;
             overflow: hidden;
@@ -191,7 +189,6 @@
             .embed-frame-wrap { min-height: 360px; }
         }
 
-        /* ★ seven-grid 第一欄加寬，讓「相對濕度」可在一行內顯示 */
         .seven-grid {
             display: grid;
             grid-template-columns: 5.5rem repeat(7, 1fr);
@@ -266,14 +263,11 @@
             margin-top: 0.75rem;
         }
 
-        /* ★ 手機版專用氣溫顯示 (桌面版預設隱藏) */
         .mobile-temp {
             display: none;
         }
 
-        /* ★ 手機版專屬設計 (螢幕寬度小於 768px) */
         @media (max-width: 768px) {
-            /* 1. 隱藏折線圖、切換 Tabs、分隔線、底部灰字標籤 */
             .chart-tabs, 
             .temp-chart-wrap, 
             .divider-line,
@@ -282,18 +276,15 @@
                 display: none !important;
             }
 
-            /* 2. 將七日天氣預報的 Grid 改為垂直列表 */
             .seven-grid.day-head {
                 display: block !important;
                 margin-bottom: 0 !important;
             }
 
-            /* 3. 隱藏原本用來對齊的第一個空 div */
             .seven-grid.day-head > div:first-child {
                 display: none;
             }
 
-            /* 4. 每一列改為 Flex 佈局，左右對齊 */
             .seven-grid.day-head .grid-cell {
                 display: flex;
                 justify-content: space-between;
@@ -302,7 +293,6 @@
                 border-bottom: 1px solid #e5e7eb;
             }
 
-            /* 5. 左側：日期與天氣圖示 */
             .seven-grid.day-head .grid-cell .day-date {
                 font-size: 1rem;
                 text-align: left;
@@ -319,7 +309,6 @@
                 margin: 0 0 0 0.5rem;
             }
 
-            /* 6. 右側：氣溫 */
             .mobile-temp {
                 display: block;
                 font-weight: 700;
@@ -327,7 +316,6 @@
                 color: #1f2937;
             }
 
-            /* 7. 確保天氣稿按鈕在列表下方正常顯示 */
             .mt-4.text-center {
                 margin-top: 1.5rem;
             }
@@ -342,7 +330,6 @@
             .chart-tabs button { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
         }
 
-        /* ★ 移動端專屬設計 */
         @media (max-width: 768px) {
             .warning-head,
             .tip-head {
@@ -440,7 +427,6 @@
 
     <main id="main-content" class="container mx-auto px-4 py-8">
 
-        <!-- ★ 特別天氣提示（深紅色） -->
         <section v-if="specialTipsList.length"
                  class="mb-8"
                  aria-labelledby="special-tips-heading">
@@ -458,7 +444,6 @@
             </div>
         </section>
 
-        <!-- ★ 天氣警告 -->
         <section class="mb-8" aria-labelledby="warning-heading">
             <h2 id="warning-heading" class="sr-only">天氣警告</h2>
             <div class="weather-card p-3">
@@ -482,7 +467,6 @@
                     </div>
                 </template>
 
-                <!-- ★ 無警告 -->
                 <div v-else class="warning-inactive">
                     <div class="warning-body">
                         <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
@@ -493,7 +477,6 @@
             </div>
         </section>
 
-        <!-- 天氣預報（本中心） -->
         <section class="mb-8" aria-labelledby="forecast-heading">
             <h2 id="forecast-heading" class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
 
@@ -520,9 +503,7 @@
                     </div>
 
                     <div class="weather-card p-5">
-                        <!-- 桌面版標題 -->
                         <h3 class="sub-title hidden md:block">七日氣溫及相對濕度預報</h3>
-                        <!-- 手機版標題 -->
                         <h3 class="sub-title md:hidden">七日天氣預報</h3>
 
                         <div class="flex justify-center">
@@ -544,20 +525,17 @@
                             </div>
                         </div>
 
-                        <!-- 七日天氣列表 (手機版會自動變成垂直列表) -->
                         <div class="seven-grid day-head mb-1">
                             <div></div>
                             <div v-for="day in sevenDays" :key="'h-' + day.date" class="grid-cell">
                                 <div class="day-date">{{ day.date }}</div>
                                 <img :src="day.icon" :alt="day.date + ' 天氣圖標'">
-                                <!-- ★ 手機版專用氣溫顯示 (桌面版會被 CSS 隱藏) -->
-                                <div class="mobile-temp">{{ day.tempMin }}°C - {{ day.tempMax }}°C</div>
+                                <div class="mobile-temp">{{ day.tempText }}</div>
                             </div>
                         </div>
 
                         <div class="divider-line"></div>
 
-                        <!-- 折線圖 (手機版會被 CSS 隱藏，包含下方「氣溫」灰字) -->
                         <div class="seven-grid chart-row-grid">
                             <div class="grid-label">{{ chartMode === 'temp' ? '氣溫' : '相對濕度' }}</div>
                             <div class="temp-chart-wrap">
@@ -577,7 +555,6 @@
             </div>
         </section>
 
-        <!-- 氣象數據 -->
         <section class="mb-8" aria-labelledby="data-heading">
             <h2 id="data-heading" class="text-xl font-bold mb-4 text-black">氣象數據</h2>
             <div class="weather-card p-6">
@@ -638,7 +615,6 @@
         orange: { border: '#ea580c', head: '#ea580c', body: '#fff7ed', text: '#ffffff' },
         red:    { border: '#dc2626', head: '#dc2626', body: '#fef2f2', text: '#ffffff' },
         black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' },
-        // ★ 新增：淺灰白（適用於潛在熱帶氣旋的低壓區影響警報）
         lightgray: { border: '#d1d5db', head: '#e5e7eb', body: '#f9fafb', text: '#1f2937' },
         cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }
     };
@@ -673,8 +649,6 @@
                 contentOptions: CONTENT_OPTIONS,
 
                 weatherData: [],
-                tempData: [],
-                humidityData: [],
                 outlookText: '載入中...',
                 issued7dText: '載入中...',
 
@@ -702,17 +676,17 @@
 
             sevenDays() {
                 if (!this.weatherData.length) return [];
-                return this.weatherData.slice(0, 7).map((w, i) => {
-                    const t = this.tempData[i] || {};
-                    const h = this.humidityData[i] || {};
+                return this.weatherData.slice(0, 7).map(w => {
+                    const hasTemp = Number.isFinite(w.tempMax) && Number.isFinite(w.tempMin);
                     return {
                         date: w.date,
                         weather: w.weather,
                         icon: 'weather icon/' + this.matchIcon(w.weather),
-                        tempMax: (typeof t.tempMax === 'number') ? t.tempMax : null,
-                        tempMin: (typeof t.tempMin === 'number') ? t.tempMin : null,
-                        humidMax: (typeof h.humidMax === 'number') ? h.humidMax : null,
-                        humidMin: (typeof h.humidMin === 'number') ? h.humidMin : null
+                        tempMax: hasTemp ? w.tempMax : null,
+                        tempMin: hasTemp ? w.tempMin : null,
+                        tempText: hasTemp ? `${w.tempMin}°C - ${w.tempMax}°C` : '--',
+                        humidMax: Number.isFinite(w.humidMax) ? w.humidMax : null,
+                        humidMin: Number.isFinite(w.humidMin) ? w.humidMin : null
                     };
                 });
             },
@@ -746,10 +720,7 @@
                     this.mapLoading = false;
                 }, 10000);
             },
-            tempData() {
-                this.$nextTick(() => this.initChart());
-            },
-            humidityData() {
+            weatherData() {
                 this.$nextTick(() => this.initChart());
             }
         },
@@ -759,10 +730,7 @@
             document.addEventListener('keydown', this.handleKeydown);
 
             this.loadForecastCsv();
-            this.loadTempCsv();
-            this.loadHumidityCsv();
-            this.loadOutlook();
-            this.loadIssued7d();
+            this.loadWeather7dText();
             this.loadSpecialTipsText();
             this.loadWarningsText();
         },
@@ -805,21 +773,14 @@
                 };
             },
 
-            // ★ 已調整：
-            //   - 強季風固定黃色
-            //   - 潛在熱帶氣旋／低壓區影響 → 淺灰白
-            //   - 只認「酷熱X色警報」行
-            //   - 跳過「改發／轉發」行
             detectWarningLevel(text) {
                 const raw = (text || '').replace(/^\uFEFF/, '').trim();
                 const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
 
-                // ★ 潛在熱帶氣旋／低壓區影響 → 淺灰白（優先於其他顏色判斷）
                 if (/潛在熱帶氣旋|潜在热带气旋|低壓區影響|低压区影响|低壓區警告|低压区警告|低壓區警報|低压区警报/.test(raw)) {
                     return 'lightgray';
                 }
 
-                // ★ 強季風固定黃色（不受內文其他顏色字眼影響）
                 if (/強季風/.test(raw)) return 'yellow';
 
                 const COLOR_KEY = {
@@ -832,21 +793,17 @@
                 };
                 const COLOR_RE = '(黑色|紅色|橙色|黃色|藍色|綠色)';
 
-                // 1) 優先只認「酷熱X色警報」這一行（例如：酷熱黃色警報仍然生效）
                 for (const line of lines) {
                     const m = line.match(new RegExp('酷熱' + COLOR_RE + '警報'));
                     if (m) return COLOR_KEY[m[1]];
                 }
 
-                // 2) 其次認第一個「X色警報」，但跳過提及「改發／轉發」的行，
-                //    避免最後一行「將改發X色颱風警報」蓋掉真正的警報顏色
                 for (const line of lines) {
                     if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
                     const m = line.match(new RegExp(COLOR_RE + '警報'));
                     if (m) return COLOR_KEY[m[1]];
                 }
 
-                // 3) 最後才判斷「取消」，其餘預設黃色
                 if (/取消/.test(raw)) return 'cancelled';
                 return 'yellow';
             },
@@ -875,22 +832,58 @@
                 }
             },
 
+            parseCsvRow(line) {
+                const cols = [];
+                let cur = '';
+                let inQuote = false;
+
+                for (let i = 0; i < line.length; i++) {
+                    const ch = line[i];
+                    if (inQuote) {
+                        if (ch === '"') {
+                            if (line[i + 1] === '"') { cur += '"'; i++; }
+                            else inQuote = false;
+                        } else {
+                            cur += ch;
+                        }
+                    } else if (ch === ',') {
+                        cols.push(cur);
+                        cur = '';
+                    } else if (ch === '"') {
+                        inQuote = true;
+                    } else {
+                        cur += ch;
+                    }
+                }
+                cols.push(cur);
+                return cols.map(s => s.trim());
+            },
+
             async loadForecastCsv() {
                 try {
                     const res = await fetch('forecast.csv', { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    let csvText = await res.text();
-                    csvText = csvText.replace(/^\uFEFF/, '');
-                    const lines = csvText.trim().split('\n');
+                    const csvText = (await res.text()).replace(/^\uFEFF/, '');
+                    const lines = csvText.split(/\r?\n/).filter(l => l.trim());
+
                     const parsed = [];
                     for (let i = 1; i < lines.length; i++) {
-                        const line = lines[i].trim();
-                        if (!line) continue;
-                        const idx = line.indexOf(',');
-                        if (idx === -1) continue;
-                        const date = line.slice(0, idx).trim();
-                        const weather = line.slice(idx + 1).trim();
-                        if (date && weather) parsed.push({ date, weather });
+                        const c = this.parseCsvRow(lines[i]);
+                        if (c.length < 6 || !c[0]) continue;
+
+                        const tempMax  = parseFloat(c[2]);
+                        const tempMin  = parseFloat(c[3]);
+                        const humidMax = parseFloat(c[4]);
+                        const humidMin = parseFloat(c[5]);
+
+                        parsed.push({
+                            date: c[0],
+                            weather: c[1],
+                            tempMax:  Number.isFinite(tempMax)  ? tempMax  : null,
+                            tempMin:  Number.isFinite(tempMin)  ? tempMin  : null,
+                            humidMax: Number.isFinite(humidMax) ? humidMax : null,
+                            humidMin: Number.isFinite(humidMin) ? humidMin : null
+                        });
                     }
                     this.weatherData = parsed;
                 } catch (e) {
@@ -898,75 +891,25 @@
                 }
             },
 
-            async loadTempCsv() {
+            async loadWeather7dText() {
                 try {
-                    const res = await fetch('temp.csv', { cache: 'no-store' });
+                    const res = await fetch('weather7d.txt', { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    let csvText = await res.text();
-                    csvText = csvText.replace(/^\uFEFF/, '');
-                    const lines = csvText.trim().split('\n');
-                    const parsed = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const cols = lines[i].split(',');
-                        if (cols.length >= 3) {
-                            parsed.push({
-                                date: cols[0].trim(),
-                                tempMax: parseFloat(cols[1].trim()),
-                                tempMin: parseFloat(cols[2].trim())
-                            });
-                        }
+                    const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
+
+                    const idx = raw.search(/\n\s*\n/);
+
+                    if (idx === -1) {
+                        this.issued7dText = '（時間暫時無法載入）';
+                        this.outlookText = raw || '（天氣展望暫時無法載入）';
+                    } else {
+                        this.issued7dText = raw.slice(0, idx).trim() || '（時間暫時無法載入）';
+                        this.outlookText = raw.slice(idx).trim() || '（天氣展望暫時無法載入）';
                     }
-                    this.tempData = parsed;
                 } catch (e) {
-                    console.error('讀取 temp.csv 失敗:', e);
-                }
-            },
-
-            async loadHumidityCsv() {
-                try {
-                    const res = await fetch('humidity.csv', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    let csvText = await res.text();
-                    csvText = csvText.replace(/^\uFEFF/, '');
-                    const lines = csvText.trim().split('\n');
-                    const parsed = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const cols = lines[i].split(',');
-                        if (cols.length >= 3) {
-                            parsed.push({
-                                date: cols[0].trim(),
-                                humidMax: parseFloat(cols[1].trim()),
-                                humidMin: parseFloat(cols[2].trim())
-                            });
-                        }
-                    }
-                    this.humidityData = parsed;
-                } catch (e) {
-                    console.error('讀取 humidity.csv 失敗:', e);
-                }
-            },
-
-            async loadOutlook() {
-                try {
-                    const res = await fetch('outlook.txt', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const text = await res.text();
-                    this.outlookText = text.trim();
-                } catch (e) {
-                    console.error('讀取 outlook.txt 失敗:', e);
-                    this.outlookText = '（天氣展望暫時無法載入）';
-                }
-            },
-
-            async loadIssued7d() {
-                try {
-                    const res = await fetch('issued-7d.txt', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const text = await res.text();
-                    this.issued7dText = text.trim();
-                } catch (e) {
-                    console.error('讀取 issued-7d.txt 失敗:', e);
+                    console.error('讀取 weather7d.txt 失敗:', e);
                     this.issued7dText = '（時間暫時無法載入）';
+                    this.outlookText = '（天氣展望暫時無法載入）';
                 }
             },
 
@@ -1020,8 +963,13 @@
                 if (!canvas) return;
 
                 const isTemp = this.chartMode === 'temp';
-                const srcData = isTemp ? this.tempData : this.humidityData;
-                if (!srcData.length) return;
+
+                const rows = this.weatherData.filter(d =>
+                    isTemp
+                        ? Number.isFinite(d.tempMax) && Number.isFinite(d.tempMin)
+                        : Number.isFinite(d.humidMax) && Number.isFinite(d.humidMin)
+                );
+                if (!rows.length) return;
 
                 if (this.chart) {
                     this.chart.destroy();
@@ -1029,20 +977,18 @@
                 }
 
                 try {
-                    const labels = srcData.map(d => d.date);
-                    const maxValues = srcData.map(d => isTemp ? d.tempMax : d.humidMax);
-                    const minValues = srcData.map(d => isTemp ? d.tempMin : d.humidMin);
+                    const labels    = rows.map(d => d.date);
+                    const maxValues = rows.map(d => isTemp ? d.tempMax : d.humidMax);
+                    const minValues = rows.map(d => isTemp ? d.tempMin : d.humidMin);
 
                     const unit = isTemp ? '°C' : '%';
                     const maxLabel = isTemp ? '最高氣溫' : '最高濕度';
                     const minLabel = isTemp ? '最低氣溫' : '最低濕度';
 
-                    if (labels.length) {
-                        this.chartAriaLabel =
-                            `七日${isTemp ? '氣溫' : '濕度'}預報折線圖。日期：${labels.join('、')}。` +
-                            `${maxLabel}介乎 ${Math.min(...maxValues)} 至 ${Math.max(...maxValues)} ${isTemp ? '度' : '百分比'}；` +
-                            `${minLabel}介乎 ${Math.min(...minValues)} 至 ${Math.max(...minValues)} ${isTemp ? '度' : '百分比'}。`;
-                    }
+                    this.chartAriaLabel =
+                        `七日${isTemp ? '氣溫' : '濕度'}預報折線圖。日期：${labels.join('、')}。` +
+                        `${maxLabel}介乎 ${Math.min(...maxValues)} 至 ${Math.max(...maxValues)} ${isTemp ? '度' : '百分比'}；` +
+                        `${minLabel}介乎 ${Math.min(...minValues)} 至 ${Math.max(...minValues)} ${isTemp ? '度' : '百分比'}。`;
 
                     const yMin = Math.min(...minValues);
                     const yMax = Math.max(...maxValues);
