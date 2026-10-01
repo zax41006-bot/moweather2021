@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -58,7 +59,7 @@
         }
 
         @media (forced-colors: active) {
-            .weather-card, .action-btn, .graphic-day-card { border: 1px solid CanvasText; }
+            .weather-card, .action-btn { border: 1px solid CanvasText; }
         }
 
         .weather-doc {
@@ -179,23 +180,57 @@
             .forecast-col-humid::before { content: "濕度："; color: #6b7280; font-weight: 400; }
         }
 
-        /* ★ 圖文版：卡片陰影與動畫 */
-        .graphic-day-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        /* ★ 圖文版表格樣式 */
+        .graphic-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background: #ffffff;
         }
-        .graphic-day-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        .graphic-table td {
+            border: 2px solid #000000;
+            text-align: center;
+            vertical-align: middle;
+            color: #000;
+            font-size: 0.9rem;
+            height: 5rem;
+            padding: 0.5rem 0.25rem;
+        }
+        /* ★ 展望文字單元格：覆蓋預設樣式 */
+        .graphic-table .outlook-cell {
+            text-align: left;
+            height: auto;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        .graphic-table .icon-cell img {
+            width: 3rem;
+            height: 3rem;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
         }
 
-        /* ★ 圖文版：滾動條美化 */
-        .graphic-scroll::-webkit-scrollbar { width: 8px; }
-        .graphic-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
-        .graphic-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+        /* ★ 圖文版：七日天氣預報標題（放大） */
+        .graphic-main-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: #000;
+            margin-bottom: 1.1rem;
+            letter-spacing: 0.05em;
         }
-        .graphic-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @media (min-width: 640px) {
+            .graphic-main-title { font-size: 1.9rem; }
+        }
+
+        @media (max-width: 640px) {
+            .graphic-table td { font-size: 0.7rem; height: 3.5rem; }
+            .graphic-table .outlook-cell { font-size: 0.8rem; padding: 0.75rem; }
+            .graphic-table .icon-cell img { width: 1.8rem; height: 1.8rem; }
+        }
 
         @media print {
             header, footer, .no-print, .skip-link, .floating-actions,
@@ -350,7 +385,7 @@
         <span class="sr-only" role="status" aria-live="polite">{{ statusMessage }}</span>
     </div>
 
-    <!-- ★ 圖文版模態框 -->
+    <!-- ★ 圖文版模態框（表格格式） -->
     <div v-if="showGraphic"
          class="graphic-modal fixed inset-0 z-[2000] flex items-center justify-center p-2 sm:p-4 no-print"
          role="dialog"
@@ -368,58 +403,85 @@
                 <h3 id="graphic-modal-title"
                     class="text-base sm:text-lg font-bold text-primary-dark flex items-center gap-2">
                     <i class="fa-solid fa-image" aria-hidden="true"></i>
-                    <span>七日天氣預報 圖文版</span>
+                    <span>圖文版預報</span>
                 </h3>
-                <button type="button"
-                        class="text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full w-9 h-9 flex items-center justify-center transition-colors"
-                        aria-label="關閉圖文版"
-                        @click="closeGraphic">
-                    <i class="fa-solid fa-times" aria-hidden="true"></i>
-                </button>
+
+                <div class="flex items-center gap-2">
+                    <!-- ★ 保存為圖片按鈕 -->
+                    <button type="button"
+                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium
+                                   bg-primary-dark text-white hover:bg-primary-dark/90
+                                   transition-colors disabled:opacity-60 disabled:cursor-wait"
+                            :disabled="savingImage"
+                            aria-label="保存圖文版為圖片"
+                            @click="saveAsImage">
+                        <i class="fa-solid"
+                           :class="savingImage ? 'fa-spinner fa-spin' : 'fa-download'"
+                           aria-hidden="true"></i>
+                        <span>{{ savingImage ? '保存中...' : '保存為圖片' }}</span>
+                    </button>
+
+                    <button type="button"
+                            class="text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full w-9 h-9 flex items-center justify-center transition-colors"
+                            aria-label="關閉圖文版"
+                            @click="closeGraphic">
+                        <i class="fa-solid fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- 內文（可滾動） -->
-            <div class="overflow-y-auto graphic-scroll p-4 sm:p-6">
-                <p class="text-center text-xs sm:text-sm text-gray-500 mb-4">
-                    發佈/更新時間：{{ issuedText }}
-                </p>
+            <div class="overflow-y-auto p-4 sm:p-6">
+                <!-- ★ 被截圖的區域：標題 + 表格 + 發佈時間 -->
+                <div ref="graphicContent" class="bg-white p-2 sm:p-4">
+                    <!-- 表格外上方：只有標題（放大） -->
+                    <h4 class="graphic-main-title">七日天氣預報</h4>
 
-                <div v-if="mergedDays.length"
-                     class="grid grid-cols-[repeat(auto-fill,minmax(175px,1fr))] gap-3 sm:gap-4">
+                    <!-- 表格本體 -->
+                    <table class="graphic-table">
+                        <tbody>
+                            <!-- 展望文字（表格內，跨 7 列，不分行） -->
+                            <tr>
+                                <td colspan="7" class="outlook-cell">
+                                    {{ outlookText ? outlookText.replace(/\n/g, ' ') : '暫無天氣展望資訊' }}
+                                </td>
+                            </tr>
+                            <!-- 日期 -->
+                            <tr>
+                                <td v-for="day in mergedDays" :key="'date-' + day.date">
+                                    <div class="font-bold">{{ day.date }}</div>
+                                </td>
+                            </tr>
+                            <!-- 天氣 ICON -->
+                            <tr>
+                                <td v-for="day in mergedDays" :key="'icon-' + day.date" class="icon-cell">
+                                    <img :src="'weather icon/' + pickIcon(day)" alt="天氣圖標">
+                                </td>
+                            </tr>
+                            <!-- 氣溫 -->
+                            <tr>
+                                <td v-for="day in mergedDays" :key="'temp-' + day.date">
+                                    <div class="font-bold text-base sm:text-lg">
+                                        {{ day.tempMin }}°C ~ {{ day.tempMax }}°C
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- 相對濕度 -->
+                            <tr>
+                                <td v-for="day in mergedDays" :key="'humid-' + day.date">
+                                    <div class="font-bold text-base sm:text-lg">
+                                        {{ day.humidMin }}% ~ {{ day.humidMax }}%
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <div v-for="day in mergedDays"
-                         :key="'g-' + day.date"
-                         class="graphic-day-card bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden flex flex-col">
-
-                        <div class="bg-gradient-to-r from-primary to-primary-dark text-white px-3 py-2 text-center">
-                            <div class="font-bold text-sm">{{ day.date }}</div>
-                        </div>
-
-                        <div class="p-4 flex flex-col items-center gap-3 flex-1">
-                            <img :src="'weather icon/' + pickIcon(day)"
-                                 alt=""
-                                 aria-hidden="true"
-                                 class="w-16 h-16 object-contain">
-
-                            <div class="text-center">
-                                <div class="text-lg sm:text-xl font-bold text-gray-800">
-                                    {{ day.tempMin }}°C ~ {{ day.tempMax }}°C
-                                </div>
-                                <div class="text-xs text-gray-500 mt-1">
-                                    濕度 {{ day.humidMin }}% ~ {{ day.humidMax }}%
-                                </div>
-                            </div>
-
-                            <p class="text-xs sm:text-sm text-gray-700 leading-relaxed text-center">
-                                {{ day.weather }}
-                            </p>
-                        </div>
+                    <!-- 發佈時間在表格外右下角 -->
+                    <div class="text-right mt-3 text-sm text-gray-600">
+                        發佈/更新時間：{{ issuedText }}
                     </div>
                 </div>
-
-                <p v-else class="text-center text-gray-500 py-8">
-                    （天氣資料暫時無法載入）
-                </p>
             </div>
 
             <!-- 底部提示 -->
@@ -457,6 +519,7 @@
                 statusMessage: '',
 
                 showGraphic: false,
+                savingImage: false,
 
                 _copiedTimer: null,
                 _statusTimer: null
@@ -629,7 +692,6 @@
                 return 'cloud.png';
             },
 
-            /* ★ 圖文版開關 */
             openGraphic() {
                 this.showGraphic = true;
                 document.body.style.overflow = 'hidden';
@@ -637,6 +699,48 @@
             closeGraphic() {
                 this.showGraphic = false;
                 document.body.style.overflow = '';
+            },
+
+            /* ★ 保存圖文版為 PNG */
+            async saveAsImage() {
+                if (this.savingImage) return;
+                const el = this.$refs.graphicContent;
+                if (!el) return;
+
+                if (typeof html2canvas !== 'function') {
+                    this.setStatus('圖片庫未載入，請稍後再試');
+                    return;
+                }
+
+                this.savingImage = true;
+                try {
+                    const canvas = await html2canvas(el, {
+                        scale: 2,
+                        backgroundColor: '#ffffff',
+                        useCORS: true,
+                        logging: false
+                    });
+
+                    const dataUrl = canvas.toDataURL('image/png');
+
+                    const stamp = (this.issuedText || '')
+                        .replace(/[^\d]/g, '')
+                        .slice(0, 12);
+
+                    const a = document.createElement('a');
+                    a.href = dataUrl;
+                    a.download = `澳門七日天氣預報_${stamp}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+
+                    this.setStatus('已開始下載圖片');
+                } catch (e) {
+                    console.error('保存圖片失敗:', e);
+                    this.setStatus('保存圖片失敗，請稍後再試');
+                } finally {
+                    this.savingImage = false;
+                }
             },
 
             toggleMobileMenu() { this.mobileOpen = !this.mobileOpen; },
@@ -650,7 +754,6 @@
                 this.closeMobileMenu();
             },
             handleKeydown(e) {
-                /* ★ ESC 優先關閉圖文版 */
                 if (e.key === 'Escape' && this.showGraphic) {
                     this.closeGraphic();
                     return;
