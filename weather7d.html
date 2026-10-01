@@ -58,7 +58,7 @@
         }
 
         @media (forced-colors: active) {
-            .weather-card, .action-btn { border: 1px solid CanvasText; }
+            .weather-card, .action-btn, .graphic-day-card { border: 1px solid CanvasText; }
         }
 
         .weather-doc {
@@ -179,8 +179,27 @@
             .forecast-col-humid::before { content: "濕度："; color: #6b7280; font-weight: 400; }
         }
 
+        /* ★ 圖文版：卡片陰影與動畫 */
+        .graphic-day-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .graphic-day-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+
+        /* ★ 圖文版：滾動條美化 */
+        .graphic-scroll::-webkit-scrollbar { width: 8px; }
+        .graphic-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .graphic-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .graphic-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
         @media print {
-            header, footer, .no-print, .skip-link, .floating-actions { display: none !important; }
+            header, footer, .no-print, .skip-link, .floating-actions,
+            .graphic-modal { display: none !important; }
             body { background: #fff !important; }
             .weather-card {
                 box-shadow: none !important;
@@ -288,6 +307,7 @@
 
     </main>
 
+    <!-- ★ 浮動操作按鈕 -->
     <div class="floating-actions fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50
                 flex flex-col items-end gap-2 no-print"
          role="group"
@@ -295,6 +315,14 @@
 
         <button type="button"
                 class="action-btn action-btn-primary"
+                aria-label="開啟圖文版七日天氣預報"
+                @click="openGraphic">
+            <i class="fa-solid fa-image" aria-hidden="true"></i>
+            <span>圖文版</span>
+        </button>
+
+        <button type="button"
+                class="action-btn action-btn-secondary"
                 :aria-label="copied ? '已複製天氣稿全文' : '複製天氣稿全文至剪貼簿'"
                 @click="copyFull">
             <i class="fa-solid"
@@ -320,6 +348,85 @@
         </button>
 
         <span class="sr-only" role="status" aria-live="polite">{{ statusMessage }}</span>
+    </div>
+
+    <!-- ★ 圖文版模態框 -->
+    <div v-if="showGraphic"
+         class="graphic-modal fixed inset-0 z-[2000] flex items-center justify-center p-2 sm:p-4 no-print"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="graphic-modal-title">
+
+        <!-- 背景遮罩 -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeGraphic"></div>
+
+        <!-- 內容容器 -->
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[92vh] flex flex-col overflow-hidden">
+
+            <!-- 標題欄 -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-blue-50 flex-shrink-0">
+                <h3 id="graphic-modal-title"
+                    class="text-base sm:text-lg font-bold text-primary-dark flex items-center gap-2">
+                    <i class="fa-solid fa-image" aria-hidden="true"></i>
+                    <span>七日天氣預報 圖文版</span>
+                </h3>
+                <button type="button"
+                        class="text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full w-9 h-9 flex items-center justify-center transition-colors"
+                        aria-label="關閉圖文版"
+                        @click="closeGraphic">
+                    <i class="fa-solid fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!-- 內文（可滾動） -->
+            <div class="overflow-y-auto graphic-scroll p-4 sm:p-6">
+                <p class="text-center text-xs sm:text-sm text-gray-500 mb-4">
+                    發佈/更新時間：{{ issuedText }}
+                </p>
+
+                <div v-if="mergedDays.length"
+                     class="grid grid-cols-[repeat(auto-fill,minmax(175px,1fr))] gap-3 sm:gap-4">
+
+                    <div v-for="day in mergedDays"
+                         :key="'g-' + day.date"
+                         class="graphic-day-card bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden flex flex-col">
+
+                        <div class="bg-gradient-to-r from-primary to-primary-dark text-white px-3 py-2 text-center">
+                            <div class="font-bold text-sm">{{ day.date }}</div>
+                        </div>
+
+                        <div class="p-4 flex flex-col items-center gap-3 flex-1">
+                            <img :src="'weather icon/' + pickIcon(day)"
+                                 alt=""
+                                 aria-hidden="true"
+                                 class="w-16 h-16 object-contain">
+
+                            <div class="text-center">
+                                <div class="text-lg sm:text-xl font-bold text-gray-800">
+                                    {{ day.tempMin }}°C ~ {{ day.tempMax }}°C
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    濕度 {{ day.humidMin }}% ~ {{ day.humidMax }}%
+                                </div>
+                            </div>
+
+                            <p class="text-xs sm:text-sm text-gray-700 leading-relaxed text-center">
+                                {{ day.weather }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <p v-else class="text-center text-gray-500 py-8">
+                    （天氣資料暫時無法載入）
+                </p>
+            </div>
+
+            <!-- 底部提示 -->
+            <div class="px-5 py-3 border-t border-gray-200 bg-gray-50 text-center text-xs text-gray-500 flex-shrink-0">
+                點擊背景或按 ESC 可關閉此視窗
+            </div>
+        </div>
     </div>
 
     <footer class="bg-white py-6 mt-8 no-print">
@@ -348,6 +455,8 @@
                 mobileOpen: false,
                 copied: false,
                 statusMessage: '',
+
+                showGraphic: false,
 
                 _copiedTimer: null,
                 _statusTimer: null
@@ -399,6 +508,7 @@
             document.removeEventListener('keydown', this.handleKeydown);
             clearTimeout(this._copiedTimer);
             clearTimeout(this._statusTimer);
+            document.body.style.overflow = '';
         },
 
         methods: {
@@ -519,6 +629,16 @@
                 return 'cloud.png';
             },
 
+            /* ★ 圖文版開關 */
+            openGraphic() {
+                this.showGraphic = true;
+                document.body.style.overflow = 'hidden';
+            },
+            closeGraphic() {
+                this.showGraphic = false;
+                document.body.style.overflow = '';
+            },
+
             toggleMobileMenu() { this.mobileOpen = !this.mobileOpen; },
             closeMobileMenu() { this.mobileOpen = false; },
             handleDocumentClick(e) {
@@ -530,6 +650,11 @@
                 this.closeMobileMenu();
             },
             handleKeydown(e) {
+                /* ★ ESC 優先關閉圖文版 */
+                if (e.key === 'Escape' && this.showGraphic) {
+                    this.closeGraphic();
+                    return;
+                }
                 if (e.key === 'Escape' && this.mobileOpen) {
                     this.closeMobileMenu();
                     if (this.$refs.mobileMenuBtn) this.$refs.mobileMenuBtn.focus();
