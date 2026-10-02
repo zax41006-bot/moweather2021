@@ -16,7 +16,7 @@
         body {
             background: #ffffff;
             padding: 1.25rem;
-            font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
             color: #1f2937;
             line-height: 1.9;
             font-size: 0.95rem;
@@ -30,64 +30,100 @@
             color: #1f2937;
         }
 
-        /* ★ 圖文版：表格樣式 */
-        .graphic-table {
+        /* ============================================================
+           ★ 圖文版美化樣式
+           ============================================================ */
+
+        .graphic-main-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.85rem;
+            color: #000000;
+            margin-bottom: 1.15rem;
+            letter-spacing: 0.18em;
+            text-indent: 0.18em;
+        }
+        @media (min-width: 640px) {
+            .graphic-main-title { font-size: 2.15rem; }
+        }
+
+        /* 使用 separate + 單向 border，避免合併邊框時粗細不一 */
+        .day-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             table-layout: fixed;
             background: #ffffff;
+            border-top: 2px solid #1565C0;
+            border-left: 2px solid #1565C0;
         }
-        .graphic-table td {
-            border: 2px solid #000000;
-            text-align: center;
+        .day-table td {
+            border-right: 2px solid #1565C0;
+            border-bottom: 2px solid #1565C0;
             vertical-align: middle;
-            color: #000;
-            font-size: 1rem;
-            height: 6rem;
-            padding: 0.5rem;
         }
-        .graphic-table .label-cell {
-            font-weight: 700;
-            font-size: 1.2rem;
-            width: 18%;
+
+        .day-label-cell {
+            width: 16%;
+            padding: 1.3rem 0.5rem;
+            background: #E3F2FD;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #000000;
+            text-align: center;
+            letter-spacing: 0.08em;
         }
-        .graphic-table .icon-cell {
+        .day-icon-cell {
             width: 20%;
+            padding: 1rem;
+            text-align: center;
+            background: #ffffff;
         }
-        .graphic-table .icon-cell img {
+        .day-icon-cell img {
             width: 3.5rem;
             height: 3.5rem;
             object-fit: contain;
-            display: block;
-            margin: 0 auto;
+            display: inline-block;
         }
-        .graphic-table .text-cell {
-            width: 62%;
+        .day-text-cell {
+            width: 64%;
+            padding: 1.2rem 1.4rem;
             text-align: left;
+            background: #ffffff;
             font-size: 0.95rem;
-            line-height: 1.7;
-            padding: 0.75rem 1rem;
+            line-height: 1.8;
+            color: #1f2937;
+            letter-spacing: 0.01em;
         }
 
-        /* ★ 圖文版主標題 */
-        .graphic-main-title {
-            text-align: center;
-            font-weight: 700;
-            font-size: 1.6rem;
-            color: #000;
-            margin-bottom: 1.1rem;
-            letter-spacing: 0.05em;
+        .graphic-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+            margin-top: 1rem;
+            padding-right: 0.35rem;
         }
-        @media (min-width: 640px) {
-            .graphic-main-title { font-size: 1.9rem; }
+        .footer-issued {
+            font-size: 0.85rem;
+            color: #4b5563;
+            letter-spacing: 0.02em;
+        }
+        .footer-source {
+            font-size: 0.95rem;
+            color: #0d47a1;
+            font-weight: 700;
+            letter-spacing: 0.08em;
         }
 
         @media (max-width: 640px) {
             body { padding: 1rem; font-size: 0.9rem; line-height: 1.85; }
-            .graphic-table td { font-size: 0.8rem; height: 4.5rem; }
-            .graphic-table .label-cell { font-size: 1rem; }
-            .graphic-table .icon-cell img { width: 2.4rem; height: 2.4rem; }
-            .graphic-table .text-cell { font-size: 0.75rem; padding: 0.5rem 0.6rem; }
+            .day-label-cell { font-size: 1rem; padding: 0.9rem 0.4rem; }
+            .day-icon-cell img { width: 2.4rem; height: 2.4rem; }
+            .day-text-cell { font-size: 0.78rem; padding: 0.75rem 0.8rem; }
+            .graphic-main-title { font-size: 1.35rem; letter-spacing: 0.1em; text-indent: 0.1em; }
+            .footer-issued { font-size: 0.75rem; }
+            .footer-source { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -151,33 +187,32 @@
             </div>
 
             <div class="overflow-y-auto p-4 sm:p-6">
-                <div ref="graphicContent" class="bg-white p-2 sm:p-4">
+                <div ref="graphicContent" class="bg-white p-3 sm:p-5">
 
                     <h4 class="graphic-main-title">今明兩日天氣預報</h4>
 
-                    <table class="graphic-table">
+                    <table class="day-table">
                         <tbody>
                             <tr>
-                                <td class="label-cell">今日</td>
-                                <td class="icon-cell">
+                                <td class="day-label-cell">今日</td>
+                                <td class="day-icon-cell">
                                     <img :src="'weather icon/' + pickIcon(todayText)" alt="今日天氣圖標">
                                 </td>
-                                <td class="text-cell">{{ todayText || '暫無資料' }}</td>
+                                <td class="day-text-cell">{{ todayText || '暫無資料' }}</td>
                             </tr>
                             <tr>
-                                <td class="label-cell">明日</td>
-                                <td class="icon-cell">
+                                <td class="day-label-cell">明日</td>
+                                <td class="day-icon-cell">
                                     <img :src="'weather icon/' + pickIcon(tomorrowText)" alt="明日天氣圖標">
                                 </td>
-                                <td class="text-cell">{{ tomorrowText || '暫無資料' }}</td>
+                                <td class="day-text-cell">{{ tomorrowText || '暫無資料' }}</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <!-- ★ 發佈時間 + MMC 發佈 -->
-                    <div class="text-right mt-3 text-sm text-gray-600">
-                        <div>發佈/更新時間：{{ issuedText }}</div>
-                        <div class="mt-0.5">澳門氣象中心 MMC 發佈</div>
+                    <div class="graphic-footer">
+                        <div class="footer-issued">發佈/更新時間：{{ issuedText }}</div>
+                        <div class="footer-source">澳門氣象中心 MMC 發佈</div>
                     </div>
                 </div>
             </div>
@@ -298,7 +333,7 @@
                 this.savingImage = true;
                 try {
                     const canvas = await html2canvas(el, {
-                        scale: 2,
+                        scale: 3,
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false
