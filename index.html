@@ -444,33 +444,25 @@
             </div>
         </section>
 
-        <section class="mb-8" aria-labelledby="warning-heading">
+        <!-- ★ 只有存在警告時才顯示整個區塊 -->
+        <section v-if="warnings.length" class="mb-8" aria-labelledby="warning-heading">
             <h2 id="warning-heading" class="sr-only">天氣警告</h2>
             <div class="weather-card p-3">
 
-                <template v-if="warnings.length">
-                    <div v-for="(w, i) in warnings"
-                         :key="i"
-                         class="warning-card"
-                         :style="{ borderColor: colorOf(w.level).border }">
+                <div v-for="(w, i) in warnings"
+                     :key="i"
+                     class="warning-card"
+                     :style="{ borderColor: colorOf(w.level).border }">
 
-                        <div class="warning-head"
-                             :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text }">
-                            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-                            <span>{{ w.title || '天氣警告' }}</span>
-                        </div>
-
-                        <div class="warning-body" :style="{ background: colorOf(w.level).body }">
-                            <span v-if="w.tag" class="warning-tag">{{ w.tag }}</span>
-                            <div class="warning-content">{{ w.content }}</div>
-                        </div>
+                    <div class="warning-head"
+                         :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text }">
+                        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span>{{ w.title || '天氣警告' }}</span>
                     </div>
-                </template>
 
-                <div v-else class="warning-inactive">
-                    <div class="warning-body">
-                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                        <span>無天氣警報</span>
+                    <div class="warning-body" :style="{ background: colorOf(w.level).body }">
+                        <span v-if="w.tag" class="warning-tag">{{ w.tag }}</span>
+                        <div class="warning-content">{{ w.content }}</div>
                     </div>
                 </div>
 
