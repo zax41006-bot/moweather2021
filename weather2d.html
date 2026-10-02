@@ -116,6 +116,7 @@
             letter-spacing: 0.08em;
         }
 
+        /* 手機預覽時縮小，但截圖時強制桌面寬度 (見 saveAsImage 的 windowWidth) */
         @media (max-width: 640px) {
             body { padding: 1rem; font-size: 0.9rem; line-height: 1.85; }
             .day-label-cell { font-size: 1rem; padding: 0.9rem 0.4rem; }
@@ -336,7 +337,11 @@
                         scale: 3,
                         backgroundColor: '#ffffff',
                         useCORS: true,
-                        logging: false
+                        logging: false,
+                        /* ★ 強制以桌面寬度渲染媒體查詢，
+                           確保手機／平板／電腦輸出完全一致 */
+                        windowWidth: 1280,
+                        windowHeight: 900
                     });
 
                     const dataUrl = canvas.toDataURL('image/png');
