@@ -180,29 +180,70 @@
             .forecast-col-humid::before { content: "濕度："; color: #6b7280; font-weight: 400; }
         }
 
-        /* ★ 圖文版表格樣式 */
+        /* ============================================================
+           ★ 圖文版美化樣式
+           ============================================================ */
+
+        .graphic-main-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.85rem;
+            color: #000000;
+            margin-bottom: 1.15rem;
+            letter-spacing: 0.18em;
+            text-indent: 0.18em;
+            font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+        }
+        @media (min-width: 640px) {
+            .graphic-main-title { font-size: 2.15rem; }
+        }
+
+        /* 使用 separate + 單向 border，避免合併邊框時粗細不一 */
         .graphic-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             table-layout: fixed;
             background: #ffffff;
+            border-top: 2px solid #1565C0;
+            border-left: 2px solid #1565C0;
         }
         .graphic-table td {
-            border: 2px solid #000000;
+            border-right: 2px solid #1565C0;
+            border-bottom: 2px solid #1565C0;
             text-align: center;
             vertical-align: middle;
-            color: #000;
-            font-size: 0.9rem;
-            height: 5rem;
-            padding: 0.5rem 0.25rem;
+            padding: 0;
+            color: #1f2937;
+            background: #ffffff;
         }
+
+        /* 展望文字：淺藍底色、深色文字、左對齊 */
         .graphic-table .outlook-cell {
             text-align: left;
-            height: auto;
-            padding: 1rem 1.25rem;
+            padding: 1.1rem 1.4rem;
             font-size: 0.95rem;
-            line-height: 1.7;
+            line-height: 1.8;
             font-weight: 400;
+            color: #1f2937;
+            background: #f0f7ff;
+            letter-spacing: 0.01em;
+        }
+
+        /* 日期行：淺藍底 + 黑字粗體 */
+        .graphic-table .date-cell {
+            padding: 1rem 0.5rem;
+            background: #E3F2FD;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #000000;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        /* 圖標行 */
+        .graphic-table .icon-cell {
+            padding: 0.85rem 0.4rem;
         }
         .graphic-table .icon-cell img {
             width: 3rem;
@@ -212,22 +253,56 @@
             margin: 0 auto;
         }
 
-        .graphic-main-title {
-            text-align: center;
+        /* 氣溫行：暖紅粗體 */
+        .graphic-table .temp-cell {
+            padding: 1rem 0.5rem;
             font-weight: 700;
-            font-size: 1.6rem;
-            color: #000;
-            margin-bottom: 1.1rem;
-            letter-spacing: 0.05em;
+            font-size: 1.15rem;
+            color: #b91c1c;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
         }
-        @media (min-width: 640px) {
-            .graphic-main-title { font-size: 1.9rem; }
+
+        /* 濕度行：冷藍粗體 */
+        .graphic-table .humid-cell {
+            padding: 1rem 0.5rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1565C0;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        /* 右下角發佈資訊 */
+        .graphic-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+            margin-top: 1rem;
+            padding-right: 0.35rem;
+        }
+        .footer-issued {
+            font-size: 0.85rem;
+            color: #4b5563;
+            letter-spacing: 0.02em;
+        }
+        .footer-source {
+            font-size: 0.95rem;
+            color: #0d47a1;
+            font-weight: 700;
+            letter-spacing: 0.08em;
         }
 
         @media (max-width: 640px) {
-            .graphic-table td { font-size: 0.7rem; height: 3.5rem; }
-            .graphic-table .outlook-cell { font-size: 0.8rem; padding: 0.75rem; }
-            .graphic-table .icon-cell img { width: 1.8rem; height: 1.8rem; }
+            .graphic-table .date-cell { font-size: 0.78rem; padding: 0.65rem 0.25rem; }
+            .graphic-table .icon-cell img { width: 2rem; height: 2rem; }
+            .graphic-table .temp-cell,
+            .graphic-table .humid-cell { font-size: 0.8rem; padding: 0.65rem 0.2rem; }
+            .graphic-table .outlook-cell { font-size: 0.8rem; padding: 0.8rem 0.9rem; }
+            .graphic-main-title { font-size: 1.35rem; letter-spacing: 0.1em; text-indent: 0.1em; }
+            .footer-issued { font-size: 0.75rem; }
+            .footer-source { font-size: 0.85rem; }
         }
 
         @media print {
@@ -383,7 +458,7 @@
         <span class="sr-only" role="status" aria-live="polite">{{ statusMessage }}</span>
     </div>
 
-    <!-- ★ 圖文版模態框（表格格式） -->
+    <!-- ★ 圖文版模態框 -->
     <div v-if="showGraphic"
          class="graphic-modal fixed inset-0 z-[2000] flex items-center justify-center p-2 sm:p-4 no-print"
          role="dialog"
@@ -425,7 +500,8 @@
             </div>
 
             <div class="overflow-y-auto p-4 sm:p-6">
-                <div ref="graphicContent" class="bg-white p-2 sm:p-4">
+                <div ref="graphicContent" class="bg-white p-3 sm:p-5">
+
                     <h4 class="graphic-main-title">七日天氣預報</h4>
 
                     <table class="graphic-table">
@@ -436,8 +512,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td v-for="day in mergedDays" :key="'date-' + day.date">
-                                    <div class="font-bold">{{ day.date }}</div>
+                                <td v-for="day in mergedDays" :key="'date-' + day.date" class="date-cell">
+                                    {{ day.date }}
                                 </td>
                             </tr>
                             <tr>
@@ -446,26 +522,21 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td v-for="day in mergedDays" :key="'temp-' + day.date">
-                                    <div class="font-bold text-base sm:text-lg">
-                                        {{ day.tempMin }}°C ~ {{ day.tempMax }}°C
-                                    </div>
+                                <td v-for="day in mergedDays" :key="'temp-' + day.date" class="temp-cell">
+                                    {{ day.tempMin }}°C ~ {{ day.tempMax }}°C
                                 </td>
                             </tr>
                             <tr>
-                                <td v-for="day in mergedDays" :key="'humid-' + day.date">
-                                    <div class="font-bold text-base sm:text-lg">
-                                        {{ day.humidMin }}% ~ {{ day.humidMax }}%
-                                    </div>
+                                <td v-for="day in mergedDays" :key="'humid-' + day.date" class="humid-cell">
+                                    {{ day.humidMin }}% ~ {{ day.humidMax }}%
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <!-- ★ 發佈時間 + MMC 發佈 -->
-                    <div class="text-right mt-3 text-sm text-gray-600">
-                        <div>發佈/更新時間：{{ issuedText }}</div>
-                        <div class="mt-0.5">澳門氣象中心 MMC 發佈</div>
+                    <div class="graphic-footer">
+                        <div class="footer-issued">發佈/更新時間：{{ issuedText }}</div>
+                        <div class="footer-source">澳門氣象中心 MMC 發佈</div>
                     </div>
                 </div>
             </div>
@@ -494,18 +565,14 @@
         data() {
             return {
                 FORECAST_TITLE,
-
                 weatherData: [],
                 outlookText: '載入中...',
                 issuedText: '載入中...',
-
                 mobileOpen: false,
                 copied: false,
                 statusMessage: '',
-
                 showGraphic: false,
                 savingImage: false,
-
                 _copiedTimer: null,
                 _statusTimer: null
             };
@@ -546,7 +613,6 @@
         mounted() {
             document.addEventListener('click', this.handleDocumentClick);
             document.addEventListener('keydown', this.handleKeydown);
-
             this.loadForecastCsv();
             this.loadWeather7dText();
         },
@@ -571,17 +637,12 @@
                         if (ch === '"') {
                             if (line[i + 1] === '"') { cur += '"'; i++; }
                             else inQuote = false;
-                        } else {
-                            cur += ch;
-                        }
+                        } else { cur += ch; }
                     } else if (ch === ',') {
-                        cols.push(cur);
-                        cur = '';
+                        cols.push(cur); cur = '';
                     } else if (ch === '"') {
                         inQuote = true;
-                    } else {
-                        cur += ch;
-                    }
+                    } else { cur += ch; }
                 }
                 cols.push(cur);
                 return cols.map(s => s.trim());
@@ -626,7 +687,6 @@
                     const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
 
                     const idx = raw.search(/\n\s*\n/);
-
                     if (idx === -1) {
                         this.issuedText = '（時間暫時無法載入）';
                         this.outlookText = raw || '（天氣展望暫時無法載入）';
@@ -690,7 +750,6 @@
                 if (this.savingImage) return;
                 const el = this.$refs.graphicContent;
                 if (!el) return;
-
                 if (typeof html2canvas !== 'function') {
                     this.setStatus('圖片庫未載入，請稍後再試');
                     return;
@@ -699,17 +758,14 @@
                 this.savingImage = true;
                 try {
                     const canvas = await html2canvas(el, {
-                        scale: 2,
+                        scale: 3,
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false
                     });
 
                     const dataUrl = canvas.toDataURL('image/png');
-
-                    const stamp = (this.issuedText || '')
-                        .replace(/[^\d]/g, '')
-                        .slice(0, 12);
+                    const stamp = (this.issuedText || '').replace(/[^\d]/g, '').slice(0, 12);
 
                     const a = document.createElement('a');
                     a.href = dataUrl;
@@ -789,10 +845,7 @@
                         type: 'text/plain;charset=utf-8'
                     });
                     const url = URL.createObjectURL(blob);
-
-                    const stamp = (this.issuedText || '')
-                        .replace(/[^\d]/g, '')
-                        .slice(0, 12);
+                    const stamp = (this.issuedText || '').replace(/[^\d]/g, '').slice(0, 12);
 
                     const a = document.createElement('a');
                     a.href = url;
