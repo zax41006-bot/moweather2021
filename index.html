@@ -769,6 +769,24 @@
                 const raw = (text || '').replace(/^\uFEFF/, '').trim();
                 const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
 
+                // ========== 新增：暴雨警報專用匹配 ==========
+                const rainColorKey = {
+                    '黑色': 'black',
+                    '紅色': 'red',
+                    '橙色': 'orange',
+                    '黃色': 'yellow'
+                };
+                // 匹配：紅色暴雨 / 橙色暴雨 / 黃色暴雨 警報
+                const rainRe = /(黑色|紅色|橙色|黃色)暴雨.*警報/;
+                for (const line of lines) {
+                    if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
+                    const match = line.match(rainRe);
+                    if (match) {
+                        return rainColorKey[match[1]];
+                    }
+                }
+                // ==========================================
+
                 if (/潛在熱帶氣旋|潜在热带气旋|低壓區影響|低压区影响|低壓區警告|低压区警告|低壓區警報|低压区警报/.test(raw)) {
                     return 'lightgray';
                 }
