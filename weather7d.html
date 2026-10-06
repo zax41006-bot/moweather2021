@@ -752,30 +752,49 @@
 
                 this.savingImage = true;
                 try {
+                    // 判斷是否為移動設備
+                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 1024;
+
                     const canvas = await html2canvas(el, {
-                        scale: 3,
+                        // 移動端降至 2 倍解析度，防止內存溢出
+                        scale: isMobile ? 2 : 3, 
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false,
+                        // ★ 關鍵：強制使用 1280 寬度渲染，確保觸發的是電腦版排版（不會變成手機版豎排）
                         windowWidth: 1280,
-                        windowHeight: 900
+                        // ★ 不設定固定的 windowHeight，讓引擎自動計算內容高度，避免底部被截斷
+                        windowHeight: el.scrollHeight + 100 
                     });
 
-                    const dataUrl = canvas.toDataURL('image/png');
-                    const stamp = (this.issuedText || '').replace(/[^\d]/g, '').slice(0, 12);
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            this.setStatus('生成圖片失敗，請稍後再試');
+                            this.savingImage = false;
+                            return;
+                        }
 
-                    const a = document.createElement('a');
-                    a.href = dataUrl;
-                    a.download = `澳門七日天氣預報_${stamp}.png`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                        const stamp = (this.issuedText || '').replace(/[^\d]/g, '').slice(0, 12);
+                        const filename = `澳門七日天氣預報_${stamp}.png`;
+                        const url = URL.createObjectURL(blob);
 
-                    this.setStatus('已開始下載圖片');
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        
+                        URL.revokeObjectURL(url);
+
+                        this.setStatus('已開始下載圖片');
+                        this.savingImage = false;
+                    }, 'image/png');
+
                 } catch (e) {
                     console.error('保存圖片失敗:', e);
                     this.setStatus('保存圖片失敗，請稍後再試');
-                } finally {
                     this.savingImage = false;
                 }
             },
