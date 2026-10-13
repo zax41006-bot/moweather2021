@@ -769,14 +769,13 @@
                 const raw = (text || '').replace(/^\uFEFF/, '').trim();
                 const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
 
-                // ========== 新增：暴雨警報專用匹配 ==========
+                // ========== 暴雨警報專用匹配 ==========
                 const rainColorKey = {
                     '黑色': 'black',
                     '紅色': 'red',
                     '橙色': 'orange',
                     '黃色': 'yellow'
                 };
-                // 匹配：紅色暴雨 / 橙色暴雨 / 黃色暴雨 警報
                 const rainRe = /(黑色|紅色|橙色|黃色)暴雨.*警報/;
                 for (const line of lines) {
                     if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
@@ -926,14 +925,22 @@
             matchIcon(text) {
                 if (!text) return 'cloud.png';
                 const t = text;
+
                 const hasThunder = /雷暴/.test(t);
                 const hasRain    = /(幾陣驟雨|間中有驟雨|有驟雨|有幾陣雨|間中有雨|有雨)/.test(t);
                 const hasSunny   = /(天晴)/.test(t);
                 const hasBriefSunny = /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴|天晴，部分時間多雲)/.test(t);
 
+                /* ★ 新增：煙霞 / 烟霞 → Haze.png */
+                const hasHaze = /(煙霞|烟霞)/.test(t);
+                /* ★ 新增：薄霧 / 薄雾 / 霧 / 雾 → fog.png */
+                const hasFog = /(薄霧|薄雾|霧|雾)/.test(t);
+
                 if (hasThunder) return 'rain3_thunder.png';
                 if (hasRain && hasSunny) return 'Sun_cloud_rain.png';
                 if (hasRain) return 'rain2.png';
+                if (hasHaze) return 'Haze.png';
+                if (hasFog) return 'fog.png';
                 if (hasBriefSunny) return 'Sun_cloud.png';
                 if (hasSunny) return 'Sun.png';
                 if (/(大致多雲|多雲|密雲|陰)/.test(t)) return 'cloud.png';
