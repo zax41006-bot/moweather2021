@@ -296,9 +296,9 @@
                 const hasSunny   = /(天晴)/.test(t);
                 const hasBriefSunny = /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴|天晴，部分時間多雲)/.test(t);
 
-                /* ★ 新增：煙霞 / 烟霞 → Haze.png */
+                /* ★ 煙霞 / 烟霞 → Haze.png */
                 const hasHaze = /(煙霞|烟霞)/.test(t);
-                /* ★ 新增：薄霧 / 薄雾 / 霧 / 雾 → fog.png */
+                /* ★ 薄霧 / 薄雾 / 霧 / 雾 → fog.png */
                 const hasFog = /(薄霧|薄雾|霧|雾)/.test(t);
 
                 if (hasThunder) return 'rain3_thunder.png';
