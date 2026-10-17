@@ -387,13 +387,31 @@
                 <h1 class="text-xl font-bold text-primary-dark">澳門氣象中心</h1>
             </div>
 
+            <!-- 電腦版選單 -->
             <nav class="hidden md:flex items-center gap-1" aria-label="主要導覽">
-                <a v-for="item in navItems"
-                   :key="'d-' + item.text"
-                   :href="item.href"
-                   class="nav-link"
-                   :class="item.desktopClass"
-                   :aria-current="item.current ? 'page' : null">{{ item.text }}</a>
+                <template v-for="item in navItems" :key="'d-' + item.text">
+                    <!-- 普通連結 -->
+                    <a v-if="!item.isDropdown"
+                       :href="item.href"
+                       class="nav-link"
+                       :class="item.desktopClass"
+                       :aria-current="item.current ? 'page' : null">{{ item.text }}</a>
+                    
+                    <!-- 下拉選單 -->
+                    <div v-else class="relative group">
+                        <button type="button" class="nav-link flex items-center gap-1 cursor-default" :class="item.desktopClass">
+                            {{ item.text }} <i class="fa fa-caret-down text-xs text-gray-400 group-hover:text-primary-dark transition-colors" aria-hidden="true"></i>
+                        </button>
+                        <!-- 下拉內容 -->
+                        <div class="absolute left-0 top-full mt-0 w-64 bg-white border border-gray-200 rounded-b-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <a v-for="child in item.children" :key="child.text"
+                               :href="child.href"
+                               class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary-dark border-b border-gray-100 last:border-0">
+                                {{ child.text }}
+                            </a>
+                        </div>
+                    </div>
+                </template>
             </nav>
 
             <button id="mobileMenuBtn"
@@ -410,17 +428,31 @@
                    aria-hidden="true"></i>
             </button>
 
+            <!-- 手機版選單 -->
             <div id="mobileMenu"
                  ref="mobileMenuEl"
                  class="mobile-menu"
                  :class="{ 'mobile-menu-hidden': !mobileOpen }">
-                <a v-for="item in navItems"
-                   :key="'m-' + item.text"
-                   :href="item.href"
-                   class="block px-4 py-2 transition-colors"
-                   :class="item.mobileClass"
-                   :aria-current="item.current ? 'page' : null"
-                   @click="closeMobileMenu">{{ item.text }}</a>
+                <template v-for="item in navItems" :key="'m-' + item.text">
+                    <!-- 普通連結 -->
+                    <a v-if="!item.isDropdown"
+                       :href="item.href"
+                       class="block px-4 py-2 transition-colors"
+                       :class="item.mobileClass"
+                       :aria-current="item.current ? 'page' : null"
+                       @click="closeMobileMenu">{{ item.text }}</a>
+                    
+                    <!-- 下拉選單 (手機版展開) -->
+                    <div v-else class="block">
+                        <div class="px-4 py-2 font-bold text-gray-800 bg-gray-50 border-t border-b border-gray-100 text-sm">{{ item.text }}</div>
+                        <a v-for="child in item.children" :key="child.text"
+                           :href="child.href"
+                           class="block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-primary-dark transition-colors"
+                           @click="closeMobileMenu">
+                            - {{ child.text }}
+                        </a>
+                    </div>
+                </template>
             </div>
         </div>
     </header>
@@ -614,8 +646,16 @@
     const NAV_ITEMS = [
         { text: '首頁', href: 'index.html', current: true,
           desktopClass: '', mobileClass: 'text-primary-dark font-medium hover:bg-blue-50' },
-        { text: 'HKMO熱帶氣旋資訊', href: 'https://zax41006-bot.github.io/HKMO_MET-TC-GIS/', current: false,
-          desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' },
+        { 
+          text: '熱帶氣旋資訊', 
+          isDropdown: true,
+          current: false,
+          children: [
+            { text: '澳門氣象中心熱帶氣旋預報', href: 'https://zax41006-bot.github.io/MMC-TC/' },
+            { text: 'HKMO 熱帶氣旋資訊', href: 'https://zax41006-bot.github.io/HKMO_MET-TC-GIS/' }
+          ],
+          desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' 
+        },
         { text: '模式預報（HKMO_MET）', href: '#', current: false,
           desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' },
         { text: '關於我們', href: 'about.html', current: false,
