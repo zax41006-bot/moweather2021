@@ -974,13 +974,15 @@
                 /* ★ 煙霞 / 烟霞 → Haze.png */
                 const hasHaze = /(煙霞|烟霞)/.test(t);
                 /* ★ 薄霧 / 薄雾 / 霧 / 雾 → fog.png */
-                const hasFog = /(薄霧|薄雾|霧|雾)/.test(t);
+                const hasFog1 = /(薄霧|薄雾)/.test(t);
+                const hasFog2 = /(霧|雾)/.test(t);
 
                 if (hasThunder) return 'rain3_thunder.png';
                 if (hasRain && hasSunny) return 'Sun_cloud_rain.png';
                 if (hasRain) return 'rain2.png';
                 if (hasHaze) return 'Haze.png';
-                if (hasFog) return 'fog.png';
+                if (hasFog1) return 'fog1.png';
+                if (hasFog2) return 'fog2.png';
                 if (hasBriefSunny) return 'Sun_cloud.png';
                 if (hasSunny) return 'Sun.png';
                 if (/(大致多雲|多雲|密雲|陰)/.test(t)) return 'cloud.png';
