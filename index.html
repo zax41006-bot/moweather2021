@@ -573,7 +573,7 @@
                             </a>
                         </div>
 
-                        <p class="issued-note">(發佈/更新時間：{{ issued7dText }})</p>
+                        <p class="issued-note">(發佈/更新時間：{{ issuedForecastText || issued7dText }})</p>
                     </div>
                 </div>
             </div>
@@ -683,6 +683,7 @@
                 weatherData: [],
                 outlookText: '載入中...',
                 issued7dText: '載入中...',
+                issuedForecastText: '',
 
                 warningsText: '',
                 specialTipsText: '',
@@ -761,7 +762,7 @@
             document.addEventListener('click', this.handleDocumentClick);
             document.addEventListener('keydown', this.handleKeydown);
 
-            this.loadForecastCsv();
+            this.loadForecastTxt();
             this.loadWeather7dText();
             this.loadSpecialTipsText();
             this.loadWarningsText();
@@ -881,43 +882,31 @@
                 }
             },
 
-            parseCsvRow(line) {
-                const cols = [];
-                let cur = '';
-                let inQuote = false;
-
-                for (let i = 0; i < line.length; i++) {
-                    const ch = line[i];
-                    if (inQuote) {
-                        if (ch === '"') {
-                            if (line[i + 1] === '"') { cur += '"'; i++; }
-                            else inQuote = false;
-                        } else {
-                            cur += ch;
-                        }
-                    } else if (ch === ',') {
-                        cols.push(cur);
-                        cur = '';
-                    } else if (ch === '"') {
-                        inQuote = true;
-                    } else {
-                        cur += ch;
-                    }
-                }
-                cols.push(cur);
-                return cols.map(s => s.trim());
-            },
-
-            async loadForecastCsv() {
+            async loadForecastTxt() {
                 try {
-                    const res = await fetch('forecast.csv', { cache: 'no-store' });
+                    const res = await fetch('forecast.txt', { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const csvText = (await res.text()).replace(/^\uFEFF/, '');
-                    const lines = csvText.split(/\r?\n/).filter(l => l.trim());
+                    const txtText = (await res.text()).replace(/^\uFEFF/, '');
+                    const lines = txtText.split(/\r?\n/);
 
+                    let issuedText = '';
                     const parsed = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const c = this.parseCsvRow(lines[i]);
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (!trimmed) continue;
+
+                        // 識別頂部「發佈/更新時間：…」
+                        const issuedMatch = trimmed.match(/^發佈\/更新時間[：:]\s*(.+)$/);
+                        if (issuedMatch) {
+                            issuedText = issuedMatch[1].trim();
+                            continue;
+                        }
+
+                        // 只處理含分隔符的資料行
+                        if (!trimmed.includes('|')) continue;
+
+                        const c = trimmed.split('|').map(s => s.trim());
                         if (c.length < 6 || !c[0]) continue;
 
                         const tempMax  = parseFloat(c[2]);
@@ -934,9 +923,11 @@
                             humidMin: Number.isFinite(humidMin) ? humidMin : null
                         });
                     }
+
                     this.weatherData = parsed;
+                    this.issuedForecastText = issuedText;
                 } catch (e) {
-                    console.error('讀取 forecast.csv 失敗:', e);
+                    console.error('讀取 forecast.txt 失敗:', e);
                 }
             },
 
