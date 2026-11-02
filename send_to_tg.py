@@ -30,61 +30,35 @@ def save_last_content(filename, content):
     with open(filename, "w", encoding="utf-8") as f:
         f.write(content)
 
-# ================= 處理「今明兩日」 =================
-def process_forecast_2d():
+# ================= 產生「今明兩日」訊息 =================
+def build_forecast_2d_msg():
     current_text = read_file("weather2d.txt")
-    if not current_text: return
+    if not current_text: return None
 
-    last_text = read_file("_last_2d.txt")
-    if current_text == last_text:
-        print("⏭️ 今明兩日預報未更新，跳過。")
-        return
-
-    print("🔄 偵測到 weather2d.txt 更新！")
-    
-    # 提取 txt 裡的時間 (格式：發佈/更新時間：2026年10月20日17時00分)
     time_match = re.search(r"發佈/更新時間[：:]\s*(.*?)\)", current_text)
     issued_time = time_match.group(1).strip() if time_match else "請見官網"
 
-    # 清理並排版文字 (移除天氣相關 Emoji，改為粗體標示)
     formatted = current_text.replace("今日天氣預報", "<b>今日天氣預報</b>")
     formatted = formatted.replace("明日天氣預報", "<b>明日天氣預報</b>")
-    # 移除原本的括號時間，我們在開頭統一顯示
     formatted = re.sub(r"\((發佈/更新時間：.*?)\)", "", formatted).strip()
 
     msg = f"📢 <b>【澳門氣象中心 MMC】今明兩日天氣預報</b>\n"
     msg += f"🕒 發佈時間：{issued_time}\n\n"
     msg += f"{formatted}\n\n"
     msg += f"🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
-    
-    send_telegram_message(msg, "今明兩日")
-    save_last_content("_last_2d.txt", current_text)
+    return msg
 
-# ================= 處理「七日天氣」 =================
-def process_forecast_7d():
+# ================= 產生「七日天氣」訊息 =================
+def build_forecast_7d_msg():
     text_7d = read_file("weather7d.txt")
     text_forecast = read_file("forecast.txt")
     
-    if not text_7d or not text_forecast: return
+    if not text_7d or not text_forecast: return None
 
-    # 將兩份文件合併作為比對依據
-    current_combined = f"{text_7d}||{text_forecast}"
-    last_combined = read_file("_last_7d.txt")
-
-    if current_combined == last_combined:
-        print("⏭️ 七日天氣（含 forecast.txt）未更新，跳過。")
-        return
-
-    print("🔄 偵測到 weather7d.txt 或 forecast.txt 更新！")
-
-    # 1. 提取時間 (weather7d.txt 第一行)
     lines = text_7d.split("\n")
     issued_time = lines[0].strip() if lines else "請見官網"
-
-    # 2. 提取天氣展望 (weather7d.txt 剩下的部分)
     outlook = "\n".join(lines[1:]).strip()
 
-    # 3. 提取每日預報 (解析 forecast.txt)
     days_text = ""
     for line in text_forecast.split("\n"):
         line = line.strip()
@@ -93,27 +67,49 @@ def process_forecast_7d():
             cols = [c.strip() for c in line.split("|")]
             if len(cols) >= 6:
                 days_text += f"\n📅 <b>{cols[0]}</b>\n"
-                # 🌟 這裡已經把天氣狀況前面的 Emoji 移除了，直接顯示純文字
                 days_text += f"{cols[1]}\n" 
                 days_text += f"🌡️ 氣溫：{cols[3]}°C ~ {cols[2]}°C\n"
                 days_text += f"💧 濕度：{cols[5]}% ~ {cols[4]}%\n"
                 days_text += "━━━━━━━━━━━━━━\n"
 
-    # 4. 組裝訊息
     msg = f"📢 <b>【澳門氣象中心 MMC】七日天氣預報</b>\n"
     msg += f"🕒 發佈時間：{issued_time}\n\n"
     msg += f"<b>🌡️ 天氣展望：</b>\n{outlook}\n"
     msg += "━━━━━━━━━━━━━━\n"
     msg += f"<b>📊 每日詳細預報：</b>{days_text}"
     msg += f"\n🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
-
-    send_telegram_message(msg, "七日天氣")
-    save_last_content("_last_7d.txt", current_combined)
+    return msg
 
 if __name__ == "__main__":
     if not BOT_TOKEN or not CHAT_ID:
         print("❌ 錯誤：未設定 TG_BOT_TOKEN 或 TG_CHAT_ID")
         exit(1)
 
-    process_forecast_2d()
-    process_forecast_7d()
+    # 1. 取得三個檔案的最新內容
+    text_2d = read_file("weather2d.txt")
+    text_7d = read_file("weather7d.txt")
+    text_forecast = read_file("forecast.txt")
+
+    # 2. 將三個檔案的內容合併成一個大字串，用來做「整體狀態比對」
+    current_state = f"{text_2d}||{text_7d}||{text_forecast}"
+    last_state = read_file("_last_all.txt")
+
+    # 3. 如果狀態完全沒變（例如你手動點擊測試，但沒改檔案），就跳過
+    if current_state == last_state:
+        print("⏭️ 三個 txt 檔案皆未更新，跳過發送。")
+        exit(0)
+
+    print("🔄 偵測到其中一個 txt 更新！將同時發送兩則預報。")
+
+    # 4. 觸發發送（只要有更新，兩則都發）
+    msg_2d = build_forecast_2d_msg()
+    if msg_2d: 
+        send_telegram_message(msg_2d, "今明兩日")
+
+    msg_7d = build_forecast_7d_msg()
+    if msg_7d: 
+        send_telegram_message(msg_7d, "七日天氣")
+
+    # 5. 儲存這次的總狀態，防止重複洗版
+    save_last_content("_last_all.txt", current_state)
+    print("✅ 本次任務完成，已更新狀態紀錄。")
