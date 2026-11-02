@@ -46,9 +46,9 @@ def process_forecast_2d():
     time_match = re.search(r"發佈/更新時間[：:]\s*(.*?)\)", current_text)
     issued_time = time_match.group(1).strip() if time_match else "請見官網"
 
-    # 清理並排版文字
-    formatted = current_text.replace("今日天氣預報", "☀️ <b>今日天氣預報</b>")
-    formatted = formatted.replace("明日天氣預報", "🌙 <b>明日天氣預報</b>")
+    # 清理並排版文字 (移除天氣相關 Emoji，改為粗體標示)
+    formatted = current_text.replace("今日天氣預報", "<b>今日天氣預報</b>")
+    formatted = formatted.replace("明日天氣預報", "<b>明日天氣預報</b>")
     # 移除原本的括號時間，我們在開頭統一顯示
     formatted = re.sub(r"\((發佈/更新時間：.*?)\)", "", formatted).strip()
 
@@ -93,7 +93,8 @@ def process_forecast_7d():
             cols = [c.strip() for c in line.split("|")]
             if len(cols) >= 6:
                 days_text += f"\n📅 <b>{cols[0]}</b>\n"
-                days_text += f"🌤️ {cols[1]}\n"
+                # 🌟 這裡已經把天氣狀況前面的 Emoji 移除了，直接顯示純文字
+                days_text += f"{cols[1]}\n" 
                 days_text += f"🌡️ 氣溫：{cols[3]}°C ~ {cols[2]}°C\n"
                 days_text += f"💧 濕度：{cols[5]}% ~ {cols[4]}%\n"
                 days_text += "━━━━━━━━━━━━━━\n"
