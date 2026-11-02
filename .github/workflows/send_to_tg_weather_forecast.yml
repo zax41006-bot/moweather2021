@@ -12,7 +12,7 @@ on:
   workflow_dispatch: # 允許你在網頁上手動點擊測試
 
 permissions:
-  contents: write # 允許機器人把記憶檔 (last.txt) Commit 回倉庫
+  contents: write # 允許機器人把記憶檔 Commit 回倉庫
 
 jobs:
   send_tg:
@@ -39,6 +39,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
-          git add _last_2d.txt _last_7d.txt
-          # 如果有變動才 commit，避免報錯，並且加上 [skip ci] 避免無限循環
+          # 🌟 這裡改成對應 Python 腳本產生的新記憶檔名
+          git add _last_all.txt
+          # 如果有變動才 commit，避免報錯，並且加上 [skip ci] 避免無限循環觸發
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update TG history state [skip ci]" && git push)
