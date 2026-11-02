@@ -1,0 +1,12 @@
+[
+  {
+    "TC_ID": "P",
+    "name": "薔琵",
+    "img": "forecast_P.png"
+  },
+  {
+    "TC_ID": "Q",
+    "name": "煙花",
+    "img": "forecast_Q.png"
+  }
+]
