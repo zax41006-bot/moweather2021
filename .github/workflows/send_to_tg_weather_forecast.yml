@@ -1,0 +1,44 @@
+name: Check Txt and Send Weather to Telegram
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # 🌟 只有當這三個檔案被修改並 Push 時，才會觸發
+      - 'weather2d.txt'
+      - 'weather7d.txt'
+      - 'forecast.txt'
+  workflow_dispatch: # 允許你在網頁上手動點擊測試
+
+permissions:
+  contents: write # 允許機器人把記憶檔 (last.txt) Commit 回倉庫
+
+jobs:
+  send_tg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 檢出代碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安裝依賴
+        run: pip install requests
+
+      - name: 執行檢查與發送腳本
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: python send_to_tg.py
+
+      - name: 提交記憶檔 (防止重複發送)
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add _last_2d.txt _last_7d.txt
+          # 如果有變動才 commit，避免報錯，並且加上 [skip ci] 避免無限循環
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update TG history state [skip ci]" && git push)
