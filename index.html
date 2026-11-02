@@ -451,6 +451,15 @@
 
     <main id="main-content" class="container mx-auto px-4 py-8">
 
+        <!-- 🌟 實時天氣簡報區塊 (已改為靠左對齊) -->
+        <section class="mb-8" aria-labelledby="live-weather-heading">
+            <h2 id="live-weather-heading" class="text-xl font-bold mb-4 text-black">實時天氣簡報</h2>
+            <!-- 把 flex justify-center 改成了 flex justify-start -->
+            <div class="weather-card p-4 flex justify-start items-center overflow-hidden">
+                <img :src="liveWeatherImage" alt="澳門實時天氣簡報" class="max-w-full h-auto rounded-lg shadow-sm" style="max-width: 600px;">
+            </div>
+        </section>
+
         <section v-if="specialTipsList.length" class="mb-8" aria-labelledby="special-tips-heading">
             <h2 id="special-tips-heading" class="sr-only">特別天氣提示</h2>
             <div class="weather-card p-3">
@@ -495,7 +504,7 @@
                 <!-- 顯示區域 -->
                 <div class="relative flex flex-col items-center w-full bg-white rounded-xl overflow-hidden min-h-[400px]">
                     
-                    <!-- 🌟 子下拉選單 (只有選中熱帶氣旋時才顯示) -->
+                    <!-- 子下拉選單 (只有選中熱帶氣旋時才顯示) -->
                     <div v-if="selectedMap === 'mmc-tc' && tcOptions.length > 0" class="w-full flex justify-center py-4 bg-gray-50 border-b border-gray-200 z-10">
                         <select v-model="selectedTC" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none bg-white font-medium text-primary-dark shadow-sm">
                             <option v-for="tc in tcOptions" :key="tc.TC_ID" :value="tc.TC_ID">
@@ -653,7 +662,7 @@
         { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖',
           url: 'https://zax41006-bot.github.io/MMC-GIS/',
           frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖', isImage: false },
-        // 🌟 新增：統一的一個熱帶氣旋選項
+        // 新增：統一的一個熱帶氣旋選項
         { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', 
           url: '', // 該選項不使用 iframe，直接顯示圖片
           frameTitle: '熱帶氣旋路徑預報圖', isImage: false },
@@ -691,6 +700,15 @@
         },
 
         computed: {
+            // 🌟 獲取實時天氣簡報圖片的 CDN 網址 (已填入你的帳號)
+            liveWeatherImage() {
+                const githubUser = "zax41006-bot"; 
+                const repoName = "mmc-weather"; 
+                // 獲取當前時間（精確到小時），作為打破 CDN 緩存的參數
+                const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
+                return `https://cdn.jsdelivr.net/gh/${githubUser}/${repoName}@main/weather.png?v=${cacheBuster}`;
+            },
+            
             allMapOptions() {
                 return this.baseOptions;
             },
