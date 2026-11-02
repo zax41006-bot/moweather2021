@@ -5,7 +5,9 @@ import re
 BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
 CHAT_ID = os.environ.get("TG_CHAT_ID")
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
-WEBSITE_URL = "https://zax41006-bot.github.io/MMC-weather/"
+
+# 🌟 這裡已經修正為你真實的網站網址
+WEBSITE_URL = "https://zax41006-bot.github.io/moweather2021/"
 
 def send_telegram_message(text, label):
     url = f"{BASE_URL}/sendMessage"
