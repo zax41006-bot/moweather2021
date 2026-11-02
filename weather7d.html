@@ -26,9 +26,6 @@
 
     <style type="text/tailwindcss">
         @layer utilities {
-            .nav-link { @apply px-3 py-2 text-gray-700 hover:text-primary-dark transition-colors; }
-            .mobile-menu { @apply absolute top-full left-0 right-0 bg-white shadow-lg py-2 z-50 border-t border-gray-200; }
-            .mobile-menu-hidden { @apply hidden; }
             .action-btn { @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all shadow-md text-sm; }
             .action-btn-primary { @apply bg-primary-dark text-white hover:bg-primary-dark/90; }
             .action-btn-secondary { @apply bg-white text-primary-dark border border-primary-dark/40 hover:bg-blue-50; }
@@ -326,41 +323,12 @@
         跳至主要內容
     </a>
 
+    <!-- 🌟 導航欄已完全移除，只保留簡單的 Logo 標題 -->
     <header class="bg-white shadow-sm sticky top-0">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="container mx-auto px-4 py-3 flex justify-center items-center">
             <div class="flex items-center gap-2">
                 <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
                 <p class="text-xl font-bold text-primary-dark">澳門氣象中心</p>
-            </div>
-
-            <nav class="hidden md:flex items-center gap-1" aria-label="主要導覽">
-                <a href="index.html" class="nav-link">首頁</a>
-                <a href="https://zax41006-bot.github.io/HKMO_MET-TC-GIS/" class="nav-link">HKMO熱帶氣旋資訊</a>
-                <a href="#" class="nav-link">模式預報（HKMO_MET）</a>
-                <a href="about.html" class="nav-link font-medium text-primary-dark">關於我們</a>
-            </nav>
-
-            <button id="mobileMenuBtn"
-                    ref="mobileMenuBtn"
-                    type="button"
-                    class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"
-                    :aria-expanded="mobileOpen ? 'true' : 'false'"
-                    aria-controls="mobileMenu"
-                    :aria-label="mobileOpen ? '關閉主選單' : '開啟主選單'"
-                    @click.stop="toggleMobileMenu">
-                <i class="fa text-xl"
-                   :class="mobileOpen ? 'fa-times' : 'fa-bars'"
-                   aria-hidden="true"></i>
-            </button>
-
-            <div id="mobileMenu"
-                 ref="mobileMenuEl"
-                 class="mobile-menu"
-                 :class="{ 'mobile-menu-hidden': !mobileOpen }">
-                <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50" @click="closeMobileMenu">首頁</a>
-                <a href="https://zax41006-bot.github.io/HKMO_MET-TC-GIS/" class="block px-4 py-2 text-gray-700 hover:bg-blue-50" @click="closeMobileMenu">HKMO熱帶氣旋資訊</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-blue-50" @click="closeMobileMenu">模式預報（HKMO_MET）</a>
-                <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50" @click="closeMobileMenu">關於我們</a>
             </div>
         </div>
     </header>
@@ -564,7 +532,6 @@
                 outlookText: '載入中...',
                 issuedText: '載入中...',
                 issuedForecastText: '',
-                mobileOpen: false,
                 copied: false,
                 statusMessage: '',
                 showGraphic: false,
@@ -607,15 +574,11 @@
         },
 
         mounted() {
-            document.addEventListener('click', this.handleDocumentClick);
-            document.addEventListener('keydown', this.handleKeydown);
             this.loadForecastTxt();
             this.loadWeather7dText();
         },
 
         beforeUnmount() {
-            document.removeEventListener('click', this.handleDocumentClick);
-            document.removeEventListener('keydown', this.handleKeydown);
             clearTimeout(this._copiedTimer);
             clearTimeout(this._statusTimer);
             document.body.style.overflow = '';
@@ -665,7 +628,6 @@
                     this.weatherData = parsed;
                     this.issuedForecastText = dataIssued;
 
-                    // 若 weather7d.txt 尚未提供時間，用 forecast.txt 的時間兜底
                     if ((!this.issuedText || this.issuedText === '載入中...') && dataIssued) {
                         this.issuedText = dataIssued;
                     }
@@ -722,9 +684,7 @@
                 const hasSunny   = /(天晴)/.test(t);
                 const hasBriefSunny = /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴|天晴，部分時間多雲)/.test(t);
 
-                /* ★ 煙霞 / 烟霞 → Haze.png */
                 const hasHaze = /(煙霞|烟霞)/.test(t);
-                /* ★ 薄霧 / 薄雾 / 霧 / 雾 → fog.png */
                 const hasFog1 = /(薄霧|薄雾)/.test(t);
                 const hasFog2 = /(霧|雾)/.test(t);
 
@@ -760,18 +720,14 @@
 
                 this.savingImage = true;
                 try {
-                    // 判斷是否為移動設備
                     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 1024;
 
                     const canvas = await html2canvas(el, {
-                        // 移動端降至 2 倍解析度，防止內存溢出
                         scale: isMobile ? 2 : 3, 
                         backgroundColor: '#ffffff',
                         useCORS: true,
                         logging: false,
-                        // ★ 關鍵：強制使用 1280 寬度渲染，確保觸發的是電腦版排版（不會變成手機版豎排）
                         windowWidth: 1280,
-                        // ★ 不設定固定的 windowHeight，讓引擎自動計算內容高度，避免底部被截斷
                         windowHeight: el.scrollHeight + 100 
                     });
 
@@ -807,24 +763,10 @@
                 }
             },
 
-            toggleMobileMenu() { this.mobileOpen = !this.mobileOpen; },
-            closeMobileMenu() { this.mobileOpen = false; },
-            handleDocumentClick(e) {
-                if (!this.mobileOpen) return;
-                const menu = this.$refs.mobileMenuEl;
-                const btn = this.$refs.mobileMenuBtn;
-                if (menu && menu.contains(e.target)) return;
-                if (btn && btn.contains(e.target)) return;
-                this.closeMobileMenu();
-            },
             handleKeydown(e) {
                 if (e.key === 'Escape' && this.showGraphic) {
                     this.closeGraphic();
                     return;
-                }
-                if (e.key === 'Escape' && this.mobileOpen) {
-                    this.closeMobileMenu();
-                    if (this.$refs.mobileMenuBtn) this.$refs.mobileMenuBtn.focus();
                 }
             },
 
