@@ -68,7 +68,7 @@ def build_forecast_7d_msg():
         if "|" in line:
             cols = [c.strip() for c in line.split("|")]
             if len(cols) >= 6:
-                days_text += f"\n📅 <b>{cols[0]}</b>\n"
+                days_text += f"\n <b>{cols[0]}</b>\n"
                 days_text += f"{cols[1]}\n" 
                 days_text += f"🌡️ 氣溫：{cols[3]}°C ~ {cols[2]}°C\n"
                 days_text += f"💧 濕度：{cols[5]}% ~ {cols[4]}%\n"
