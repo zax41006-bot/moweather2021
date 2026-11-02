@@ -451,10 +451,9 @@
 
     <main id="main-content" class="container mx-auto px-4 py-8">
 
-        <!-- 🌟 實時天氣簡報區塊 (已改為靠左對齊) -->
+        <!-- 🌟 實時天氣簡報區塊 -->
         <section class="mb-8" aria-labelledby="live-weather-heading">
             <h2 id="live-weather-heading" class="text-xl font-bold mb-4 text-black">實時天氣簡報</h2>
-            <!-- 把 flex justify-center 改成了 flex justify-start -->
             <div class="weather-card p-4 flex justify-start items-center overflow-hidden">
                 <img :src="liveWeatherImage" alt="澳門實時天氣簡報" class="max-w-full h-auto rounded-lg shadow-sm" style="max-width: 600px;">
             </div>
@@ -700,13 +699,14 @@
         },
 
         computed: {
-            // 🌟 獲取實時天氣簡報圖片的 CDN 網址 (已填入你的帳號)
+            // 🌟 獲取實時天氣簡報圖片的網址 (改用 Raw 連結，保證即時更新)
             liveWeatherImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "mmc-weather"; 
-                // 獲取當前時間（精確到小時），作為打破 CDN 緩存的參數
+                // 獲取當前時間（精確到小時），作為打破瀏覽器緩存的參數
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
-                return `https://cdn.jsdelivr.net/gh/${githubUser}/${repoName}@main/weather.png?v=${cacheBuster}`;
+                // 直接用 raw.githubusercontent.com，避開 jsDelivr 的長效緩存
+                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/weather.png?v=${cacheBuster}`;
             },
             
             allMapOptions() {
