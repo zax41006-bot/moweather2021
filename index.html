@@ -451,11 +451,11 @@
 
     <main id="main-content" class="container mx-auto px-4 py-8">
 
-        <!-- 🌟 實時天氣簡報區塊 -->
+        <!-- 🌟 實時天氣簡報區塊 (已優化手機端顯示) -->
         <section class="mb-8" aria-labelledby="live-weather-heading">
             <h2 id="live-weather-heading" class="text-xl font-bold mb-4 text-black">實時天氣簡報</h2>
-            <div class="weather-card p-4 flex justify-start items-center overflow-hidden">
-                <img :src="liveWeatherImage" alt="澳門實時天氣簡報" class="max-w-full h-auto rounded-lg shadow-sm" style="max-width: 600px;">
+            <div class="weather-card p-4 w-full overflow-x-auto">
+                <img :src="liveWeatherImage" alt="澳門實時天氣簡報" class="block mx-auto w-full h-auto rounded-lg shadow-sm" style="max-width: 600px;">
             </div>
         </section>
 
