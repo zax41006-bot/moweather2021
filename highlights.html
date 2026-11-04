@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重點天氣預報 | 澳門氣象中心</title>
+    <link class="js-meta-tag" rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+
+    <style>
+        [v-cloak] { display: none; }
+        body { background-color: #f3f4f6; }
+        
+        .weather-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .highlight-article {
+            line-height: 1.8;
+            color: #1f2937;
+            font-size: 1.05rem;
+        }
+
+        .highlight-article p {
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen">
+
+<div id="app" v-cloak>
+
+    <!-- 🌟 只有 Logo 和網站名稱的簡約 Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-center items-center">
+            <div class="flex items-center gap-2">
+                <img src="mmclogo.jpg" alt="澳門氣象中心" class="w-8 h-8">
+                <h1 class="text-xl font-bold text-blue-700">澳門氣象中心</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 max-w-3xl">
+        
+        <!-- 🌟 主標題（紅字）與副標題（黑粗字） -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-red-600 mb-4 tracking-widest">重點天氣預報</h2>
+            <h3 class="text-xl md:text-2xl font-bold text-black bg-gray-100 inline-block px-4 py-2 rounded-lg">
+                {{ subTitle }}
+            </h3>
+            <p class="text-gray-500 text-sm mt-3">
+                <i class="fa-regular fa-clock mr-1"></i> 發佈時間：{{ issueTime }}
+            </p>
+        </div>
+
+        <!-- 🌟 圖文內容區域 -->
+        <div class="weather-card p-6 md:p-10 highlight-article">
+            <div v-if="isLoading" class="text-center py-10 text-gray-500">
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i>
+                <p>載入中...</p>
+            </div>
+
+            <!-- 當 sections 為空時，顯示此提示 -->
+            <div v-else-if="sections.length === 0" class="text-center py-10 text-gray-500">
+                <i class="fa-solid fa-info-circle text-4xl mb-3 text-gray-300"></i>
+                <p>暫無重點天氣預報資訊。</p>
+            </div>
+
+            <div v-else>
+                <div v-for="(section, index) in sections" :key="index" class="mb-6 last:mb-0">
+                    <!-- 文字段落 -->
+                    <p class="text-gray-700 leading-relaxed">{{ section.text }}</p>
+                    
+                    <!-- 固定編號圖片 (預設讀取 highlight_X.png，失敗則讀取 highlight_X.jpg) -->
+                    <img 
+                        :src="section.imageUrl" 
+                        alt="重點天氣預報圖" 
+                        class="highlight-image"
+                        @error="handleImageError($event, index)"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 transition-colors inline-flex items-center gap-2 font-medium">
+                <i class="fa-solid fa-arrow-left"></i> 返回首頁
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="bg-white py-6 mt-12 border-t border-gray-200">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>©2026 澳門氣象中心</p>
+            <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    const { createApp } = Vue;
+
+    createApp({
+        data() {
+            return {
+                isLoading: true,
+                issueTime: '--',
+                subTitle: '載入中...',
+                sections: [], // 存放 { text: "...", imageUrl: "highlight_1.png" }
+            };
+        },
+        mounted() {
+            this.loadHighlightData();
+        },
+        methods: {
+            async loadHighlightData() {
+                try {
+                    // 讀取 highlights.txt
+                    const res = await fetch('highlights.txt?t=' + Date.now(), { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    
+                    // 去除 BOM 與首尾空白
+                    const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
+
+                    // 🌟 核心修改：如果 txt 檔案是空的，直接顯示暫無資訊
+                    if (!raw) {
+                        this.issueTime = '--';
+                        this.subTitle = '暫無資訊';
+                        this.sections = [];
+                        return; // 提前結束
+                    }
+
+                    // 將文本按雙換行分割成區塊 (時間、標題、段落)
+                    const blocks = raw.split(/\n\s*\n/);
+
+                    if (blocks.length >= 2) {
+                        // 第一段：時間
+                        this.issueTime = blocks[0].trim() || '--';
+                        // 第二段：副標題
+                        this.subTitle = blocks[1].trim() || '暫無資訊';
+
+                        // 剩下的區塊為正文段落
+                        const contentBlocks = blocks.slice(2);
+                        
+                        if (contentBlocks.length === 0) {
+                            this.sections = [];
+                        } else {
+                            // 為每個段落生成對應的圖片連結，預設為 .png
+                            this.sections = contentBlocks.map((textBlock, index) => {
+                                return {
+                                    text: textBlock.trim(),
+                                    imageUrl: `highlight_${index + 1}.png`
+                                };
+                            });
+                        }
+                    } else {
+                        // 如果格式不對（例如只有一行文字），把它當作正文顯示
+                        this.subTitle = '重點天氣預報';
+                        this.sections = [{ text: raw, imageUrl: '' }];
+                    }
+
+                } catch (e) {
+                    console.error('讀取 highlights.txt 失敗:', e);
+                    // 🌟 讀取失敗時，也顯示暫無資訊
+                    this.issueTime = '--';
+                    this.subTitle = '暫無資訊';
+                    this.sections = [];
+                } finally {
+                    this.isLoading = false;
+                }
+            },
+
+            handleImageError(e, index) {
+                const currentSrc = e.target.src;
+                
+                // 🌟 如果結尾是 .png，自動替換成 .jpg 再試一次
+                if (currentSrc.endsWith('.png')) {
+                    e.target.src = currentSrc.replace('.png', '.jpg');
+                } 
+                // 🌟 如果 .jpg 也找不到，就隱藏圖片
+                else {
+                    e.target.style.display = 'none';
+                    console.warn(`找不到圖片 highlight_${index + 1}.png 或 .jpg，已自動隱藏。`);
+                }
+            }
+        }
+    }).mount('#app');
+</script>
+
+</body>
+</html>
