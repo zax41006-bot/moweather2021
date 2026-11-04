@@ -451,7 +451,7 @@
 
     <main id="main-content" class="container mx-auto px-4 py-8">
 
-        <!-- 🌟 實時天氣簡報區塊 (已移除 mx-auto 靠左對齊) -->
+        <!-- 🌟 實時天氣簡報區塊 -->
         <section class="mb-8" aria-labelledby="live-weather-heading">
             <h2 id="live-weather-heading" class="text-xl font-bold mb-4 text-black">實時天氣簡報</h2>
             <div class="weather-card p-4 w-full overflow-x-auto">
@@ -553,8 +553,15 @@
             <h2 id="forecast-heading" class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                
+                <!-- 🌟 修改了今明兩日的標題區，按鈕改為新分頁打開 -->
                 <div class="weather-card p-4 md:col-span-2 flex flex-col">
-                    <h3 class="block-title">今明兩日天氣預報</h3>
+                    <div class="flex justify-between items-center mb-2 border-b border-gray-200 pb-2">
+                        <h3 class="text-center font-bold text-black text-base m-0 flex-1">今明兩日天氣預報</h3>
+                        <button @click="open48hTab" class="bg-primary-dark text-white px-2 py-1 rounded text-xs hover:bg-primary-dark/90 transition shadow-sm ml-2 whitespace-nowrap">
+                            <i class="fa-solid fa-chart-line mr-1"></i>48小時圖
+                        </button>
+                    </div>
                     <div class="embed-frame-wrap flex-1">
                         <iframe src="weather2d.html" title="今明兩日天氣預報" loading="lazy"></iframe>
                     </div>
@@ -614,6 +621,7 @@
             <p class="mt-1">資料僅供參考，請以澳門地球物理氣象局實時發布為準</p>
         </div>
     </footer>
+
 </div>
 
 <script>
@@ -699,20 +707,25 @@
         },
 
         computed: {
-            // 🌟 獲取實時天氣簡報圖片的網址 (改用 Raw 連結，保證即時更新)
+            // 🌟 獲取實時天氣簡報圖片的網址
             liveWeatherImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "mmc-weather"; 
-                // 獲取當前時間（精確到小時），作為打破瀏覽器緩存的參數
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
-                // 直接用 raw.githubusercontent.com，避開 jsDelivr 的長效緩存
                 return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/weather.png?v=${cacheBuster}`;
+            },
+            
+            // 🌟 新增：獲取 48 小時預報圖片的網址
+            forecast48hImage() {
+                const githubUser = "zax41006-bot"; 
+                const repoName = "mmc-weather"; 
+                const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
+                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast48h.png?v=${cacheBuster}`;
             },
             
             allMapOptions() {
                 return this.baseOptions;
             },
-            // 獲取當前氣旋對應的圖片網址
             currentTCImage() {
                 if (!this.selectedTC) return '';
                 const tc = this.tcOptions.find(t => t.TC_ID === this.selectedTC);
@@ -798,7 +811,11 @@
         },
 
         methods: {
-            // 讀取 JSON 並填充選項
+            // 🌟 新增：新分頁打開 48 小時預報圖
+            open48hTab() {
+                window.open(this.forecast48hImage, '_blank');
+            },
+
             async loadTCOptions() {
                 try {
                     const res = await fetch('./tc.json?t=' + Date.now(), { cache: 'no-store' });
@@ -807,7 +824,7 @@
                     
                     this.tcOptions = data;
                     if (data.length > 0) {
-                        this.selectedTC = data[0].TC_ID; // 預設選中第一個氣旋
+                        this.selectedTC = data[0].TC_ID;
                     }
                 } catch (e) {
                     console.error('獲取 TC JSON 失敗:', e);
