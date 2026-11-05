@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 
 # 從 GitHub Actions 的 Secrets 讀取變數
 BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
@@ -22,22 +23,42 @@ def send_telegram_message(text):
     if response.status_code != 200:
         print(f"❌ 文字發送失敗: {response.text}")
 
-def send_telegram_photo(photo_path, caption=""):
-    """發送圖片並附帶文字說明 (Caption)"""
-    url = f"{BASE_URL}/sendPhoto"
+def send_telegram_media_group(images, caption):
+    """發送多張圖片（相冊），並將文字綁定在第一張圖"""
+    url = f"{BASE_URL}/sendMediaGroup"
+    media = []
+    files = {}
+    
+    for i, img_path in enumerate(images):
+        attach_name = f"photo_{i}"
+        files[attach_name] = open(img_path, 'rb')
+        
+        media_item = {
+            "type": "photo",
+            "media": f"attach://{attach_name}",
+        }
+        # 只有第一張圖攜帶完整的說明文字
+        if i == 0:
+            media_item["caption"] = caption
+            media_item["parse_mode"] = "HTML"
+            
+        media.append(media_item)
+        
+    payload = {
+        "chat_id": CHAT_ID,
+        "media": json.dumps(media)
+    }
+    
     try:
-        with open(photo_path, 'rb') as photo:
-            payload = {
-                "chat_id": CHAT_ID, 
-                "caption": caption, 
-                "parse_mode": "HTML"
-            }
-            files = {"photo": photo}
-            res = requests.post(url, data=payload, files=files)
-            if res.status_code != 200:
-                print(f"❌ 圖片發送失敗 {photo_path}: {res.text}")
+        res = requests.post(url, data=payload, files=files)
+        if res.status_code != 200:
+            print(f"❌ 相冊發送失敗: {res.text}")
     except Exception as e:
-        print(f"❌ 讀取圖片失敗 {photo_path}: {e}")
+        print(f"❌ 相冊發送異常: {e}")
+    finally:
+        # 確保檔案關閉
+        for f in files.values():
+            f.close()
 
 def read_file(filename):
     if not os.path.exists(filename): return ""
@@ -60,7 +81,6 @@ def process_and_send_highlights():
     text_hl = read_file("highlights.txt")
     if not text_hl: return
 
-    # 按雙換行分割區塊 (保留原本的段落結構)
     blocks = [b.strip() for b in text_hl.split('\n\n') if b.strip()]
     if len(blocks) < 2: return
 
@@ -68,57 +88,63 @@ def process_and_send_highlights():
     sub_title = blocks[1]
     content_blocks = blocks[2:]
 
-    # 🌟 核心修改：把所有文字合併成一個超長字串
+    # 1. 把所有文字合併成一個超長字串
     full_text = f"📢 <b>【澳門氣象中心 MMC】重點天氣預報</b>\n"
     full_text += f"🕒 發佈時間：{issue_time}\n\n"
     full_text += f"<b>{sub_title}</b>\n\n"
     
-    # 將所有段落用雙換行拼接，完美保留空行
     body_text = "\n\n".join(content_blocks)
     full_text += body_text
     full_text += f"\n\n🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
 
-    # 收集所有圖片路徑
+    # 2. 收集所有存在的圖片
     images = []
     for i in range(len(content_blocks)):
         img = find_image(i + 1)
         if img: images.append(img)
 
-    # 🌟 判斷文字長度是否在 Telegram 圖片的限制內 (1024字元)
-    if len(full_text) <= 1024 and len(images) > 0:
-        # 字數允許且有大圖：直接把整段文字塞進第一張圖的說明裡 (圖文一體，不分家)
-        print("字數允許，發送圖文合併訊息...")
-        send_telegram_photo(images[0], full_text)
-        
-        # 如果還有其他圖片，發在後面 (不帶文字)
-        for img in images[1:]:
-            send_telegram_photo(img, "")
-    else:
-        # 字數超過 1024 或完全沒有圖片：先發一條完整的大文字，再發所有圖片
-        print("字數過長或無圖片，先發送完整長文再發送圖片...")
+    if not images:
+        # 如果完全沒有圖片，直接發純文字
         send_telegram_message(full_text)
-        for img in images:
-            send_telegram_photo(img, "")
+        return
 
+    # 3. 根據字數判斷發送策略
+    if len(full_text) <= 1024:
+        # 字數在限制內，把圖片打包成相冊（最多10張），文字放在第一張
+        if len(images) > 1:
+            # 大於1張圖，用相冊發送
+            send_telegram_media_group(images, full_text)
+        else:
+            # 只有1張圖，直接發送
+            url = f"{BASE_URL}/sendPhoto"
+            with open(images[0], 'rb') as photo:
+                payload = {"chat_id": CHAT_ID, "caption": full_text, "parse_mode": "HTML"}
+                requests.post(url, data=payload, files={"photo": photo})
+    else:
+        # 如果文字超過 1024 字，圖片無法攜帶這麼長的說明
+        # 策略：先發一條完整的長文字，再把所有圖片打包成無說明的相冊發送
+        send_telegram_message(full_text)
+        if len(images) > 1:
+            send_telegram_media_group(images, "")
+        else:
+            url = f"{BASE_URL}/sendPhoto"
+            with open(images[0], 'rb') as photo:
+                payload = {"chat_id": CHAT_ID}
+                requests.post(url, data=payload, files={"photo": photo})
 
 if __name__ == "__main__":
     if not BOT_TOKEN or not CHAT_ID:
         print("❌ 錯誤：未設定 TG_BOT_TOKEN 或 TG_CHAT_ID")
         exit(1)
 
-    # 取得最新內容與上次發送的狀態
     current_text = read_file("highlights.txt")
     last_state = read_file("_last_highlights.txt")
 
-    # 如果沒更新，跳過
     if current_text == last_state:
         print("⏭️ 重點天氣預報未更新，跳過發送。")
         exit(0)
 
     print("🔄 偵測到重點天氣預報更新！開始發送...")
-    
     process_and_send_highlights()
-    
-    # 發送完成後，更新備忘錄
     save_last_content("_last_highlights.txt", current_text)
     print("✅ 重點天氣預報任務完成！")
