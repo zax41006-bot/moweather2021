@@ -22,7 +22,7 @@ def send_telegram_message(text):
     if response.status_code != 200:
         print(f"❌ 文字發送失敗: {response.text}")
 
-def send_telegram_photo(photo_path, caption):
+def send_telegram_photo(photo_path, caption=""):
     """發送圖片並附帶文字說明 (Caption)"""
     url = f"{BASE_URL}/sendPhoto"
     try:
@@ -62,44 +62,43 @@ def process_and_send_highlights():
 
     # 按雙換行分割區塊 (保留原本的段落結構)
     blocks = [b.strip() for b in text_hl.split('\n\n') if b.strip()]
-    
     if len(blocks) < 2: return
 
-    # 1. 提取時間與副標題
     issue_time = blocks[0]
     sub_title = blocks[1]
     content_blocks = blocks[2:]
 
-    # 2. 發送標題與發佈時間 (第一則訊息)
-    header_msg = f"📢 <b>【澳門氣象中心 MMC】重點天氣預報</b>\n"
-    header_msg += f"🕒 發佈時間：{issue_time}\n\n"
-    header_msg += f"<b>{sub_title}</b>"
-    send_telegram_message(header_msg)
+    # 🌟 核心修改：把所有文字合併成一個超長字串
+    full_text = f"📢 <b>【澳門氣象中心 MMC】重點天氣預報</b>\n"
+    full_text += f"🕒 發佈時間：{issue_time}\n\n"
+    full_text += f"<b>{sub_title}</b>\n\n"
+    
+    # 將所有段落用雙換行拼接，完美保留空行
+    body_text = "\n\n".join(content_blocks)
+    full_text += body_text
+    full_text += f"\n\n🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
 
-    # 3. 逐段發送圖文內容
-    for i, text in enumerate(content_blocks):
-        img_path = find_image(i + 1)
+    # 收集所有圖片路徑
+    images = []
+    for i in range(len(content_blocks)):
+        img = find_image(i + 1)
+        if img: images.append(img)
+
+    # 🌟 判斷文字長度是否在 Telegram 圖片的限制內 (1024字元)
+    if len(full_text) <= 1024 and len(images) > 0:
+        # 字數允許且有大圖：直接把整段文字塞進第一張圖的說明裡 (圖文一體，不分家)
+        print("字數允許，發送圖文合併訊息...")
+        send_telegram_photo(images[0], full_text)
         
-        # 準備說明文字，第一段加上官網連結
-        caption = text
-        if i == 0:
-            caption += f"\n\n🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
-            
-        # Telegram 圖片的 caption 限制為 1024 字元，如果太長會報錯
-        if len(caption) > 1024:
-            caption = caption[:1020] + "..."
-        
-        if img_path:
-            # 如果有找到圖片，發送圖文
-            print(f"正在發送圖片：{img_path}")
-            send_telegram_photo(img_path, caption)
-        else:
-            # 沒有圖片，退化成純文字發送
-            print(f"未找到圖片 highlight_{i+1}，以純文字發送。")
-            # 如果是第一段，但沒有圖片，也要補上官網連結
-            if i == 0 and WEBSITE_URL not in caption:
-                caption += f"\n\n🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
-            send_telegram_message(caption)
+        # 如果還有其他圖片，發在後面 (不帶文字)
+        for img in images[1:]:
+            send_telegram_photo(img, "")
+    else:
+        # 字數超過 1024 或完全沒有圖片：先發一條完整的大文字，再發所有圖片
+        print("字數過長或無圖片，先發送完整長文再發送圖片...")
+        send_telegram_message(full_text)
+        for img in images:
+            send_telegram_photo(img, "")
 
 
 if __name__ == "__main__":
