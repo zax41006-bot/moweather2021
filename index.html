@@ -41,286 +41,61 @@
         body { background-color: #E3F2FD; }
         header { position: relative; z-index: 999; }
 
-        a:focus-visible,
-        button:focus-visible,
-        select:focus-visible,
-        input:focus-visible,
-        iframe:focus-visible,
-        [tabindex]:focus-visible {
+        a:focus-visible, button:focus-visible, select:focus-visible,
+        input:focus-visible, iframe:focus-visible, [tabindex]:focus-visible {
             outline: 3px solid #1565C0;
             outline-offset: 2px;
             border-radius: 4px;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        @media (forced-colors: active) {
-            .weather-card { border: 1px solid CanvasText; }
-        }
-
         .block-title {
-            text-align: center;
-            font-weight: 700;
-            color: #000;
-            font-size: 1rem;
-            padding-bottom: 0.6rem;
-            border-bottom: 1px solid #e5e7eb;
-            margin-bottom: 0.9rem;
+            text-align: center; font-weight: 700; color: #000; font-size: 1rem;
+            padding-bottom: 0.6rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 0.9rem;
         }
         .sub-title {
-            text-align: center;
-            font-weight: 700;
-            color: #000;
-            font-size: 0.95rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            margin-bottom: 0.75rem;
+            text-align: center; font-weight: 700; color: #000; font-size: 0.95rem;
+            padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 0.75rem;
         }
 
-        .warning-card {
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid transparent;
-            background: #ffffff;
-            margin-bottom: 0.75rem;
-        }
+        .warning-card { border-radius: 10px; overflow: hidden; border: 2px solid transparent; background: #ffffff; margin-bottom: 0.75rem; }
         .warning-card:last-child { margin-bottom: 0; }
-        .warning-head {
-            padding: 0.6rem 1rem;
-            font-weight: 700;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            letter-spacing: 0.03em;
-        }
-        .warning-body {
-            padding: 0.9rem 1rem;
-            color: #1f2937;
-            line-height: 1.85;
-            font-size: 0.9rem;
-        }
-        .warning-tag {
-            display: inline-block;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #1f2937;
-            background: rgba(0,0,0,0.06);
-            padding: 0.15rem 0.6rem;
-            border-radius: 4px;
-            margin-bottom: 0.5rem;
-        }
-        .warning-content {
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-        .warning-inactive {
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #ffffff;
-        }
-        .warning-inactive .warning-head { background: #9ca3af; color: #ffffff; }
-        .warning-inactive .warning-body {
-            background: #f9fafb;
-            color: #6b7280;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .warning-head { padding: 0.6rem 1rem; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.55rem; }
+        .warning-body { padding: 0.9rem 1rem; color: #1f2937; line-height: 1.85; font-size: 0.9rem; }
+        .warning-tag { display: inline-block; font-weight: 700; font-size: 0.85rem; color: #1f2937; background: rgba(0,0,0,0.06); padding: 0.15rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; }
+        .warning-content { white-space: pre-wrap; word-break: break-word; }
 
-        .tip-card {
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #991b1b;
-            background: #ffffff;
-            margin-bottom: 0.75rem;
-        }
+        .tip-card { border-radius: 10px; overflow: hidden; border: 2px solid #991b1b; background: #ffffff; margin-bottom: 0.75rem; }
         .tip-card:last-child { margin-bottom: 0; }
-        .tip-head {
-            background: #991b1b;
-            color: #ffffff;
-            padding: 0.6rem 1rem;
-            font-weight: 700;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            letter-spacing: 0.03em;
-        }
-        .tip-body {
-            padding: 0.9rem 1rem;
-            background: #fef2f2;
-            color: #1f2937;
-            line-height: 1.85;
-            font-size: 0.9rem;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
+        .tip-head { background: #991b1b; color: #ffffff; padding: 0.6rem 1rem; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.55rem; }
+        .tip-body { padding: 0.9rem 1rem; background: #fef2f2; color: #1f2937; line-height: 1.85; font-size: 0.9rem; white-space: pre-wrap; word-break: break-word; }
 
-        @media (max-width: 640px) {
-            .tip-head, .warning-head { font-size: 0.875rem; padding: 0.5rem 0.85rem; }
-            .tip-body, .warning-body { font-size: 0.85rem; padding: 0.75rem 0.85rem; }
-        }
+        .embed-frame-wrap { width: 100%; height: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; background: #ffffff; }
+        .embed-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
 
-        .embed-frame-wrap {
-            width: 100%;
-            height: 100%;
-            min-height: 420px;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #ffffff;
-        }
-        .embed-frame-wrap iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            display: block;
-        }
-        @media (max-width: 768px) {
-            .embed-frame-wrap { min-height: 360px; }
-        }
-
-        .seven-grid {
-            display: grid;
-            grid-template-columns: 5.5rem repeat(7, 1fr);
-            gap: 0;
-            align-items: center;
-        }
-        .seven-grid .grid-label {
-            color: #6b7280;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-align: right;
-            padding-right: 0.75rem;
-            white-space: nowrap;
-        }
+        .seven-grid { display: grid; grid-template-columns: 5.5rem repeat(7, 1fr); gap: 0; align-items: center; }
+        .seven-grid .grid-label { color: #6b7280; font-size: 0.8rem; font-weight: 500; text-align: right; padding-right: 0.75rem; white-space: nowrap; }
         .seven-grid .grid-cell { text-align: center; }
+        .day-head .day-date { color: #1f2937; font-size: 0.85rem; font-weight: 600; }
+        .day-head img { width: 1.9rem; height: 1.9rem; object-fit: contain; margin: 0.35rem auto 0; display: block; }
+        .temp-chart-wrap { grid-column: 2 / -1; position: relative; height: 200px; overflow: visible; }
+        .divider-line { border-top: 1px solid #e5e7eb; margin: 0.75rem 0; }
 
-        .day-head .day-date {
-            color: #1f2937;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .day-head img {
-            width: 1.9rem;
-            height: 1.9rem;
-            object-fit: contain;
-            margin: 0.35rem auto 0;
-            display: block;
-        }
-
-        .temp-chart-wrap {
-            grid-column: 2 / -1;
-            position: relative;
-            height: 200px;
-            overflow: visible;
-        }
-
-        .divider-line {
-            border-top: 1px solid #e5e7eb;
-            margin: 0.75rem 0;
-        }
-
-        .chart-tabs {
-            display: inline-flex;
-            background: #f3f4f6;
-            border-radius: 9999px;
-            padding: 3px;
-            margin: 0 auto 0.75rem;
-            gap: 2px;
-        }
-        .chart-tabs button {
-            border: 0;
-            background: transparent;
-            padding: 0.4rem 1.1rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #6b7280;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
+        .chart-tabs { display: inline-flex; background: #f3f4f6; border-radius: 9999px; padding: 3px; margin: 0 auto 0.75rem; gap: 2px; }
+        .chart-tabs button { border: 0; background: transparent; padding: 0.4rem 1.1rem; font-size: 0.875rem; font-weight: 600; color: #6b7280; border-radius: 9999px; cursor: pointer; transition: all 0.15s ease; }
         .chart-tabs button:hover { color: #1f2937; }
-        .chart-tabs button.active {
-            background: #1565C0;
-            color: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-        }
-
-        .issued-note {
-            color: #6b7280;
-            font-size: 0.75rem;
-            text-align: center;
-            margin-top: 0.75rem;
-        }
-
-        .mobile-temp {
-            display: none;
-        }
+        .chart-tabs button.active { background: #1565C0; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+        .issued-note { color: #6b7280; font-size: 0.75rem; text-align: center; margin-top: 0.75rem; }
+        .mobile-temp { display: none; }
 
         @media (max-width: 768px) {
-            .chart-tabs, 
-            .temp-chart-wrap, 
-            .divider-line,
-            .grid-label,
-            .chart-row-grid {
-                display: none !important;
-            }
-
-            .seven-grid.day-head {
-                display: block !important;
-                margin-bottom: 0 !important;
-            }
-
-            .seven-grid.day-head > div:first-child {
-                display: none;
-            }
-
-            .seven-grid.day-head .grid-cell {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 1rem 0.5rem;
-                border-bottom: 1px solid #e5e7eb;
-            }
-
-            .seven-grid.day-head .grid-cell .day-date {
-                font-size: 1rem;
-                text-align: left;
-                margin-bottom: 0;
-                display: inline-block;
-                vertical-align: middle;
-            }
-
-            .seven-grid.day-head .grid-cell img {
-                display: inline-block;
-                vertical-align: middle;
-                width: 2rem;
-                height: 2rem;
-                margin: 0 0 0 0.5rem;
-            }
-
-            .mobile-temp {
-                display: block;
-                font-weight: 700;
-                font-size: 1rem;
-                color: #1f2937;
-            }
-
-            .mt-4.text-center {
-                margin-top: 1.5rem;
-            }
+            .chart-tabs, .temp-chart-wrap, .divider-line, .grid-label, .chart-row-grid { display: none !important; }
+            .seven-grid.day-head { display: block !important; margin-bottom: 0 !important; }
+            .seven-grid.day-head > div:first-child { display: none; }
+            .seven-grid.day-head .grid-cell { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0.5rem; border-bottom: 1px solid #e5e7eb; }
+            .seven-grid.day-head .grid-cell .day-date { font-size: 1rem; text-align: left; margin-bottom: 0; display: inline-block; vertical-align: middle; }
+            .seven-grid.day-head .grid-cell img { display: inline-block; vertical-align: middle; width: 2rem; height: 2rem; margin: 0 0 0 0.5rem; }
+            .mobile-temp { display: block; font-weight: 700; font-size: 1rem; color: #1f2937; }
         }
-
         @media (max-width: 640px) {
             .seven-grid { grid-template-columns: 4.5rem repeat(7, 1fr); }
             .seven-grid .grid-label { font-size: 0.7rem; padding-right: 0.4rem; }
@@ -329,56 +104,13 @@
             .temp-chart-wrap { height: 170px; }
             .chart-tabs button { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
         }
-
-        @media (max-width: 768px) {
-            .warning-head,
-            .tip-head {
-                padding: 0.75rem 1rem;
-                font-size: 0.95rem;
-            }
-            .warning-body,
-            .tip-body {
-                padding: 1rem;
-                font-size: 0.9rem;
-            }
-            .weather-card {
-                border-radius: 16px;
-            }
-            .warning-card,
-            .tip-card {
-                border-radius: 12px;
-            }
-            .temp-chart-wrap {
-                height: 220px;
-            }
-            .map-select {
-                width: 100%;
-                padding: 0.7rem 1rem;
-                font-size: 0.95rem;
-            }
-            main.container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-        }
-
-        @media (max-width: 420px) {
-            .seven-grid { grid-template-columns: 4rem repeat(7, 1fr); }
-            .day-head .day-date { font-size: 0.68rem; }
-            .day-head img { width: 1.3rem; height: 1.3rem; }
-        }
     </style>
 </head>
 <body class="font-sans text-gray-800 min-h-screen">
 
 <div id="app" v-cloak>
 
-    <a href="#main-content"
-       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[1001]
-              focus:bg-white focus:text-primary-dark focus:px-4 focus:py-2 focus:rounded-lg
-              focus:shadow-lg focus:font-medium">
-        跳至主要內容
-    </a>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[1001] focus:bg-white focus:text-primary-dark focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:font-medium">跳至主要內容</a>
 
     <header class="bg-white shadow-sm sticky top-0">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -390,20 +122,13 @@
             <!-- 電腦版選單 -->
             <nav class="hidden md:flex items-center gap-1" aria-label="主要導覽">
                 <template v-for="item in navItems" :key="'d-' + item.text">
-                    <a v-if="!item.isDropdown"
-                       :href="item.href"
-                       class="nav-link"
-                       :class="item.desktopClass"
-                       :aria-current="item.current ? 'page' : null">{{ item.text }}</a>
-                    
+                    <a v-if="!item.isDropdown" :href="item.href" class="nav-link" :class="item.desktopClass" :aria-current="item.current ? 'page' : null">{{ item.text }}</a>
                     <div v-else class="relative group">
                         <button type="button" class="nav-link flex items-center gap-1 cursor-default" :class="item.desktopClass">
                             {{ item.text }} <i class="fa fa-caret-down text-xs text-gray-400 group-hover:text-primary-dark transition-colors" aria-hidden="true"></i>
                         </button>
                         <div class="absolute left-0 top-full mt-0 w-64 bg-white border border-gray-200 rounded-b-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                            <a v-for="child in item.children" :key="child.text"
-                               :href="child.href"
-                               class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary-dark border-b border-gray-100 last:border-0">
+                            <a v-for="child in item.children" :key="child.text" :href="child.href" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary-dark border-b border-gray-100 last:border-0">
                                 {{ child.text }}
                             </a>
                         </div>
@@ -411,36 +136,17 @@
                 </template>
             </nav>
 
-            <button id="mobileMenuBtn"
-                    ref="mobileMenuBtn"
-                    type="button"
-                    class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all"
-                    :aria-expanded="mobileOpen ? 'true' : 'false'"
-                    aria-controls="mobileMenu"
-                    :aria-label="mobileOpen ? '關閉主選單' : '開啟主選單'"
-                    @click.stop="toggleMobileMenu">
+            <button id="mobileMenuBtn" ref="mobileMenuBtn" type="button" class="md:hidden text-gray-700 focus:outline-none p-3 rounded-full hover:bg-gray-100 transition-all" :aria-expanded="mobileOpen ? 'true' : 'false'" aria-controls="mobileMenu" :aria-label="mobileOpen ? '關閉主選單' : '開啟主選單'" @click.stop="toggleMobileMenu">
                 <i id="menuIcon" class="fa text-xl" :class="mobileOpen ? 'fa-times' : 'fa-bars'" aria-hidden="true"></i>
             </button>
 
             <!-- 手機版選單 -->
-            <div id="mobileMenu"
-                 ref="mobileMenuEl"
-                 class="mobile-menu"
-                 :class="{ 'mobile-menu-hidden': !mobileOpen }">
+            <div id="mobileMenu" ref="mobileMenuEl" class="mobile-menu" :class="{ 'mobile-menu-hidden': !mobileOpen }">
                 <template v-for="item in navItems" :key="'m-' + item.text">
-                    <a v-if="!item.isDropdown"
-                       :href="item.href"
-                       class="block px-4 py-2 transition-colors"
-                       :class="item.mobileClass"
-                       :aria-current="item.current ? 'page' : null"
-                       @click="closeMobileMenu">{{ item.text }}</a>
-                    
+                    <a v-if="!item.isDropdown" :href="item.href" class="block px-4 py-2 transition-colors" :class="item.mobileClass" :aria-current="item.current ? 'page' : null" @click="closeMobileMenu">{{ item.text }}</a>
                     <div v-else class="block">
                         <div class="px-4 py-2 font-bold text-gray-800 bg-gray-50 border-t border-b border-gray-100 text-sm">{{ item.text }}</div>
-                        <a v-for="child in item.children" :key="child.text"
-                           :href="child.href"
-                           class="block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-primary-dark transition-colors"
-                           @click="closeMobileMenu">
+                        <a v-for="child in item.children" :key="child.text" :href="child.href" class="block pl-8 pr-4 py-2 text-sm text-gray-600 hover:bg-blue-50 hover:text-primary-dark transition-colors" @click="closeMobileMenu">
                             - {{ child.text }}
                         </a>
                     </div>
@@ -449,9 +155,9 @@
         </div>
     </header>
 
-    <main id="main-content" class="container mx-auto px-4 py-8">
+    <main id="main-content" class="container mx-auto px-4 py-8 max-w-7xl">
 
-        <!-- 🌟 實時天氣簡報區塊 -->
+        <!-- 實時天氣簡報區塊 -->
         <section class="mb-8" aria-labelledby="live-weather-heading">
             <h2 id="live-weather-heading" class="text-xl font-bold mb-4 text-black">實時天氣簡報</h2>
             <div class="weather-card p-4 w-full overflow-x-auto">
@@ -459,6 +165,7 @@
             </div>
         </section>
 
+        <!-- 特別天氣提示 / 警告 -->
         <section v-if="specialTipsList.length" class="mb-8" aria-labelledby="special-tips-heading">
             <h2 id="special-tips-heading" class="sr-only">特別天氣提示</h2>
             <div class="weather-card p-3">
@@ -488,73 +195,86 @@
             </div>
         </section>
 
-        <!-- 氣象數據 -->
+        <!-- 🌟 實時天氣監測 -->
         <section class="mb-8" aria-labelledby="data-heading">
-            <h2 id="data-heading" class="text-xl font-bold mb-4 text-black">氣象數據</h2>
-            <div class="weather-card p-6">
-                <!-- 主下拉選單 -->
-                <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <select id="mapSelector" class="map-select" v-model="selectedMap">
-                        <option v-for="opt in allMapOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                    </select>
-                    <p id="mapSelectorHint" class="text-gray-500 text-sm">選擇要查看的氣象數據</p>
-                </div>
-
-                <!-- 顯示區域 -->
-                <div class="relative flex flex-col items-center w-full bg-white rounded-xl overflow-hidden min-h-[400px]">
+            <h2 id="data-heading" class="text-xl font-bold mb-4 text-black">實時天氣監測</h2>
+            
+            <div class="weather-card p-4 md:p-6">
+                <div class="flex flex-col lg:flex-row gap-6 lg:items-start">
                     
-                    <!-- 子下拉選單 (只有選中熱帶氣旋時才顯示) -->
-                    <div v-if="selectedMap === 'mmc-tc' && tcOptions.length > 0" class="w-full flex justify-center py-4 bg-gray-50 border-b border-gray-200 z-10">
-                        <select v-model="selectedTC" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none bg-white font-medium text-primary-dark shadow-sm">
-                            <option v-for="tc in tcOptions" :key="tc.TC_ID" :value="tc.TC_ID">
-                                🌀 {{ tc.name }} 路徑圖
-                            </option>
-                        </select>
+                    <!-- 左側：圖片顯示區 -->
+                    <div class="flex-1 w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden relative flex items-center justify-center p-2">
+                        <div v-show="monitorLoading" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20 backdrop-blur-sm">
+                            <i class="fa fa-spinner fa-spin text-2xl text-primary mb-2"></i>
+                            <p class="text-sm text-gray-600">載入圖像中...</p>
+                        </div>
+                        
+                        <img :src="currentMonitorImage" 
+                             :alt="currentMonitorLabel" 
+                             class="w-full h-auto max-h-[700px] object-contain transition-opacity duration-300 drop-shadow-sm"
+                             :class="{'opacity-0': monitorLoading, 'opacity-100': !monitorLoading}"
+                             @load="onMonitorLoad">
                     </div>
 
-                    <!-- Loading 遮罩 -->
-                    <div v-show="mapLoading" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20">
-                        <i class="fa fa-spinner fa-spin text-3xl text-primary mb-2"></i>
-                        <p class="text-gray-600">載入中...</p>
-                    </div>
-
-                    <!-- 內容區域 -->
-                    <div class="relative w-full flex justify-center flex-1 p-2">
+                    <!-- 右側：控制面板 -->
+                    <div class="w-full lg:w-[300px] flex-shrink-0">
                         
-                        <!-- 1. 熱帶氣旋圖片 (當 selectedMap 是 mmc-tc) -->
-                        <img v-if="selectedMap === 'mmc-tc' && currentTCImage" 
-                             :src="currentTCImage + '?t=' + Date.now()" 
-                             class="max-w-full h-auto object-contain rounded-lg" 
-                             style="max-height: 600px;"
-                             @load="onFrameLoad">
-                        
-                        <!-- 如果選了熱帶氣旋但沒有資料 -->
-                        <div v-else-if="selectedMap === 'mmc-tc' && tcOptions.length === 0" class="flex items-center text-gray-500 py-10">
-                            目前暫無熱帶氣旋路徑預報圖。
+                        <!-- Tab 切換 -->
+                        <div class="flex bg-gray-100 rounded-lg p-1 mb-4">
+                            <button @click="monitorMode = 'realtime'" :class="monitorMode === 'realtime' ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-1.5 text-sm font-bold rounded-md transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-layer-group"></i> 實時分佈
+                            </button>
+                            <button @click="monitorMode = 'history'" :class="monitorMode === 'history' ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-1.5 text-sm font-bold rounded-md transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-chart-line"></i> 歷史折線
+                            </button>
                         </div>
 
-                        <!-- 2. 其他氣象數據 (iframe) -->
-                        <iframe v-else
-                            :src="currentFrameUrl"
-                            width="100%"
-                            height="600"
-                            frameborder="0"
-                            class="rounded-xl"
-                            :title="currentFrameTitle"
-                            @load="onFrameLoad">
-                        </iframe>
+                        <!-- 實時分佈選項 -->
+                        <div v-show="monitorMode === 'realtime'">
+                            <h3 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">選擇氣象要素</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
+                                <button v-for="layer in monitorLayers" 
+                                        :key="layer.id"
+                                        @click="selectMonitorLayer(layer)"
+                                        class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 text-sm font-medium transition-all hover:bg-blue-50 hover:border-blue-300 hover:text-primary-dark"
+                                        :class="{ 'bg-primary text-white border-primary shadow-md hover:bg-primary-dark hover:text-white ring-2 ring-primary/20': selectedMonitorId === layer.id }">
+                                    <i :class="layer.icon" class="w-4 text-center text-base opacity-80"></i>
+                                    <span>{{ layer.label }}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 歷史折線圖選項 -->
+                        <div v-show="monitorMode === 'history'">
+                            <h3 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">選擇監測站與變數</h3>
+                            
+                            <div class="flex flex-col gap-3">
+                                <div>
+                                    <label class="block text-xs text-gray-500 mb-1 font-medium">監測站點</label>
+                                    <select v-model="selectedHistoryStation" @change="onHistoryChange" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm">
+                                        <option v-for="st in historyStations" :key="st.code" :value="st.code">{{ st.label }}</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-500 mb-1 font-medium">數據變數</label>
+                                    <select v-model="selectedHistoryType" @change="onHistoryChange" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm">
+                                        <option v-for="type in historyTypes" :key="type.code" :value="type.code">{{ type.label }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
             </div>
         </section>
 
-        <!-- 天氣預報 -->
+        <!-- 🌟 天氣預報（本中心） -->
         <section class="mb-8" aria-labelledby="forecast-heading">
             <h2 id="forecast-heading" class="text-xl font-bold mb-4 text-black">天氣預報（本中心）</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                
-                <!-- 今明兩日的區塊 -->
                 <div class="weather-card p-4 md:col-span-2 flex flex-col">
                     <h3 class="block-title">今明兩日天氣預報</h3>
                     <div class="embed-frame-wrap flex-1 relative">
@@ -603,28 +323,120 @@
                             </div>
                         </div>
 
-                        <!-- 🌟 修改了這裡：加入數值模式 15 天氣溫概率預報按鈕 -->
                         <div class="mt-6 flex flex-wrap justify-center items-center gap-3">
                             <a href="weather7d.html" class="weather-draft-btn inline-flex items-center">
                                 <i class="fa fa-file-text-o mr-2" aria-hidden="true"></i>查看天氣稿
                             </a>
-                            
-                            <!-- 🌟 新增：15天概率預報按鈕 -->
                             <button @click="open15dTab" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-all shadow-md text-sm inline-flex items-center">
                                 <i class="fa-solid fa-chart-area mr-2" aria-hidden="true"></i>數值模式15天氣溫概率預報
                             </button>
-
                             <a href="highlights.html" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all shadow-md text-sm inline-flex items-center">
                                 <i class="fa-solid fa-bullhorn mr-2" aria-hidden="true"></i>重點天氣預報
                             </a>
                         </div>
-                        <!-- 🌟 修改結束 -->
 
                         <p class="issued-note mt-4">(發佈/更新時間：{{ issuedForecastText || issued7dText }})</p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- 🌟 天氣圖像資訊區塊 -->
+        <section class="mb-8" aria-labelledby="model-heading">
+            <h2 id="model-heading" class="text-xl font-bold mb-4 text-black">天氣圖像資訊</h2>
+            <div class="weather-card p-6">
+                <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <select id="mapSelector" class="map-select" v-model="selectedModel">
+                        <option v-for="opt in modelOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+                    </select>
+                    <p id="mapSelectorHint" class="text-gray-500 text-sm">選擇要查看的天氣圖像</p>
+                </div>
+
+                <div class="relative flex flex-col items-center w-full bg-white rounded-xl overflow-hidden min-h-[400px]">
+                    <!-- 熱帶氣旋子選單 -->
+                    <div v-if="selectedModel === 'mmc-tc' && tcOptions.length > 0" class="w-full flex justify-center py-4 bg-gray-50 border-b border-gray-200 z-10">
+                        <select v-model="selectedTC" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none bg-white font-medium text-primary-dark shadow-sm">
+                            <option v-for="tc in tcOptions" :key="tc.TC_ID" :value="tc.TC_ID">
+                                🌀 {{ tc.name }} 路徑圖
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Loading 遮罩 -->
+                    <div v-show="modelLoading" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20">
+                        <i class="fa fa-spinner fa-spin text-3xl text-primary mb-2"></i>
+                        <p class="text-gray-600">載入中...</p>
+                    </div>
+
+                    <div class="relative w-full flex flex-col items-center flex-1 p-2">
+                        
+                        <!-- 🌟 48 小時預報圖 (圖上方加下拉選單，圖下方放置極簡控制按鈕) -->
+                        <div v-if="selectedModel === 'precip_48h'" class="w-full flex flex-col items-center">
+                            
+                            <!-- 新增：氣象要素下拉選單 -->
+                            <div class="w-full flex justify-center mb-5">
+                                <div class="relative inline-block w-64">
+                                    <select v-model="selectedPrecipType" class="w-full appearance-none bg-white border border-gray-300 rounded-lg shadow-sm px-4 py-2 pr-10 text-sm font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors cursor-pointer">
+                                        <option value="precip">海平面氣壓+降水預報</option>
+                                        <option value="wind">近地面風力預報</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+                                </div>
+                            </div>
+
+                            <!-- 預報圖 -->
+                            <img :src="currentPrecip48hImage" 
+                                 alt="天氣預報圖"
+                                 class="max-w-full h-auto object-contain rounded-lg drop-shadow-md transition-opacity duration-300 mb-6"
+                                 :class="{'opacity-50': modelLoading}"
+                                 style="max-height: 600px;"
+                                 @load="onModelLoad">
+                                 
+                            <!-- 下方極簡控制按鈕 (完全對齊截圖的圓圈箭頭設計) -->
+                            <div class="flex items-center justify-center gap-8 mb-4">
+                                <!-- 左箭頭 -->
+                                <button type="button" @click="prevHour" class="w-12 h-12 rounded-full border-2 border-[#1f2937] flex items-center justify-center text-[#1f2937] hover:bg-gray-100 transition-all focus:outline-none">
+                                    <i class="fa-solid fa-arrow-left text-lg"></i>
+                                </button>
+                                
+                                <!-- 播放/暫停 -->
+                                <button type="button" @click="togglePlay" class="w-12 h-12 rounded-full border-2 border-[#1f2937] flex items-center justify-center text-[#1f2937] hover:bg-gray-100 transition-all focus:outline-none">
+                                    <i :class="isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play'" class="text-lg" :style="isPlaying ? '' : 'margin-left: 3px;'"></i>
+                                </button>
+                                
+                                <!-- 右箭頭 -->
+                                <button type="button" @click="nextHour" class="w-12 h-12 rounded-full border-2 border-[#1f2937] flex items-center justify-center text-[#1f2937] hover:bg-gray-100 transition-all focus:outline-none">
+                                    <i class="fa-solid fa-arrow-right text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 熱帶氣旋路徑圖 -->
+                        <img v-else-if="selectedModel === 'mmc-tc' && currentTCImage" 
+                             :src="currentTCImage + '?t=' + Date.now()" 
+                             class="max-w-full h-auto object-contain rounded-lg" 
+                             style="max-height: 600px;"
+                             @load="onModelLoad">
+                        
+                        <div v-else-if="selectedModel === 'mmc-tc' && tcOptions.length === 0" class="flex items-center text-gray-500 py-10">
+                            目前暫無熱帶氣旋路徑預報圖。
+                        </div>
+
+                        <!-- 其他模式 (iframe) -->
+                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h'"
+                            :src="currentModelUrl"
+                            width="100%"
+                            height="600"
+                            frameborder="0"
+                            class="rounded-xl"
+                            :title="currentModelTitle"
+                            @load="onModelLoad">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="bg-white py-6 mt-8">
@@ -655,48 +467,92 @@
     };
 
     const NAV_ITEMS = [
-        { text: '首頁', href: 'index.html', current: true,
-          desktopClass: '', mobileClass: 'text-primary-dark font-medium hover:bg-blue-50' },
+        { text: '首頁', href: 'index.html', current: true, desktopClass: '', mobileClass: 'text-primary-dark font-medium hover:bg-blue-50' },
         { 
-          text: '熱帶氣旋資訊', 
-          isDropdown: true,
-          current: false,
+          text: '熱帶氣旋資訊', isDropdown: true, current: false,
           children: [
             { text: '本中心 熱帶氣旋資訊', href: 'https://zax41006-bot.github.io/MMC-TC/' },
             { text: 'HKMO 熱帶氣旋資訊', href: 'https://zax41006-bot.github.io/HKMO_MET-TC-GIS/' }
           ],
           desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' 
         },
-        { text: '模式預報（HKMO_MET）', href: '#', current: false,
-          desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' },
-        { text: '關於我們', href: 'about.html', current: false,
-          desktopClass: 'font-medium text-primary-dark', mobileClass: 'text-gray-700 hover:bg-blue-50' }
+        { text: '天氣圖像資訊', href: '#', current: false, desktopClass: '', mobileClass: 'text-gray-700 hover:bg-blue-50' },
+        { text: '關於我們', href: 'about.html', current: false, desktopClass: 'font-medium text-primary-dark', mobileClass: 'text-gray-700 hover:bg-blue-50' }
     ];
 
-    // 主選單選項
-    const BASE_OPTIONS = [
-        { value: 'mmc-r-weather', label: 'MMC 實時天氣地圖', 
-          url: 'https://macao2021928moweather-debug.github.io/mmc-r-weather/',
-          frameTitle: 'MMC 實時天氣地圖', isImage: false },
-        { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖',
-          url: 'https://zax41006-bot.github.io/MMC-GIS/',
-          frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖', isImage: false },
-        // 新增：統一的一個熱帶氣旋選項
-        { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', 
-          url: '', // 該選項不使用 iframe，直接顯示圖片
-          frameTitle: '熱帶氣旋路徑預報圖', isImage: false },
-        { value: 'satellite', label: '知天衛星雲圖',
-          url: 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU',
-          frameTitle: '知天衛星雲圖', isImage: false }
+    const IMG_BASE = "https://raw.githubusercontent.com/macao2021928moweather-debug/mmc-r-weather/gh-pages/static/images/";
+
+    const MONITOR_LAYERS = [
+        { id: 'temp_now', label: '現時氣溫', icon: 'fa-solid fa-temperature-half', file: 'temp_now.png' },
+        { id: 'temp_max', label: '最高氣溫', icon: 'fa-solid fa-temperature-arrow-up', file: 'temp_max.png' },
+        { id: 'temp_min', label: '最低氣溫', icon: 'fa-solid fa-temperature-arrow-down', file: 'temp_min.png' },
+        { id: 'humidity', label: '相對濕度', icon: 'fa-solid fa-droplet', file: 'humidity.png' },
+        { id: 'rain_h', label: '一小時降水', icon: 'fa-solid fa-cloud-showers-heavy', file: 'rain_h.png' },
+        { id: 'rain_d', label: '今日累計降水', icon: 'fa-solid fa-cloud-rain', file: 'rain_d.png' },
+        { id: 'wind_speed', label: '實時風速', icon: 'fa-solid fa-wind', file: 'wind_speed.png' },
+        { id: 'gust_speed', label: '陣風風速', icon: 'fa-solid fa-tornado', file: 'gust_speed.png' },
+        { id: 'wind_dir', label: '風向分佈', icon: 'fa-solid fa-compass', file: 'wind_dir.png' }
+    ];
+
+    const HISTORY_STATIONS = [
+        { label: '九澳', code: '九澳' },
+        { label: '外港碼頭', code: '外港碼頭' },
+        { label: '大潭山', code: '大潭山' },
+        { label: '大炮臺', code: '大炮臺' },
+        { label: '媽閣', code: '媽閣' },
+        { label: '東亞運大馬路', code: '東亞運大馬路' },
+        { label: '澳門大學', code: '澳門大學' },
+        { label: '紀念孫中山公園', code: '紀念孫中山公園' },
+        { label: '路環', code: '路環' },
+        { label: '黑沙環', code: '黑沙環' },
+        { label: '友誼大橋北', code: '友誼大橋北' },
+        { label: '友誼大橋南', code: '友誼大橋南' },
+        { label: '嘉樂庇總督大橋', code: '嘉樂庇總督大橋' },
+        { label: '澳門大橋北', code: '澳門大橋北' },
+        { label: '澳門大橋南', code: '澳門大橋南' },
+        { label: '蓮花大橋', code: '蓮花大橋' },
+        { label: '西灣大橋', code: '西灣大橋' }
+    ];
+
+    const HISTORY_TYPES = [
+        { label: '氣溫', code: 'temp' },
+        { label: '相對濕度', code: 'humidity' },
+        { label: '雨量', code: 'rain' },
+        { label: '風速', code: 'wind_speed' }
+    ];
+
+    const MODEL_OPTIONS = [
+        { value: 'precip_48h', label: '天氣預報圖', url: '', frameTitle: '天氣預報圖' },
+        { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', url: '', frameTitle: '熱帶氣旋路徑預報圖' },
+        { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
+        { value: 'satellite', label: '知天衛星雲圖', url: 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU', frameTitle: '知天衛星雲圖' }
     ];
 
     createApp({
         data() {
             return {
                 navItems: NAV_ITEMS,
-                baseOptions: BASE_OPTIONS,
-                tcOptions: [], // 存放從 JSON 讀取的氣旋資料
-                selectedTC: '', // 目前選中的氣旋 ID
+                modelOptions: MODEL_OPTIONS,
+                tcOptions: [], selectedTC: '', selectedModel: 'precip_48h',
+                
+                // 預報圖相關
+                selectedPrecipHour: '06',
+                selectedPrecipType: 'precip', // 新增：預報類型 (precip=降水, wind=風力)
+                precipHours: ['06', '12', '18', '24', '30', '36', '42', '48'],
+                isPlaying: false,
+                playTimer: null,
+
+                // 實時天氣監測相關
+                monitorMode: 'realtime', 
+                monitorLayers: MONITOR_LAYERS,
+                selectedMonitorId: 'temp_now',
+                monitorLoading: true,
+
+                // 歷史折線圖相關
+                historyStations: HISTORY_STATIONS,
+                historyTypes: HISTORY_TYPES,
+                selectedHistoryStation: '大潭山',
+                selectedHistoryType: 'temp',
 
                 weatherData: [],
                 outlookText: '載入中...',
@@ -707,19 +563,16 @@
                 specialTipsText: '',
 
                 chartMode: 'temp',
-
                 mobileOpen: false,
-                selectedMap: 'mmc-r-weather',
-                mapLoading: false,
+                modelLoading: false,
 
                 chart: null,
                 chartAriaLabel: '七日氣溫預報折線圖，載入中。',
-                mapLoadTimer: null
+                modelLoadTimer: null
             };
         },
 
         computed: {
-            // 🌟 獲取實時天氣簡報圖片的網址
             liveWeatherImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "mmc-weather"; 
@@ -727,7 +580,6 @@
                 return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/weather.png?v=${cacheBuster}`;
             },
             
-            // 🌟 獲取 48 小時預報圖片的網址
             forecast48hImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "mmc-weather"; 
@@ -735,7 +587,6 @@
                 return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast48h.png?v=${cacheBuster}`;
             },
 
-            // 🌟 【新增】獲取 15 天概率預報圖片的網址
             forecast15dImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "mmc-weather"; 
@@ -743,19 +594,55 @@
                 return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast15d.png?v=${cacheBuster}`;
             },
             
-            allMapOptions() {
-                return this.baseOptions;
-            },
             currentTCImage() {
                 if (!this.selectedTC) return '';
                 const tc = this.tcOptions.find(t => t.TC_ID === this.selectedTC);
                 return tc ? `https://zax41006-bot.github.io/MMC-TC/output/${tc.img}` : '';
             },
-            currentFrame() {
-                return this.baseOptions.find(o => o.value === this.selectedMap) || this.baseOptions[0];
+            currentModel() {
+                return this.modelOptions.find(o => o.value === this.selectedModel) || this.modelOptions[0];
             },
-            currentFrameUrl() { return this.currentFrame.url; },
-            currentFrameTitle() { return this.currentFrame.frameTitle; },
+            currentModelUrl() { return this.currentModel.url; },
+            currentModelTitle() { return this.currentModel.frameTitle; },
+
+            // 獲取對應類型與時效的預報圖
+            currentPrecip48hImage() {
+                const githubUser = "zax41006-bot"; 
+                const repoName = "MMC-weather"; 
+                const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
+                
+                // 根據選擇切換圖片前綴
+                // 預設降水圖為 precip_48h_xx.png
+                // 預設風力圖為 wind_48h_xx.png (請根據您 Github 的實際檔名調整)
+                let prefix = 'precip_48h_';
+                if (this.selectedPrecipType === 'wind') {
+                    prefix = 'wind_48h_';
+                }
+                
+                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/${prefix}${this.selectedPrecipHour}.png?v=${cacheBuster}`;
+            },
+
+            currentMonitorImage() {
+                const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-');
+                
+                if (this.monitorMode === 'realtime') {
+                    const layer = this.monitorLayers.find(l => l.id === this.selectedMonitorId) || this.monitorLayers[0];
+                    return `${IMG_BASE}${layer.file}?v=${cacheBuster}`;
+                } else {
+                    const fileName = `line_${this.selectedHistoryStation}_${this.selectedHistoryType}.png`;
+                    return `${IMG_BASE}${encodeURIComponent(fileName)}?v=${cacheBuster}`;
+                }
+            },
+            
+            currentMonitorLabel() {
+                if (this.monitorMode === 'realtime') {
+                    return this.monitorLayers.find(l => l.id === this.selectedMonitorId)?.label || '天氣圖';
+                } else {
+                    const st = this.historyStations.find(s => s.code === this.selectedHistoryStation)?.label;
+                    const tp = this.historyTypes.find(t => t.code === this.selectedHistoryType)?.label;
+                    return `${st} - ${tp} 歷史折線圖`;
+                }
+            },
 
             sevenDays() {
                 if (!this.weatherData.length) return [];
@@ -778,37 +665,47 @@
                 const raw = (this.warningsText || '').trim();
                 if (!raw || raw === '-') return [];
                 const blocks = raw.split(/\n\s*-{2,}\s*\n/);
-                return blocks
-                    .map(b => this.parseWarningBlock(b))
-                    .filter(w => w !== null);
+                return blocks.map(b => this.parseWarningBlock(b)).filter(w => w !== null);
             },
 
             specialTipsList() {
                 const t = (this.specialTipsText || '').trim();
                 if (!t || t === '-') return [];
-                return t.split(/\n\s*\n/)
-                        .map(s => s.trim())
-                        .filter(Boolean);
+                return t.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
             }
         },
 
         watch: {
-            selectedMap() {
-                this.mapLoading = true;
-                clearTimeout(this.mapLoadTimer);
-                this.mapLoadTimer = setTimeout(() => {
-                    this.mapLoading = false;
+            selectedModel() {
+                this.modelLoading = true;
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoadTimer = setTimeout(() => {
+                    this.modelLoading = false;
                 }, 10000);
             },
             selectedTC() {
-                this.mapLoading = true;
-                clearTimeout(this.mapLoadTimer);
-                this.mapLoadTimer = setTimeout(() => {
-                    this.mapLoading = false;
+                this.modelLoading = true;
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoadTimer = setTimeout(() => {
+                    this.modelLoading = false;
+                }, 3000);
+            },
+            // 監聽預報類型切換，切換時顯示 Loading
+            selectedPrecipType() {
+                this.modelLoading = true;
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoadTimer = setTimeout(() => {
+                    this.modelLoading = false;
                 }, 3000);
             },
             weatherData() {
                 this.$nextTick(() => this.initChart());
+            },
+            monitorMode() {
+                this.monitorLoading = true;
+            },
+            selectedMonitorId() {
+                this.monitorLoading = true;
             }
         },
 
@@ -826,17 +723,59 @@
         beforeUnmount() {
             document.removeEventListener('click', this.handleDocumentClick);
             document.removeEventListener('keydown', this.handleKeydown);
-            clearTimeout(this.mapLoadTimer);
+            clearTimeout(this.modelLoadTimer);
             if (this.chart) this.chart.destroy();
+            if (this.playTimer) clearInterval(this.playTimer);
         },
 
         methods: {
-            // 🌟 新分頁打開 48 小時預報圖
+            selectPrecipHour(hour) {
+                if (this.selectedPrecipHour === hour) return;
+                this.selectedPrecipHour = hour;
+                this.modelLoading = true;
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoadTimer = setTimeout(() => {
+                    this.modelLoading = false;
+                }, 3000);
+            },
+
+            prevHour() {
+                const idx = this.precipHours.indexOf(this.selectedPrecipHour);
+                const newIdx = idx > 0 ? idx - 1 : this.precipHours.length - 1;
+                this.selectPrecipHour(this.precipHours[newIdx]);
+            },
+
+            nextHour() {
+                const idx = this.precipHours.indexOf(this.selectedPrecipHour);
+                const newIdx = idx < this.precipHours.length - 1 ? idx + 1 : 0;
+                this.selectPrecipHour(this.precipHours[newIdx]);
+            },
+
+            togglePlay() {
+                this.isPlaying = !this.isPlaying;
+                if (this.isPlaying) {
+                    this.playTimer = setInterval(() => {
+                        this.nextHour();
+                    }, 1500);
+                } else {
+                    clearInterval(this.playTimer);
+                }
+            },
+
+            selectMonitorLayer(layer) {
+                if (this.selectedMonitorId === layer.id) return;
+                this.selectedMonitorId = layer.id;
+            },
+            onHistoryChange() {
+                this.monitorLoading = true;
+            },
+            onMonitorLoad() {
+                this.monitorLoading = false;
+            },
+
             open48hTab() {
                 window.open(this.forecast48hImage, '_blank');
             },
-
-            // 🌟 【新增】新分頁打開 15 天概率預報圖
             open15dTab() {
                 window.open(this.forecast15dImage, '_blank');
             },
@@ -846,11 +785,8 @@
                     const res = await fetch('./tc.json?t=' + Date.now(), { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     const data = await res.json();
-                    
                     this.tcOptions = data;
-                    if (data.length > 0) {
-                        this.selectedTC = data[0].TC_ID;
-                    }
+                    if (data.length > 0) this.selectedTC = data[0].TC_ID;
                 } catch (e) {
                     console.error('獲取 TC JSON 失敗:', e);
                 }
@@ -872,19 +808,14 @@
                     idx++;
                 }
                 const content = lines.slice(idx).join('\n').trim();
-                return {
-                    title, tag, content,
-                    level: this.detectWarningLevel(text)
-                };
+                return { title, tag, content, level: this.detectWarningLevel(text) };
             },
 
             detectWarningLevel(text) {
                 const raw = (text || '').replace(/^\uFEFF/, '').trim();
                 const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
 
-                const rainColorKey = {
-                    '黑色': 'black', '紅色': 'red', '橙色': 'orange', '黃色': 'yellow'
-                };
+                const rainColorKey = { '黑色': 'black', '紅色': 'red', '橙色': 'orange', '黃色': 'yellow' };
                 const rainRe = /(黑色|紅色|橙色|黃色)暴雨.*警報/;
                 for (const line of lines) {
                     if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
@@ -895,9 +826,7 @@
                 if (/潛在熱帶氣旋|潜在热带气旋|低壓區影響|低压区影响|低壓區警告|低压区警告|低壓區警報|低压区警报/.test(raw)) return 'lightgray';
                 if (/強季風/.test(raw)) return 'yellow';
 
-                const COLOR_KEY = {
-                    '黑色': 'black', '紅色': 'red', '橙色': 'orange', '黃色': 'yellow', '藍色': 'blue', '綠色': 'green'
-                };
+                const COLOR_KEY = { '黑色': 'black', '紅色': 'red', '橙色': 'orange', '黃色': 'yellow', '藍色': 'blue', '綠色': 'green' };
                 const COLOR_RE = '(黑色|紅色|橙色|黃色|藍色|綠色)';
 
                 for (const line of lines) {
@@ -1036,9 +965,9 @@
                 }
             },
 
-            onFrameLoad() {
-                clearTimeout(this.mapLoadTimer);
-                this.mapLoading = false;
+            onModelLoad() {
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoading = false;
             },
 
             initChart() {
