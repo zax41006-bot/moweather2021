@@ -408,16 +408,6 @@
                             </div>
                         </div>
 
-                        <!-- 🌟 澳門氣象局雷達圖 -->
-                        <div v-else-if="selectedModel === 'smg-radar'" class="w-full flex flex-col items-center py-4">
-                            <!-- 加上時間戳 ?t= 防止瀏覽器讀取舊圖 -->
-                            <img :src="'https://cdn.dsmg.gov.mo/uploads/dsmg/radarMap/240km/radar10.jpg?t=' + Date.now()" 
-                                 alt="澳門氣象局雷達圖"
-                                 class="max-w-full h-auto object-contain rounded-lg drop-shadow-md bg-white border border-gray-200"
-                                 style="max-height: 600px;"
-                                 @load="onModelLoad">
-                        </div>
-
                         <!-- 熱帶氣旋路徑圖 -->
                         <img v-else-if="selectedModel === 'mmc-tc' && currentTCImage" 
                              :src="currentTCImage + '?t=' + Date.now()" 
@@ -430,7 +420,7 @@
                         </div>
 
                         <!-- 其他模式 (iframe) -->
-                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h' && selectedModel !== 'smg-radar'"
+                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h'"
                             :src="currentModelUrl"
                             width="100%"
                             height="600"
@@ -528,9 +518,8 @@
         { label: '風速', code: 'wind_speed' }
     ];
 
-    // 已將雷達圖移至第一位
+    // 已移除雷達圖，恢復天氣預報圖為第一位
     const MODEL_OPTIONS = [
-        { value: 'smg-radar', label: '📡 澳門氣象局雷達圖', url: '', frameTitle: '澳門氣象局雷達圖' },
         { value: 'precip_48h', label: '天氣預報圖', url: '', frameTitle: '天氣預報圖' },
         { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', url: '', frameTitle: '熱帶氣旋路徑預報圖' },
         { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
@@ -542,8 +531,7 @@
             return {
                 navItems: NAV_ITEMS,
                 modelOptions: MODEL_OPTIONS,
-                // 預設顯示改為 smg-radar
-                tcOptions: [], selectedTC: '', selectedModel: 'smg-radar',
+                tcOptions: [], selectedTC: '', selectedModel: 'precip_48h',
                 
                 // 預報圖相關
                 selectedPrecipHour: '06',
