@@ -518,11 +518,11 @@
         { label: '風速', code: 'wind_speed' }
     ];
 
-    // 已移除雷達圖，恢復天氣預報圖為第一位
+    // 🌟 已將 MMC-GIS 移至第一位
     const MODEL_OPTIONS = [
+        { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
         { value: 'precip_48h', label: '天氣預報圖', url: '', frameTitle: '天氣預報圖' },
         { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', url: '', frameTitle: '熱帶氣旋路徑預報圖' },
-        { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
         { value: 'satellite', label: '知天衛星雲圖', url: 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU', frameTitle: '知天衛星雲圖' }
     ];
 
@@ -531,7 +531,8 @@
             return {
                 navItems: NAV_ITEMS,
                 modelOptions: MODEL_OPTIONS,
-                tcOptions: [], selectedTC: '', selectedModel: 'precip_48h',
+                // 🌟 預設顯示改為 mmc-gis
+                tcOptions: [], selectedTC: '', selectedModel: 'mmc-gis',
                 
                 // 預報圖相關
                 selectedPrecipHour: '06',
