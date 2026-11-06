@@ -603,11 +603,17 @@
                             </div>
                         </div>
 
-                        <!-- 🌟 修改了這裡：加入重點天氣預報按鈕 -->
+                        <!-- 🌟 修改了這裡：加入數值模式 15 天氣溫概率預報按鈕 -->
                         <div class="mt-6 flex flex-wrap justify-center items-center gap-3">
                             <a href="weather7d.html" class="weather-draft-btn inline-flex items-center">
                                 <i class="fa fa-file-text-o mr-2" aria-hidden="true"></i>查看天氣稿
                             </a>
+                            
+                            <!-- 🌟 新增：15天概率預報按鈕 -->
+                            <button @click="open15dTab" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-all shadow-md text-sm inline-flex items-center">
+                                <i class="fa-solid fa-chart-area mr-2" aria-hidden="true"></i>數值模式15天氣溫概率預報
+                            </button>
+
                             <a href="highlights.html" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all shadow-md text-sm inline-flex items-center">
                                 <i class="fa-solid fa-bullhorn mr-2" aria-hidden="true"></i>重點天氣預報
                             </a>
@@ -721,12 +727,20 @@
                 return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/weather.png?v=${cacheBuster}`;
             },
             
-            // 🌟 新增：獲取 48 小時預報圖片的網址
+            // 🌟 獲取 48 小時預報圖片的網址
             forecast48hImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "mmc-weather"; 
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
                 return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast48h.png?v=${cacheBuster}`;
+            },
+
+            // 🌟 【新增】獲取 15 天概率預報圖片的網址
+            forecast15dImage() {
+                const githubUser = "zax41006-bot"; 
+                const repoName = "mmc-weather"; 
+                const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
+                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast15d.png?v=${cacheBuster}`;
             },
             
             allMapOptions() {
@@ -817,9 +831,14 @@
         },
 
         methods: {
-            // 🌟 新增：新分頁打開 48 小時預報圖
+            // 🌟 新分頁打開 48 小時預報圖
             open48hTab() {
                 window.open(this.forecast48hImage, '_blank');
+            },
+
+            // 🌟 【新增】新分頁打開 15 天概率預報圖
+            open15dTab() {
+                window.open(this.forecast15dImage, '_blank');
             },
 
             async loadTCOptions() {
