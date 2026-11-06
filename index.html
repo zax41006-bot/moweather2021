@@ -370,10 +370,10 @@
 
                     <div class="relative w-full flex flex-col items-center flex-1 p-2">
                         
-                        <!-- 🌟 48 小時預報圖 (圖上方加下拉選單，圖下方放置極簡控制按鈕) -->
+                        <!-- 48 小時預報圖 -->
                         <div v-if="selectedModel === 'precip_48h'" class="w-full flex flex-col items-center">
                             
-                            <!-- 新增：氣象要素下拉選單 -->
+                            <!-- 氣象要素下拉選單 -->
                             <div class="w-full flex justify-center mb-5">
                                 <div class="relative inline-block w-64">
                                     <select v-model="selectedPrecipType" class="w-full appearance-none bg-white border border-gray-300 rounded-lg shadow-sm px-4 py-2 pr-10 text-sm font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors cursor-pointer">
@@ -392,23 +392,30 @@
                                  style="max-height: 600px;"
                                  @load="onModelLoad">
                                  
-                            <!-- 下方極簡控制按鈕 (完全對齊截圖的圓圈箭頭設計) -->
+                            <!-- 下方控制按鈕 -->
                             <div class="flex items-center justify-center gap-8 mb-4">
-                                <!-- 左箭頭 -->
                                 <button type="button" @click="prevHour" class="w-12 h-12 rounded-full border-2 border-[#1f2937] flex items-center justify-center text-[#1f2937] hover:bg-gray-100 transition-all focus:outline-none">
                                     <i class="fa-solid fa-arrow-left text-lg"></i>
                                 </button>
                                 
-                                <!-- 播放/暫停 -->
                                 <button type="button" @click="togglePlay" class="w-12 h-12 rounded-full border-2 border-[#1f2937] flex items-center justify-center text-[#1f2937] hover:bg-gray-100 transition-all focus:outline-none">
                                     <i :class="isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play'" class="text-lg" :style="isPlaying ? '' : 'margin-left: 3px;'"></i>
                                 </button>
                                 
-                                <!-- 右箭頭 -->
                                 <button type="button" @click="nextHour" class="w-12 h-12 rounded-full border-2 border-[#1f2937] flex items-center justify-center text-[#1f2937] hover:bg-gray-100 transition-all focus:outline-none">
                                     <i class="fa-solid fa-arrow-right text-lg"></i>
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- 🌟 澳門氣象局雷達圖 -->
+                        <div v-else-if="selectedModel === 'smg-radar'" class="w-full flex flex-col items-center py-4">
+                            <!-- 加上時間戳 ?t= 防止瀏覽器讀取舊圖 -->
+                            <img :src="'https://cdn.dsmg.gov.mo/uploads/dsmg/radarMap/240km/radar10.jpg?t=' + Date.now()" 
+                                 alt="澳門氣象局雷達圖"
+                                 class="max-w-full h-auto object-contain rounded-lg drop-shadow-md bg-white border border-gray-200"
+                                 style="max-height: 600px;"
+                                 @load="onModelLoad">
                         </div>
 
                         <!-- 熱帶氣旋路徑圖 -->
@@ -423,7 +430,7 @@
                         </div>
 
                         <!-- 其他模式 (iframe) -->
-                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h'"
+                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h' && selectedModel !== 'smg-radar'"
                             :src="currentModelUrl"
                             width="100%"
                             height="600"
@@ -521,7 +528,9 @@
         { label: '風速', code: 'wind_speed' }
     ];
 
+    // 已將雷達圖移至第一位
     const MODEL_OPTIONS = [
+        { value: 'smg-radar', label: '📡 澳門氣象局雷達圖', url: '', frameTitle: '澳門氣象局雷達圖' },
         { value: 'precip_48h', label: '天氣預報圖', url: '', frameTitle: '天氣預報圖' },
         { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', url: '', frameTitle: '熱帶氣旋路徑預報圖' },
         { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
@@ -533,11 +542,12 @@
             return {
                 navItems: NAV_ITEMS,
                 modelOptions: MODEL_OPTIONS,
-                tcOptions: [], selectedTC: '', selectedModel: 'precip_48h',
+                // 預設顯示改為 smg-radar
+                tcOptions: [], selectedTC: '', selectedModel: 'smg-radar',
                 
                 // 預報圖相關
                 selectedPrecipHour: '06',
-                selectedPrecipType: 'precip', // 新增：預報類型 (precip=降水, wind=風力)
+                selectedPrecipType: 'precip', 
                 precipHours: ['06', '12', '18', '24', '30', '36', '42', '48'],
                 isPlaying: false,
                 playTimer: null,
@@ -605,15 +615,11 @@
             currentModelUrl() { return this.currentModel.url; },
             currentModelTitle() { return this.currentModel.frameTitle; },
 
-            // 獲取對應類型與時效的預報圖
             currentPrecip48hImage() {
                 const githubUser = "zax41006-bot"; 
                 const repoName = "MMC-weather"; 
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
                 
-                // 根據選擇切換圖片前綴
-                // 預設降水圖為 precip_48h_xx.png
-                // 預設風力圖為 wind_48h_xx.png (請根據您 Github 的實際檔名調整)
                 let prefix = 'precip_48h_';
                 if (this.selectedPrecipType === 'wind') {
                     prefix = 'wind_48h_';
@@ -690,7 +696,6 @@
                     this.modelLoading = false;
                 }, 3000);
             },
-            // 監聽預報類型切換，切換時顯示 Loading
             selectedPrecipType() {
                 this.modelLoading = true;
                 clearTimeout(this.modelLoadTimer);
