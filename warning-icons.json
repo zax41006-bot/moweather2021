@@ -1,0 +1,112 @@
+[
+  {
+    "matchAll": ["取消|取消警報|取消警告"],
+    "image": "",
+    "level": "cancelled"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "黃色|黄色", "東北|东北"],
+    "image": "Typhoon_yellow_NE.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "黃色|黄色", "西北"],
+    "image": "Typhoon_yellow_NW.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "黃色|黄色", "東南|东南"],
+    "image": "Typhoon_yellow_SE.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "黃色|黄色", "西南"],
+    "image": "Typhoon_yellow_SW.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "黃色|黄色"],
+    "image": "Typhoon_yellow.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "橙色"],
+    "image": "Typhoon_orange.png",
+    "level": "orange"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "紅色|红色"],
+    "image": "Typhoon_red.png",
+    "level": "red"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "藍色|蓝色"],
+    "image": "Typhoon_blue.png",
+    "level": "blue"
+  },
+  {
+    "matchAll": ["颱風|台风|熱帶氣旋|热带气旋", "綠色|绿色"],
+    "image": "Typhoon_green.png",
+    "level": "green"
+  },
+  {
+    "matchAll": ["酷熱|酷热", "黃色|黄色"],
+    "image": "Hot_yellow.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["酷熱|酷热", "橙色"],
+    "image": "Hot_orange.png",
+    "level": "orange"
+  },
+  {
+    "matchAll": ["酷熱|酷热", "紅色|红色"],
+    "image": "Hot_red.png",
+    "level": "red"
+  },
+  {
+    "matchAll": ["寒冷", "黃色|黄色"],
+    "image": "Cold_yellow.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["寒冷", "橙色"],
+    "image": "Cold_orange.png",
+    "level": "orange"
+  },
+  {
+    "matchAll": ["寒冷", "紅色|红色"],
+    "image": "Cold_red.png",
+    "level": "red"
+  },
+  {
+    "matchAll": ["暴雨", "黃色|黄色"],
+    "image": "Heavy_rain_yellow.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["暴雨", "橙色"],
+    "image": "Heavy_rain_orange.png",
+    "level": "orange"
+  },
+  {
+    "matchAll": ["暴雨", "紅色|红色"],
+    "image": "Heavy_rain_red.png",
+    "level": "red"
+  },
+  {
+    "matchAll": ["暴雨", "黑色"],
+    "image": "Heavy_rain_black.png",
+    "level": "black"
+  },
+  {
+    "matchAll": ["強季風|强季风"],
+    "image": "Storm_Monsoon.png",
+    "level": "yellow"
+  },
+  {
+    "matchAll": ["潛在熱帶氣旋|潜在热带气旋|低壓區|低压区"],
+    "image": "LOW-TC.png",
+    "level": "lightgray"
+  }
+]
