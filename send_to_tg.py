@@ -6,7 +6,7 @@ BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
 CHAT_ID = os.environ.get("TG_CHAT_ID")
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
-# 🌟 這裡已經修正為你真實的網站網址
+# 🌟 請確保這裡是真實的網站網址
 WEBSITE_URL = "https://zax41006-bot.github.io/moweather2021/"
 
 def send_telegram_message(text, label):
@@ -50,21 +50,24 @@ def build_forecast_2d_msg():
     msg += f"🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
     return msg
 
-# ================= 產生「七日天氣」訊息 =================
+# ================= 產生「七日天氣」訊息 (已對調邏輯) =================
 def build_forecast_7d_msg():
-    text_7d = read_file("weather7d.txt")
-    text_forecast = read_file("forecast.txt")
+    text_7d = read_file("weather7d.txt")       # 現在放表格數據
+    text_forecast = read_file("forecast.txt")  # 現在放天氣展望
     
     if not text_7d or not text_forecast: return None
 
+    # 解析 weather7d.txt (表格與時間)
     lines = text_7d.split("\n")
-    issued_time = lines[0].strip() if lines else "請見官網"
-    outlook = "\n".join(lines[1:]).strip()
-
+    issued_time = "請見官網"
     days_text = ""
-    for line in text_forecast.split("\n"):
+    
+    for line in lines:
         line = line.strip()
-        if not line or line.startswith("發佈"): continue
+        if not line: continue
+        if "發佈" in line and "更新時間" in line:
+            issued_time = line.replace("發佈/更新時間：", "").strip()
+            continue
         if "|" in line:
             cols = [c.strip() for c in line.split("|")]
             if len(cols) >= 6:
@@ -73,6 +76,13 @@ def build_forecast_7d_msg():
                 days_text += f"🌡️ 氣溫：{cols[3]}°C ~ {cols[2]}°C\n"
                 days_text += f"💧 濕度：{cols[5]}% ~ {cols[4]}%\n"
                 days_text += "━━━━━━━━━━━━━━\n"
+
+    # 解析 forecast.txt (天氣展望)
+    parts = text_forecast.split("\n\n")
+    if len(parts) >= 2:
+        outlook = "\n".join(parts[1:]).strip()
+    else:
+        outlook = text_forecast
 
     msg = f"📢 <b>【澳門氣象中心 MMC】七日天氣預報</b>\n"
     msg += f"🕒 發佈時間：{issued_time}\n\n"
@@ -96,7 +106,7 @@ if __name__ == "__main__":
     current_state = f"{text_2d}||{text_7d}||{text_forecast}"
     last_state = read_file("_last_all.txt")
 
-    # 3. 如果狀態完全沒變（例如你手動點擊測試，但沒改檔案），就跳過
+    # 3. 如果狀態完全沒變（例如手動點擊測試，但沒改檔案），就跳過
     if current_state == last_state:
         print("⏭️ 三個 txt 檔案皆未更新，跳過發送。")
         exit(0)
