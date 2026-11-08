@@ -8,7 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 🌟 引入天氣圖標共用工具 (文字版仍需要用到) -->
+    <script src="weather-utils.js"></script>
 
     <style>
         [v-cloak] { display: none; }
@@ -30,101 +31,8 @@
             color: #1f2937;
         }
 
-        /* ============================================================
-           ★ 圖文版美化樣式
-           ============================================================ */
-
-        .graphic-main-title {
-            text-align: center;
-            font-weight: 900;
-            font-size: 1.85rem;
-            color: #000000;
-            margin-bottom: 1.15rem;
-            letter-spacing: 0.18em;
-            text-indent: 0.18em;
-        }
-        @media (min-width: 640px) {
-            .graphic-main-title { font-size: 2.15rem; }
-        }
-
-        /* 使用 separate + 單向 border，避免合併邊框時粗細不一 */
-        .day-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            table-layout: fixed;
-            background: #ffffff;
-            border-top: 2px solid #1565C0;
-            border-left: 2px solid #1565C0;
-        }
-        .day-table td {
-            border-right: 2px solid #1565C0;
-            border-bottom: 2px solid #1565C0;
-            vertical-align: middle;
-        }
-
-        .day-label-cell {
-            width: 16%;
-            padding: 1.3rem 0.5rem;
-            background: #E3F2FD;
-            font-weight: 800;
-            font-size: 1.3rem;
-            color: #000000;
-            text-align: center;
-            letter-spacing: 0.08em;
-        }
-        .day-icon-cell {
-            width: 20%;
-            padding: 1rem;
-            text-align: center;
-            background: #ffffff;
-        }
-        .day-icon-cell img {
-            width: 3.5rem;
-            height: 3.5rem;
-            object-fit: contain;
-            display: inline-block;
-        }
-        .day-text-cell {
-            width: 64%;
-            padding: 1.2rem 1.4rem;
-            text-align: left;
-            background: #ffffff;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            color: #1f2937;
-            letter-spacing: 0.01em;
-        }
-
-        .graphic-footer {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 3px;
-            margin-top: 1rem;
-            padding-right: 0.35rem;
-        }
-        .footer-issued {
-            font-size: 0.85rem;
-            color: #4b5563;
-            letter-spacing: 0.02em;
-        }
-        .footer-source {
-            font-size: 0.95rem;
-            color: #0d47a1;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-        }
-
-        /* 手機預覽時縮小，但截圖時強制桌面寬度 (見 saveAsImage 的 windowWidth) */
         @media (max-width: 640px) {
-            body { padding: 1rem; font-size: 0.9rem; line-height: 1.85; }
-            .day-label-cell { font-size: 1rem; padding: 0.9rem 0.4rem; }
-            .day-icon-cell img { width: 2.4rem; height: 2.4rem; }
-            .day-text-cell { font-size: 0.78rem; padding: 0.75rem 0.8rem; }
-            .graphic-main-title { font-size: 1.35rem; letter-spacing: 0.1em; text-indent: 0.1em; }
-            .footer-issued { font-size: 0.75rem; }
-            .footer-source { font-size: 0.85rem; }
+            body { padding: 1rem; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -132,6 +40,7 @@
 
 <div id="app" v-cloak>
 
+    <!-- 🌟 網頁主體保留純文字版 -->
     <div class="weather-text">{{ text }}</div>
 
     <!-- ★ 浮動「圖文版」按鈕 -->
@@ -146,7 +55,7 @@
         <span>圖文版</span>
     </button>
 
-    <!-- ★ 圖文版模態框 -->
+    <!-- ★ 圖文版模態框 (直接顯示 Python 生成的圖片) -->
     <div v-if="showGraphic"
          class="fixed inset-0 z-[2000] flex items-center justify-center p-2 sm:p-4"
          role="dialog"
@@ -157,26 +66,20 @@
 
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden">
 
+            <!-- 頂部工具列 -->
             <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-blue-50 flex-shrink-0">
-                <h3 id="graphic-modal-title"
-                    class="text-base sm:text-lg font-bold text-blue-800 flex items-center gap-2">
+                <h3 id="graphic-modal-title" class="text-base sm:text-lg font-bold text-blue-800 flex items-center gap-2">
                     <i class="fa-solid fa-image" aria-hidden="true"></i>
                     <span>圖文版預報</span>
                 </h3>
 
                 <div class="flex items-center gap-2">
-                    <button type="button"
-                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium
-                                   bg-blue-700 text-white hover:bg-blue-800
-                                   transition-colors disabled:opacity-60 disabled:cursor-wait"
-                            :disabled="savingImage"
-                            aria-label="保存圖文版為圖片"
-                            @click="saveAsImage">
-                        <i class="fa-solid"
-                           :class="savingImage ? 'fa-spinner fa-spin' : 'fa-download'"
-                           aria-hidden="true"></i>
-                        <span>{{ savingImage ? '保存中...' : '保存為圖片' }}</span>
-                    </button>
+                    <a :href="graphicImageUrl" download="澳門今明兩日天氣預報.png"
+                       class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium
+                              bg-blue-700 text-white hover:bg-blue-800 transition-colors">
+                        <i class="fa-solid fa-download" aria-hidden="true"></i>
+                        <span>下載圖片</span>
+                    </a>
 
                     <button type="button"
                             class="text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full w-9 h-9 flex items-center justify-center transition-colors"
@@ -187,34 +90,19 @@
                 </div>
             </div>
 
-            <div class="overflow-y-auto p-4 sm:p-6">
-                <div ref="graphicContent" class="bg-white p-3 sm:p-5">
-
-                    <h4 class="graphic-main-title">今明兩日天氣預報</h4>
-
-                    <table class="day-table">
-                        <tbody>
-                            <tr>
-                                <td class="day-label-cell">今日</td>
-                                <td class="day-icon-cell">
-                                    <img :src="'weather icon/' + pickIcon(todayText)" alt="今日天氣圖標">
-                                </td>
-                                <td class="day-text-cell">{{ todayText || '暫無資料' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="day-label-cell">明日</td>
-                                <td class="day-icon-cell">
-                                    <img :src="'weather icon/' + pickIcon(tomorrowText)" alt="明日天氣圖標">
-                                </td>
-                                <td class="day-text-cell">{{ tomorrowText || '暫無資料' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="graphic-footer">
-                        <div class="footer-issued">發佈/更新時間：{{ issuedText }}</div>
-                        <div class="footer-source">澳門氣象中心 MMC 發佈</div>
-                    </div>
+            <!-- 圖片顯示區 -->
+            <div class="overflow-y-auto p-4 sm:p-6 bg-gray-100 flex justify-center">
+                <!-- 🌟 這裡直接加載 Python 生成的圖片，並加上時間戳防止緩存 -->
+                <img :src="graphicImageUrl" 
+                     alt="今明兩日天氣預報圖文版" 
+                     class="max-w-full h-auto shadow-md border border-gray-300 bg-white"
+                     @load="imageLoading = false"
+                     v-show="!imageLoading">
+                     
+                <!-- 圖片載入中的 Loading 提示 -->
+                <div v-if="imageLoading" class="flex flex-col items-center justify-center py-20 text-gray-500">
+                    <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-blue-600"></i>
+                    <p>圖片載入中...</p>
                 </div>
             </div>
 
@@ -233,11 +121,9 @@
         data() {
             return {
                 text: '載入中…',
-                todayText: '',
-                tomorrowText: '',
-                issuedText: '',
                 showGraphic: false,
-                savingImage: false
+                imageLoading: true,
+                graphicImageUrl: '' // 動態生成圖片 URL
             };
         },
 
@@ -258,64 +144,17 @@
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
                     this.text = raw;
-                    this.parseWeather2d(raw);
                 } catch (e) {
                     console.error('讀取 weather2d.txt 失敗:', e);
                     this.text = '（天氣資料暫時無法載入）';
-                    this.todayText = '（載入失敗）';
-                    this.tomorrowText = '（載入失敗）';
-                    this.issuedText = '（時間暫時無法載入）';
                 }
-            },
-
-            parseWeather2d(raw) {
-                const issuedMatch = raw.match(/[（(]\s*發佈\/更新時間[:：]\s*([^）)]+)\s*[）)]/);
-                this.issuedText = issuedMatch ? issuedMatch[1].trim() : '（時間暫時無法載入）';
-
-                const todayMatch = raw.match(/今日天氣預報\s*\n([\s\S]*?)(?=\n\s*(?:明日天氣預報|[（(]))/);
-                this.todayText = todayMatch
-                    ? todayMatch[1].trim().replace(/\n+/g, ' ')
-                    : '（暫無資料）';
-
-                const tomorrowMatch = raw.match(/明日天氣預報\s*\n([\s\S]*?)(?=\n\s*[（(])/);
-                this.tomorrowText = tomorrowMatch
-                    ? tomorrowMatch[1].trim().replace(/\n+/g, ' ')
-                    : '（暫無資料）';
-            },
-
-            pickIcon(text) {
-                return this.matchIcon(text || '');
-            },
-
-            matchIcon(text) {
-                if (!text) return 'cloud.png';
-                const t = text;
-
-                const hasThunder = /雷暴/.test(t);
-                const hasRain    = /(幾陣驟雨|間中有驟雨|有驟雨|有幾陣雨|間中有雨|有雨|有微雨|有幾陣微雨)/.test(t);
-                const hasSunny   = /(天晴)/.test(t);
-                const hasBriefSunny = /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴|天晴，部分時間多雲)/.test(t);
-
-                /* ★ 煙霞 / 烟霞 → Haze.png */
-                const hasHaze = /(煙霞|烟霞)/.test(t);
-                /* ★ 薄霧 / 薄雾 / 霧 / 雾 → fog.png */
-                const hasFog1 = /(薄霧|薄雾)/.test(t);
-                const hasFog2 = /(霧|雾)/.test(t);
-
-                if (hasThunder) return 'rain3_thunder.png';
-                if (hasRain && hasSunny) return 'Sun_cloud_rain.png';
-                if (hasRain) return 'rain2.png';
-                if (hasHaze) return 'Haze.png';
-                if (hasFog1) return 'fog1.png';
-                if (hasFog2) return 'fog2.png';
-                if (hasBriefSunny) return 'Sun_cloud.png';
-                if (hasSunny) return 'Sun.png';
-                if (/(大致多雲|多雲|密雲|陰)/.test(t)) return 'cloud.png';
-                return 'cloud.png';
             },
 
             openGraphic() {
                 this.showGraphic = true;
+                this.imageLoading = true;
+                // 加上時間戳，強制瀏覽器抓取最新的 Python 生成圖片
+                this.graphicImageUrl = `weather2d_graphic.png?t=${Date.now()}`;
                 document.body.style.overflow = 'hidden';
             },
 
@@ -327,45 +166,6 @@
             handleKeydown(e) {
                 if (e.key === 'Escape' && this.showGraphic) {
                     this.closeGraphic();
-                }
-            },
-
-            async saveAsImage() {
-                if (this.savingImage) return;
-                const el = this.$refs.graphicContent;
-                if (!el) return;
-
-                if (typeof html2canvas !== 'function') {
-                    console.error('html2canvas 未載入');
-                    return;
-                }
-
-                this.savingImage = true;
-                try {
-                    const canvas = await html2canvas(el, {
-                        scale: 3,
-                        backgroundColor: '#ffffff',
-                        useCORS: true,
-                        logging: false,
-                        /* ★ 強制以桌面寬度渲染媒體查詢，
-                           確保手機／平板／電腦輸出完全一致 */
-                        windowWidth: 1280,
-                        windowHeight: 900
-                    });
-
-                    const dataUrl = canvas.toDataURL('image/png');
-                    const stamp = (this.issuedText || '').replace(/[^\d]/g, '').slice(0, 12);
-
-                    const a = document.createElement('a');
-                    a.href = dataUrl;
-                    a.download = `澳門今明兩日天氣預報_${stamp}.png`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                } catch (e) {
-                    console.error('保存圖片失敗:', e);
-                } finally {
-                    this.savingImage = false;
                 }
             }
         }
