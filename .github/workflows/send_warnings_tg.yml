@@ -7,10 +7,10 @@ on:
     paths:
       # 🌟 只有當 warnings.txt 被修改時才觸發
       - 'warnings.txt'
-  workflow_dispatch: # 允許在網頁上手動點擊測試
+  workflow_dispatch: # 允許你在網頁上手動點擊測試
 
 permissions:
-  contents: write # 允許機器人把記憶檔 Commit 回倉庫
+  contents: write # 允許機器人把記憶檔和歷史紀錄 Commit 回倉庫
 
 jobs:
   send_warnings:
@@ -33,13 +33,14 @@ jobs:
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: python send_warnings_tg.py
 
-      - name: 提交記憶檔 (防止重複發送)
+      - name: 提交記憶檔與歷史紀錄 TXT
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
           
-          # 加入警報專屬的記憶檔
-          git add _last_warnings.txt
+          # 🌟 追蹤防重複發送的記憶檔，以及新生成的 TXT 歷史紀錄檔
+          git add _last_warnings.txt warnings_history.txt
           
-          # 如果有變動才 commit，並加上 [skip ci]
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Warnings TG state [skip ci]" && git pull --rebase origin main && git push)
+          # 如果有變動才 commit，並加上 [skip ci] 避免無限循環觸發
+          # 加上 git pull --rebase 防止與其他工作流同時執行時發生衝突
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Warnings TG state & history txt [skip ci]" && git pull --rebase origin main && git push)
