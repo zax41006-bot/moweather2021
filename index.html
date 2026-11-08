@@ -61,11 +61,6 @@
             padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 0.75rem;
         }
 
-        .tip-card { border-radius: 10px; overflow: hidden; border: 2px solid #991b1b; background: #ffffff; margin-bottom: 0.75rem; }
-        .tip-card:last-child { margin-bottom: 0; }
-        .tip-head { background: #991b1b; color: #ffffff; padding: 0.6rem 1rem; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.55rem; }
-        .tip-body { padding: 0.9rem 1rem; background: #fef2f2; color: #1f2937; line-height: 1.85; font-size: 0.9rem; white-space: pre-wrap; word-break: break-word; }
-
         .embed-frame-wrap { width: 100%; height: 100%; min-height: 420px; border-radius: 8px; overflow: hidden; background: #ffffff; }
         .embed-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
 
@@ -162,21 +157,35 @@
             </div>
         </section>
 
-        <!-- 特別天氣提示 / 警告 -->
+        <!-- 🌟 特別天氣提示 (全新卡片設計，支援多提示與完美換行) -->
         <section v-if="specialTipsList.length" class="mb-8" aria-labelledby="special-tips-heading">
             <h2 id="special-tips-heading" class="sr-only">特別天氣提示</h2>
-            <div class="weather-card p-3">
-                <div v-for="(tip, i) in specialTipsList" :key="i" class="tip-card">
-                    <div class="tip-head">
+            <div class="flex flex-col gap-4">
+                <!-- 外層容器加上 2px 的完整邊框 (深紅色) -->
+                <div v-for="(tip, i) in specialTipsList" :key="i" 
+                     class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col"
+                     style="border: 2px solid #991b1b;">
+                    
+                    <!-- 頂部標題列 (跨越整個寬度) -->
+                    <div class="px-5 py-3 font-bold text-base flex items-center gap-2 border-b"
+                         style="background: #991b1b; color: #ffffff; border-color: #991b1b;">
                         <i class="fa-solid fa-bullhorn" aria-hidden="true"></i>
                         <span>特別天氣提示</span>
                     </div>
-                    <div class="tip-body">{{ tip }}</div>
+
+                    <!-- 下方主體區塊 (內容區) -->
+                    <div class="px-5 py-4 flex-1 flex flex-col justify-between" style="background: #fef2f2;">
+                        <!-- 內文：保留換行，增加行距 -->
+                        <div class="text-gray-800 text-sm leading-loose whitespace-pre-wrap break-words">{{ tip.content }}</div>
+                        
+                        <!-- 發佈時間：靠右顯示 -->
+                        <div v-if="tip.issuedTime" class="text-right text-xs text-gray-500 mt-4">{{ tip.issuedTime }}</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 🌟 天氣警告 (標題置頂，左圖右字，完整外框) -->
+        <!-- 🌟 天氣警告 (左圖右字，完整外框) -->
         <section v-if="warnings.length" class="mb-8" aria-labelledby="warning-heading">
             <h2 id="warning-heading" class="sr-only">天氣警告</h2>
             
@@ -186,7 +195,7 @@
                      class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col"
                      :style="{ border: '2px solid ' + colorOf(w.level).border }">
                     
-                    <!-- 🌟 頂部標題列 (跨越整個寬度，讓厚邊框包覆上方) -->
+                    <!-- 頂部標題列 (跨越整個寬度，讓厚邊框包覆上方) -->
                     <div class="px-5 py-3 font-bold text-base flex items-center gap-2 border-b"
                          :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text, borderColor: colorOf(w.level).border }">
                         <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
@@ -627,10 +636,34 @@
                 return blocks.map(b => this.parseWarningBlock(b)).filter(w => w !== null);
             },
 
+            // 🌟 全新特別天氣提示解析：支援多提示 (---) 與自動提取發佈時間
             specialTipsList() {
                 const t = (this.specialTipsText || '').trim();
                 if (!t || t === '-') return [];
-                return t.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+
+                const blocks = t.split(/\n\s*-{3,}\s*\n/);
+
+                return blocks.map(block => {
+                    const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+                    if (!lines.length) return null;
+
+                    let contentLines = [];
+                    let issuedTime = '';
+
+                    lines.forEach(line => {
+                        if (line.includes('發佈/更新時間') || line.includes('發佈時間')) {
+                            issuedTime = line;
+                        } 
+                        else if (line !== '[特別天氣提示]' && line !== '[特别天气提示]') {
+                            contentLines.push(line);
+                        }
+                    });
+
+                    return {
+                        content: contentLines.join('\n'),
+                        issuedTime: issuedTime
+                    };
+                }).filter(Boolean);
             }
         },
 
@@ -748,7 +781,6 @@
                 return COLOR_MAP[level] || COLOR_MAP.yellow;
             },
 
-            // 🌟 核心修改：解析警報，直接從 JSON 取得圖片與顏色級別
             parseWarningBlock(block) {
                 const text = block.trim();
                 if (!text || text === '-') return null;
@@ -762,29 +794,26 @@
                 }
                 const content = lines.slice(idx).join('\n').trim();
                 
-                // 取得 JSON 匹配結果
                 const rule = this.getWarningRule(text);
                 const imageName = rule ? rule.image : '';
-                const level = rule ? rule.level : 'yellow'; // 如果找不到規則，預設為黃色
+                const level = rule ? rule.level : 'yellow';
                 
                 return { title, tag, content, level, image: imageName };
             },
 
-            // 🌟 新增：遍歷 JSON 尋找匹配的規則
             getWarningRule(text) {
                 if (!this.warningIcons || !Array.isArray(this.warningIcons)) return null;
                 
                 const raw = (text || '').replace(/^\uFEFF/, '').trim();
 
                 for (const rule of this.warningIcons) {
-                    // 檢查這條規則的所有條件是否都符合 (AND 邏輯)
                     const isMatch = rule.matchAll.every(keywordRegex => {
                         const regex = new RegExp(keywordRegex);
                         return regex.test(raw);
                     });
 
                     if (isMatch) {
-                        return rule; // 找到符合的，直接回傳整條規則 (包含 image 與 level)
+                        return rule;
                     }
                 }
                 
