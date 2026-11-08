@@ -1,13 +1,14 @@
 import requests
 import os
 import re
-import json
+from datetime import datetime
 
 BOT_TOKEN = os.environ.get("TG_BOT_TOKEN")
 CHAT_ID = os.environ.get("TG_CHAT_ID")
 BASE_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
 WEBSITE_URL = "https://zax41006-bot.github.io/moweather2021/"
+HISTORY_FILE = "warnings_history.txt"
 
 def read_file(filename):
     if not os.path.exists(filename): return ""
@@ -18,7 +19,6 @@ def save_last_content(filename, content):
     with open(filename, "w", encoding="utf-8") as f:
         f.write(content)
 
-# 🌟 讀取並匹配 warning-icons.json
 def get_warning_rule(text, rules):
     if not rules: return None
     raw = text.strip()
@@ -28,29 +28,17 @@ def get_warning_rule(text, rules):
             return rule
     return None
 
-# 🌟 發送圖片+文字 (或純文字)
 def send_warning(text, image_name):
     image_path = os.path.join("weather icon", image_name) if image_name else None
     
     if image_name and os.path.exists(image_path):
-        # 如果有圖片，使用 sendPhoto
         url = f"{BASE_URL}/sendPhoto"
         with open(image_path, 'rb') as photo:
-            payload = {
-                "chat_id": CHAT_ID,
-                "caption": text,
-                "parse_mode": "HTML"
-            }
+            payload = {"chat_id": CHAT_ID, "caption": text, "parse_mode": "HTML"}
             res = requests.post(url, data=payload, files={"photo": photo})
     else:
-        # 如果沒圖片，使用 sendMessage
         url = f"{BASE_URL}/sendMessage"
-        payload = {
-            "chat_id": CHAT_ID,
-            "text": text,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True
-        }
+        payload = {"chat_id": CHAT_ID, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True}
         res = requests.post(url, json=payload)
         
     if res.status_code == 200:
@@ -58,19 +46,80 @@ def send_warning(text, image_name):
     else:
         print(f"❌ 發送失敗: {res.text}")
 
+# 🌟 解析時間並計算時長
+def parse_time(time_str):
+    try:
+        return datetime.strptime(time_str, "%Y年%m月%d日%H時%M分")
+    except:
+        return datetime.now()
+
+def calc_duration(start_str, end_str):
+    start = parse_time(start_str)
+    end = parse_time(end_str)
+    delta = end - start
+    days = delta.days
+    hours, remainder = divmod(delta.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+    
+    parts = []
+    if days > 0: parts.append(f"{days}天")
+    if hours > 0: parts.append(f"{hours}小時")
+    if minutes > 0: parts.append(f"{minutes}分")
+    return "".join(parts) if parts else "少於1分"
+
+# 🌟 更新 TXT 歷史紀錄
+def update_history_txt(tag, content, status):
+    lines = []
+    if os.path.exists(HISTORY_FILE):
+        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+            lines = [line.strip() for line in f.readlines() if line.strip()]
+
+    # 抓取內容中的時間
+    time_match = re.search(r'(\d{4}年\d{1,2}月\d{1,2}日\d{1,2}時\d{1,2}分)', content)
+    event_time = time_match.group(1) if time_match else datetime.now().strftime("%Y年%m月%d日%H時%M分")
+
+    updated = False
+
+    if status == "issued":
+        # 檢查是否已經有一筆「生效中」的同類型警報
+        exists = any(line.startswith(f"{tag}|") and "生效中" in line for line in lines)
+        if not exists:
+            # 新增一行：警報類型|發出時間|取消時間|總共生效
+            lines.append(f"{tag}|{event_time}||生效中")
+            updated = True
+
+    elif status == "cancelled":
+        # 尋找對應的「生效中」行並更新
+        for i, line in enumerate(lines):
+            if line.startswith(f"{tag}|") and "生效中" in line:
+                parts = line.split('|')
+                issue_time = parts[1]
+                duration = calc_duration(issue_time, event_time)
+                lines[i] = f"{tag}|{issue_time}|{event_time}|{duration}"
+                updated = True
+                break
+        
+        # 如果找不到對應的（例如手動新增的取消），就直接補上一行
+        if not updated:
+            lines.append(f"{tag}||{event_time}|已取消")
+            updated = True
+
+    if updated:
+        with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+        print(f"📝 歷史紀錄已更新 ({status})")
+
 def build_and_send_warnings():
     raw_text = read_file("warnings.txt")
-    if not raw_text or raw_text == "-": 
-        print("ℹ️ 目前無天氣警報。")
-        return
-
-    # 讀取圖片規則
     rules = []
     if os.path.exists("warning-icons.json"):
         with open("warning-icons.json", "r", encoding="utf-8") as f:
             rules = json.load(f)
 
-    # 用 --- 分割多個警報
+    if not raw_text or raw_text == "-":
+        print("ℹ️ 目前無天氣警報。")
+        return
+
     blocks = re.split(r'\n\s*-{3,}\s*\n', raw_text)
     
     for block in blocks:
@@ -78,29 +127,37 @@ def build_and_send_warnings():
         if not block: continue
         
         lines = block.split('\n')
-        title = lines[0].strip()
-        
         tag = ""
-        content_start_idx = 1
-        if len(lines) > 1 and lines[1].strip().startswith('#'):
-            tag = lines[1].strip().replace('#', '')
-            content_start_idx = 2
-            
-        content = "\n".join(lines[content_start_idx:]).strip()
+        content_lines = []
         
-        # 組裝單個警報的 HTML 文字
+        for line in lines:
+            line = line.strip()
+            if not line: continue
+            if "MMC天氣警報" in line: continue
+            if line.startswith('#'):
+                tag = line.replace('#', '').strip()
+            else:
+                content_lines.append(line)
+                
+        content = "\n".join(content_lines)
+        
+        status = "cancelled" if "取消" in content else "issued"
+        
+        # 更新 TXT 歷史紀錄
+        update_history_txt(tag, content, status)
+
+        # 取得圖片與顏色
+        rule = get_warning_rule(block, rules)
+        image_name = rule.get("image") if rule else None
+        level = rule.get("level") if rule else "yellow"
+
+        # 發送 TG
         msg = f"🚨 <b>【澳門氣象中心 MMC】天氣警報</b>\n\n"
-        msg += f"<b>{title}</b>\n"
         if tag:
             msg += f"<b>【{tag}】</b>\n"
         msg += f"{content}\n\n"
-        msg += f"🌐 <b>詳細資訊：</b>\n{WEBSITE_URL}"
-
-        # 匹配圖片
-        rule = get_warning_rule(block, rules)
-        image_name = rule.get("image") if rule else None
+        msg += f"🌐 <b>詳細資訊請瀏覽 MMC 官網：</b>\n{WEBSITE_URL}"
         
-        # 發送
         send_warning(msg, image_name)
 
 if __name__ == "__main__":
