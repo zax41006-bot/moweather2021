@@ -1,11 +1,11 @@
-name: Check Txt and Send Weather to Telegram
+name: Send Weather Text to Telegram
 
 on:
   push:
     branches:
       - main
     paths:
-      # 🌟 只有當這三個檔案被修改並 Push 時，才會觸發
+      # 🌟 只有當這三個檔案被修改並 Push 時才觸發
       - 'weather2d.txt'
       - 'weather7d.txt'
       - 'forecast.txt'
@@ -27,6 +27,7 @@ jobs:
           python-version: '3.10'
 
       - name: 安裝依賴
+        # 因為這支腳本只發送文字，所以只需要 requests
         run: pip install requests
 
       - name: 執行檢查與發送腳本
@@ -39,7 +40,10 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
-          # 🌟 這裡改成對應 Python 腳本產生的新記憶檔名
+          
+          # 把腳本產生的記憶檔加進版控
           git add _last_all.txt
-          # 如果有變動才 commit，避免報錯，並且加上 [skip ci] 避免無限循環觸發
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update TG history state [skip ci]" && git push)
+          
+          # 如果有變動才 commit，加上 [skip ci] 避免無限循環觸發
+          # 加上 git pull --rebase 防止遠端有其他人更新時 Push 失敗
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update TG history state [skip ci]" && git pull --rebase origin main && git push)
