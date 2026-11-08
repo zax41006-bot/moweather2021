@@ -10,6 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+    
+    <!-- 🌟 引入天氣圖標與地圖設定檔 -->
+    <script src="weather-utils.js"></script>
+    <script src="weather-map-config.js"></script>
 
     <script>
         tailwind.config = {
@@ -56,13 +60,6 @@
             text-align: center; font-weight: 700; color: #000; font-size: 0.95rem;
             padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 0.75rem;
         }
-
-        .warning-card { border-radius: 10px; overflow: hidden; border: 2px solid transparent; background: #ffffff; margin-bottom: 0.75rem; }
-        .warning-card:last-child { margin-bottom: 0; }
-        .warning-head { padding: 0.6rem 1rem; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.55rem; }
-        .warning-body { padding: 0.9rem 1rem; color: #1f2937; line-height: 1.85; font-size: 0.9rem; }
-        .warning-tag { display: inline-block; font-weight: 700; font-size: 0.85rem; color: #1f2937; background: rgba(0,0,0,0.06); padding: 0.15rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; }
-        .warning-content { white-space: pre-wrap; word-break: break-word; }
 
         .tip-card { border-radius: 10px; overflow: hidden; border: 2px solid #991b1b; background: #ffffff; margin-bottom: 0.75rem; }
         .tip-card:last-child { margin-bottom: 0; }
@@ -179,17 +176,39 @@
             </div>
         </section>
 
+        <!-- 🌟 天氣警告 (標題置頂，左圖右字，完整外框) -->
         <section v-if="warnings.length" class="mb-8" aria-labelledby="warning-heading">
             <h2 id="warning-heading" class="sr-only">天氣警告</h2>
-            <div class="weather-card p-3">
-                <div v-for="(w, i) in warnings" :key="i" class="warning-card" :style="{ borderColor: colorOf(w.level).border }">
-                    <div class="warning-head" :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text }">
+            
+            <div class="flex flex-col gap-4">
+                <!-- 外層容器加上 2px 的完整邊框 -->
+                <div v-for="(w, i) in warnings" :key="i" 
+                     class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col"
+                     :style="{ border: '2px solid ' + colorOf(w.level).border }">
+                    
+                    <!-- 🌟 頂部標題列 (跨越整個寬度，讓厚邊框包覆上方) -->
+                    <div class="px-5 py-3 font-bold text-base flex items-center gap-2 border-b"
+                         :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text, borderColor: colorOf(w.level).border }">
                         <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
                         <span>{{ w.title || '天氣警告' }}</span>
                     </div>
-                    <div class="warning-body" :style="{ background: colorOf(w.level).body }">
-                        <span v-if="w.tag" class="warning-tag">{{ w.tag }}</span>
-                        <div class="warning-content">{{ w.content }}</div>
+
+                    <!-- 下方主體區塊 (左圖右字) -->
+                    <div class="flex flex-col md:flex-row flex-1">
+                        <!-- 左側：圖片區 -->
+                        <div v-if="w.image" 
+                             class="w-full md:w-64 lg:w-72 flex-shrink-0 flex items-center justify-center p-4 border-b md:border-b-0 md:border-r"
+                             :style="{ background: colorOf(w.level).body, borderColor: colorOf(w.level).border + '40' }">
+                            <img :src="'weather icon/' + w.image" 
+                                 :alt="w.title" 
+                                 class="max-w-[220px] md:max-w-full h-auto object-contain drop-shadow-sm transition-transform hover:scale-105">
+                        </div>
+
+                        <!-- 右側：文字內容區 -->
+                        <div class="px-5 py-4 flex-1" :style="{ background: colorOf(w.level).body }">
+                            <span v-if="w.tag" class="inline-block font-bold text-xs px-2 py-1 rounded bg-black/10 mb-2 text-gray-800">{{ w.tag }}</span>
+                            <div class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap break-words">{{ w.content }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -452,6 +471,7 @@
         Chart.register(ChartDataLabels);
     }
 
+    // 🌟 顏色對照表（包含淺白與灰白）
     const COLOR_MAP = {
         green:  { border: '#16a34a', head: '#16a34a', body: '#f0fdf4', text: '#ffffff' },
         blue:   { border: '#2563eb', head: '#2563eb', body: '#eff6ff', text: '#ffffff' },
@@ -459,8 +479,8 @@
         orange: { border: '#ea580c', head: '#ea580c', body: '#fff7ed', text: '#ffffff' },
         red:    { border: '#dc2626', head: '#dc2626', body: '#fef2f2', text: '#ffffff' },
         black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' },
-        lightgray: { border: '#d1d5db', head: '#e5e7eb', body: '#f9fafb', text: '#1f2937' },
-        cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }
+        lightgray: { border: '#9ca3af', head: '#f3f4f6', body: '#f9fafb', text: '#1f2937' }, // 潛在熱帶氣旋 (淺白)
+        cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }  // 取消警報 (灰白)
     };
 
     const NAV_ITEMS = [
@@ -479,46 +499,6 @@
 
     const IMG_BASE = "https://raw.githubusercontent.com/macao2021928moweather-debug/mmc-r-weather/gh-pages/static/images/";
 
-    const MONITOR_LAYERS = [
-        { id: 'temp_now', label: '現時氣溫', icon: 'fa-solid fa-temperature-half', file: 'temp_now.png' },
-        { id: 'temp_max', label: '最高氣溫', icon: 'fa-solid fa-temperature-arrow-up', file: 'temp_max.png' },
-        { id: 'temp_min', label: '最低氣溫', icon: 'fa-solid fa-temperature-arrow-down', file: 'temp_min.png' },
-        { id: 'humidity', label: '相對濕度', icon: 'fa-solid fa-droplet', file: 'humidity.png' },
-        { id: 'rain_h', label: '一小時降水', icon: 'fa-solid fa-cloud-showers-heavy', file: 'rain_h.png' },
-        { id: 'rain_d', label: '今日累計降水', icon: 'fa-solid fa-cloud-rain', file: 'rain_d.png' },
-        { id: 'wind_speed', label: '實時風速', icon: 'fa-solid fa-wind', file: 'wind_speed.png' },
-        { id: 'gust_speed', label: '陣風風速', icon: 'fa-solid fa-tornado', file: 'gust_speed.png' },
-        { id: 'wind_dir', label: '風向分佈', icon: 'fa-solid fa-compass', file: 'wind_dir.png' }
-    ];
-
-    const HISTORY_STATIONS = [
-        { label: '九澳', code: '九澳' },
-        { label: '外港碼頭', code: '外港碼頭' },
-        { label: '大潭山', code: '大潭山' },
-        { label: '大炮臺', code: '大炮臺' },
-        { label: '媽閣', code: '媽閣' },
-        { label: '東亞運大馬路', code: '東亞運大馬路' },
-        { label: '澳門大學', code: '澳門大學' },
-        { label: '紀念孫中山公園', code: '紀念孫中山公園' },
-        { label: '路環', code: '路環' },
-        { label: '黑沙環', code: '黑沙環' },
-        { label: '友誼大橋北', code: '友誼大橋北' },
-        { label: '友誼大橋南', code: '友誼大橋南' },
-        { label: '嘉樂庇總督大橋', code: '嘉樂庇總督大橋' },
-        { label: '澳門大橋北', code: '澳門大橋北' },
-        { label: '澳門大橋南', code: '澳門大橋南' },
-        { label: '蓮花大橋', code: '蓮花大橋' },
-        { label: '西灣大橋', code: '西灣大橋' }
-    ];
-
-    const HISTORY_TYPES = [
-        { label: '氣溫', code: 'temp' },
-        { label: '相對濕度', code: 'humidity' },
-        { label: '雨量', code: 'rain' },
-        { label: '風速', code: 'wind_speed' }
-    ];
-
-    // 🌟 已將 MMC-GIS 移至第一位
     const MODEL_OPTIONS = [
         { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
         { value: 'precip_48h', label: '天氣預報圖', url: '', frameTitle: '天氣預報圖' },
@@ -531,25 +511,22 @@
             return {
                 navItems: NAV_ITEMS,
                 modelOptions: MODEL_OPTIONS,
-                // 🌟 預設顯示改為 mmc-gis
                 tcOptions: [], selectedTC: '', selectedModel: 'mmc-gis',
                 
-                // 預報圖相關
                 selectedPrecipHour: '06',
                 selectedPrecipType: 'precip', 
                 precipHours: ['06', '12', '18', '24', '30', '36', '42', '48'],
                 isPlaying: false,
                 playTimer: null,
 
-                // 實時天氣監測相關
                 monitorMode: 'realtime', 
                 monitorLayers: MONITOR_LAYERS,
+                historyStations: HISTORY_STATIONS,
+                historyTypes: HISTORY_TYPES,
+                
                 selectedMonitorId: 'temp_now',
                 monitorLoading: true,
 
-                // 歷史折線圖相關
-                historyStations: HISTORY_STATIONS,
-                historyTypes: HISTORY_TYPES,
                 selectedHistoryStation: '大潭山',
                 selectedHistoryType: 'temp',
 
@@ -560,6 +537,7 @@
 
                 warningsText: '',
                 specialTipsText: '',
+                warningIcons: [], // 🌟 載入 JSON 規則陣列
 
                 chartMode: 'temp',
                 mobileOpen: false,
@@ -573,26 +551,17 @@
 
         computed: {
             liveWeatherImage() {
-                const githubUser = "zax41006-bot"; 
-                const repoName = "mmc-weather"; 
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
-                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/weather.png?v=${cacheBuster}`;
+                return `https://raw.githubusercontent.com/zax41006-bot/mmc-weather/main/weather.png?v=${cacheBuster}`;
             },
-            
             forecast48hImage() {
-                const githubUser = "zax41006-bot"; 
-                const repoName = "mmc-weather"; 
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
-                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast48h.png?v=${cacheBuster}`;
+                return `https://raw.githubusercontent.com/zax41006-bot/mmc-weather/main/forecast48h.png?v=${cacheBuster}`;
             },
-
             forecast15dImage() {
-                const githubUser = "zax41006-bot"; 
-                const repoName = "mmc-weather"; 
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
-                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/forecast15d.png?v=${cacheBuster}`;
+                return `https://raw.githubusercontent.com/zax41006-bot/mmc-weather/main/forecast15d.png?v=${cacheBuster}`;
             },
-            
             currentTCImage() {
                 if (!this.selectedTC) return '';
                 const tc = this.tcOptions.find(t => t.TC_ID === this.selectedTC);
@@ -605,21 +574,16 @@
             currentModelTitle() { return this.currentModel.frameTitle; },
 
             currentPrecip48hImage() {
-                const githubUser = "zax41006-bot"; 
-                const repoName = "MMC-weather"; 
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
-                
                 let prefix = 'precip_48h_';
                 if (this.selectedPrecipType === 'wind') {
                     prefix = 'wind_48h_';
                 }
-                
-                return `https://raw.githubusercontent.com/${githubUser}/${repoName}/main/${prefix}${this.selectedPrecipHour}.png?v=${cacheBuster}`;
+                return `https://raw.githubusercontent.com/zax41006-bot/MMC-weather/main/${prefix}${this.selectedPrecipHour}.png?v=${cacheBuster}`;
             },
 
             currentMonitorImage() {
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-');
-                
                 if (this.monitorMode === 'realtime') {
                     const layer = this.monitorLayers.find(l => l.id === this.selectedMonitorId) || this.monitorLayers[0];
                     return `${IMG_BASE}${layer.file}?v=${cacheBuster}`;
@@ -695,17 +659,19 @@
             weatherData() {
                 this.$nextTick(() => this.initChart());
             },
-            monitorMode() {
-                this.monitorLoading = true;
-            },
-            selectedMonitorId() {
-                this.monitorLoading = true;
-            }
+            monitorMode() { this.monitorLoading = true; },
+            selectedMonitorId() { this.monitorLoading = true; }
         },
 
         mounted() {
             document.addEventListener('click', this.handleDocumentClick);
             document.addEventListener('keydown', this.handleKeydown);
+
+            // 🌟 載入警報圖片與顏色對照 JSON
+            fetch('warning-icons.json', { cache: 'no-store' })
+                .then(res => res.json())
+                .then(data => { this.warningIcons = data; })
+                .catch(e => console.error('載入 warning-icons.json 失敗:', e));
 
             this.loadTCOptions();
             this.loadForecastTxt();
@@ -760,19 +726,11 @@
                 if (this.selectedMonitorId === layer.id) return;
                 this.selectedMonitorId = layer.id;
             },
-            onHistoryChange() {
-                this.monitorLoading = true;
-            },
-            onMonitorLoad() {
-                this.monitorLoading = false;
-            },
+            onHistoryChange() { this.monitorLoading = true; },
+            onMonitorLoad() { this.monitorLoading = false; },
 
-            open48hTab() {
-                window.open(this.forecast48hImage, '_blank');
-            },
-            open15dTab() {
-                window.open(this.forecast15dImage, '_blank');
-            },
+            open48hTab() { window.open(this.forecast48hImage, '_blank'); },
+            open15dTab() { window.open(this.forecast15dImage, '_blank'); },
 
             async loadTCOptions() {
                 try {
@@ -790,6 +748,7 @@
                 return COLOR_MAP[level] || COLOR_MAP.yellow;
             },
 
+            // 🌟 核心修改：解析警報，直接從 JSON 取得圖片與顏色級別
             parseWarningBlock(block) {
                 const text = block.trim();
                 if (!text || text === '-') return null;
@@ -802,40 +761,34 @@
                     idx++;
                 }
                 const content = lines.slice(idx).join('\n').trim();
-                return { title, tag, content, level: this.detectWarningLevel(text) };
+                
+                // 取得 JSON 匹配結果
+                const rule = this.getWarningRule(text);
+                const imageName = rule ? rule.image : '';
+                const level = rule ? rule.level : 'yellow'; // 如果找不到規則，預設為黃色
+                
+                return { title, tag, content, level, image: imageName };
             },
 
-            detectWarningLevel(text) {
+            // 🌟 新增：遍歷 JSON 尋找匹配的規則
+            getWarningRule(text) {
+                if (!this.warningIcons || !Array.isArray(this.warningIcons)) return null;
+                
                 const raw = (text || '').replace(/^\uFEFF/, '').trim();
-                const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
 
-                const rainColorKey = { '黑色': 'black', '紅色': 'red', '橙色': 'orange', '黃色': 'yellow' };
-                const rainRe = /(黑色|紅色|橙色|黃色)暴雨.*警報/;
-                for (const line of lines) {
-                    if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
-                    const match = line.match(rainRe);
-                    if (match) return rainColorKey[match[1]];
+                for (const rule of this.warningIcons) {
+                    // 檢查這條規則的所有條件是否都符合 (AND 邏輯)
+                    const isMatch = rule.matchAll.every(keywordRegex => {
+                        const regex = new RegExp(keywordRegex);
+                        return regex.test(raw);
+                    });
+
+                    if (isMatch) {
+                        return rule; // 找到符合的，直接回傳整條規則 (包含 image 與 level)
+                    }
                 }
-
-                if (/潛在熱帶氣旋|潜在热带气旋|低壓區影響|低压区影响|低壓區警告|低压区警告|低壓區警報|低压区警报/.test(raw)) return 'lightgray';
-                if (/強季風/.test(raw)) return 'yellow';
-
-                const COLOR_KEY = { '黑色': 'black', '紅色': 'red', '橙色': 'orange', '黃色': 'yellow', '藍色': 'blue', '綠色': 'green' };
-                const COLOR_RE = '(黑色|紅色|橙色|黃色|藍色|綠色)';
-
-                for (const line of lines) {
-                    const m = line.match(new RegExp('酷熱' + COLOR_RE + '警報'));
-                    if (m) return COLOR_KEY[m[1]];
-                }
-
-                for (const line of lines) {
-                    if (/改發|轉發|將改發|將轉發|升級|降級/.test(line)) continue;
-                    const m = line.match(new RegExp(COLOR_RE + '警報'));
-                    if (m) return COLOR_KEY[m[1]];
-                }
-
-                if (/取消/.test(raw)) return 'cancelled';
-                return 'yellow';
+                
+                return null;
             },
 
             async loadWarningsText() {
@@ -866,6 +819,26 @@
                 try {
                     const res = await fetch('forecast.txt', { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
+                    const idx = raw.search(/\n\s*\n/);
+                    if (idx === -1) {
+                        this.issuedForecastText = '（時間暫時無法載入）';
+                        this.outlookText = raw || '（天氣展望暫時無法載入）';
+                    } else {
+                        this.issuedForecastText = raw.slice(0, idx).trim() || '（時間暫時無法載入）';
+                        this.outlookText = raw.slice(idx).trim() || '（天氣展望暫時無法載入）';
+                    }
+                } catch (e) {
+                    console.error('讀取 forecast.txt 失敗:', e);
+                    this.issuedForecastText = '（時間暫時無法載入）';
+                    this.outlookText = '（天氣展望暫時無法載入）';
+                }
+            },
+
+            async loadWeather7dText() {
+                try {
+                    const res = await fetch('weather7d.txt', { cache: 'no-store' });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     const txtText = (await res.text()).replace(/^\uFEFF/, '');
                     const lines = txtText.split(/\r?\n/);
                     let issuedText = '';
@@ -874,7 +847,7 @@
                         const trimmed = line.trim();
                         if (!trimmed) continue;
                         const issuedMatch = trimmed.match(/^發佈\/更新時間[：:]\s*(.+)$/);
-                        if (issuedMatch) { issuedText = issuedMatch[1].trim(); continue; }
+                        if (issuedMatch) { issuedText = issuedText || issuedMatch[1].trim(); continue; }
                         if (!trimmed.includes('|')) continue;
                         const c = trimmed.split('|').map(s => s.trim());
                         if (c.length < 6 || !c[0]) continue;
@@ -887,53 +860,14 @@
                         });
                     }
                     this.weatherData = parsed;
-                    this.issuedForecastText = issuedText;
-                } catch (e) {
-                    console.error('讀取 forecast.txt 失敗:', e);
-                }
-            },
-
-            async loadWeather7dText() {
-                try {
-                    const res = await fetch('weather7d.txt', { cache: 'no-store' });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const raw = (await res.text()).replace(/^\uFEFF/, '').trim();
-                    const idx = raw.search(/\n\s*\n/);
-                    if (idx === -1) {
-                        this.issued7dText = '（時間暫時無法載入）';
-                        this.outlookText = raw || '（天氣展望暫時無法載入）';
-                    } else {
-                        this.issued7dText = raw.slice(0, idx).trim() || '（時間暫時無法載入）';
-                        this.outlookText = raw.slice(idx).trim() || '（天氣展望暫時無法載入）';
-                    }
+                    this.issued7dText = issuedText || '（時間暫時無法載入）';
                 } catch (e) {
                     console.error('讀取 weather7d.txt 失敗:', e);
-                    this.issued7dText = '（時間暫時無法載入）';
-                    this.outlookText = '（天氣展望暫時無法載入）';
                 }
             },
 
             matchIcon(text) {
-                if (!text) return 'cloud.png';
-                const t = text;
-                const hasThunder = /雷暴/.test(t);
-                const hasRain = /(幾陣驟雨|間中有驟雨|有驟雨|有幾陣雨|間中有雨|有雨|有微雨|有幾陣微雨)/.test(t);
-                const hasSunny = /(天晴)/.test(t);
-                const hasBriefSunny = /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴|天晴，部分時間多雲)/.test(t);
-                const hasHaze = /(煙霞|烟霞)/.test(t);
-                const hasFog1 = /(薄霧|薄雾)/.test(t);
-                const hasFog2 = /(霧|雾)/.test(t);
-
-                if (hasThunder) return 'rain3_thunder.png';
-                if (hasRain && hasSunny) return 'Sun_cloud_rain.png';
-                if (hasRain) return 'rain2.png';
-                if (hasHaze) return 'Haze.png';
-                if (hasFog1) return 'fog1.png';
-                if (hasFog2) return 'fog2.png';
-                if (hasBriefSunny) return 'Sun_cloud.png';
-                if (hasSunny) return 'Sun.png';
-                if (/(大致多雲|多雲|密雲|陰)/.test(t)) return 'cloud.png';
-                return 'cloud.png';
+                return getWeatherIcon(text);
             },
 
             switchChart(mode) {
