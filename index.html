@@ -157,28 +157,57 @@
             </div>
         </section>
 
-        <!-- 🌟 特別天氣提示 (全新卡片設計，支援多提示與完美換行) -->
+        <!-- 🌟 特別天氣提示 (支援圖文並茂，多圖排版) -->
         <section v-if="specialTipsList.length" class="mb-8" aria-labelledby="special-tips-heading">
             <h2 id="special-tips-heading" class="sr-only">特別天氣提示</h2>
             <div class="flex flex-col gap-4">
-                <!-- 外層容器加上 2px 的完整邊框 (深紅色) -->
                 <div v-for="(tip, i) in specialTipsList" :key="i" 
                      class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col"
                      style="border: 2px solid #991b1b;">
                     
-                    <!-- 頂部標題列 (跨越整個寬度) -->
                     <div class="px-5 py-3 font-bold text-base flex items-center gap-2 border-b"
                          style="background: #991b1b; color: #ffffff; border-color: #991b1b;">
                         <i class="fa-solid fa-bullhorn" aria-hidden="true"></i>
                         <span>特別天氣提示</span>
                     </div>
 
-                    <!-- 下方主體區塊 (內容區) -->
                     <div class="px-5 py-4 flex-1 flex flex-col justify-between" style="background: #fef2f2;">
-                        <!-- 內文：保留換行，增加行距 -->
-                        <div class="text-gray-800 text-sm leading-loose whitespace-pre-wrap break-words">{{ tip.content }}</div>
+                        <div>
+                            <!-- 文字內容 -->
+                            <div class="text-gray-800 text-sm leading-loose whitespace-pre-wrap break-words mb-5">{{ tip.content }}</div>
+                            
+                            <!-- 🌟 圖片區塊：限制大小、防止撐破版面 -->
+                            <div v-if="tip.imageIndex" class="w-full">
+                                <div class="flex flex-col sm:flex-row flex-wrap gap-4 items-start">
+                                    
+                                    <!-- 主圖 (無後綴) -->
+                                    <div v-show="!hiddenImages[`${tip.imageIndex}`]" class="w-full sm:w-auto max-w-full sm:max-w-[400px]">
+                                        <img
+                                            :src="`special_tip_${tip.imageIndex}.png`"
+                                            class="w-full h-auto rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity object-contain bg-white"
+                                            @error="handleImageError(`${tip.imageIndex}`, $event)"
+                                            @click="openImageInNewTab($event)"
+                                            title="點擊查看大圖"
+                                        >
+                                    </div>
+                                    
+                                    <!-- 分圖 (A, B, C) -->
+                                    <div v-for="letter in ['A', 'B', 'C']" :key="letter" 
+                                         v-show="!hiddenImages[`${tip.imageIndex}-${letter}`]" 
+                                         class="w-full sm:w-auto max-w-full sm:max-w-[400px]">
+                                        <img
+                                            :src="`special_tip_${tip.imageIndex}-${letter}.png`"
+                                            class="w-full h-auto rounded-lg shadow-sm border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity object-contain bg-white"
+                                            @error="handleImageError(`${tip.imageIndex}-${letter}`, $event)"
+                                            @click="openImageInNewTab($event)"
+                                            title="點擊查看大圖"
+                                        >
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
                         
-                        <!-- 發佈時間：靠右顯示 -->
                         <div v-if="tip.issuedTime" class="text-right text-xs text-gray-500 mt-4">{{ tip.issuedTime }}</div>
                     </div>
                 </div>
@@ -190,21 +219,17 @@
             <h2 id="warning-heading" class="sr-only">天氣警告</h2>
             
             <div class="flex flex-col gap-4">
-                <!-- 外層容器加上 2px 的完整邊框 -->
                 <div v-for="(w, i) in warnings" :key="i" 
                      class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col"
                      :style="{ border: '2px solid ' + colorOf(w.level).border }">
                     
-                    <!-- 頂部標題列 (跨越整個寬度，讓厚邊框包覆上方) -->
                     <div class="px-5 py-3 font-bold text-base flex items-center gap-2 border-b"
                          :style="{ background: colorOf(w.level).head, color: colorOf(w.level).text, borderColor: colorOf(w.level).border }">
                         <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
                         <span>{{ w.title || '天氣警告' }}</span>
                     </div>
 
-                    <!-- 下方主體區塊 (左圖右字) -->
                     <div class="flex flex-col md:flex-row flex-1">
-                        <!-- 左側：圖片區 -->
                         <div v-if="w.image" 
                              class="w-full md:w-64 lg:w-72 flex-shrink-0 flex items-center justify-center p-4 border-b md:border-b-0 md:border-r"
                              :style="{ background: colorOf(w.level).body, borderColor: colorOf(w.level).border + '40' }">
@@ -213,7 +238,6 @@
                                  class="max-w-[220px] md:max-w-full h-auto object-contain drop-shadow-sm transition-transform hover:scale-105">
                         </div>
 
-                        <!-- 右側：文字內容區 -->
                         <div class="px-5 py-4 flex-1" :style="{ background: colorOf(w.level).body }">
                             <span v-if="w.tag" class="inline-block font-bold text-xs px-2 py-1 rounded bg-black/10 mb-2 text-gray-800">{{ w.tag }}</span>
                             <div class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap break-words">{{ w.content }}</div>
@@ -229,25 +253,18 @@
             
             <div class="weather-card p-4 md:p-6">
                 <div class="flex flex-col lg:flex-row gap-6 lg:items-start">
-                    
-                    <!-- 左側：圖片顯示區 -->
                     <div class="flex-1 w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden relative flex items-center justify-center p-2">
                         <div v-show="monitorLoading" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-20 backdrop-blur-sm">
                             <i class="fa fa-spinner fa-spin text-2xl text-primary mb-2"></i>
                             <p class="text-sm text-gray-600">載入圖像中...</p>
                         </div>
-                        
-                        <img :src="currentMonitorImage" 
-                             :alt="currentMonitorLabel" 
+                        <img :src="currentMonitorImage" :alt="currentMonitorLabel" 
                              class="w-full h-auto max-h-[700px] object-contain transition-opacity duration-300 drop-shadow-sm"
                              :class="{'opacity-0': monitorLoading, 'opacity-100': !monitorLoading}"
                              @load="onMonitorLoad">
                     </div>
 
-                    <!-- 右側：控制面板 -->
                     <div class="w-full lg:w-[300px] flex-shrink-0">
-                        
-                        <!-- Tab 切換 -->
                         <div class="flex bg-gray-100 rounded-lg p-1 mb-4">
                             <button @click="monitorMode = 'realtime'" :class="monitorMode === 'realtime' ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-1.5 text-sm font-bold rounded-md transition-all flex items-center justify-center gap-1">
                                 <i class="fa-solid fa-layer-group"></i> 實時分佈
@@ -257,13 +274,10 @@
                             </button>
                         </div>
 
-                        <!-- 實時分佈選項 -->
                         <div v-show="monitorMode === 'realtime'">
                             <h3 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">選擇氣象要素</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
-                                <button v-for="layer in monitorLayers" 
-                                        :key="layer.id"
-                                        @click="selectMonitorLayer(layer)"
+                                <button v-for="layer in monitorLayers" :key="layer.id" @click="selectMonitorLayer(layer)"
                                         class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 text-sm font-medium transition-all hover:bg-blue-50 hover:border-blue-300 hover:text-primary-dark"
                                         :class="{ 'bg-primary text-white border-primary shadow-md hover:bg-primary-dark hover:text-white ring-2 ring-primary/20': selectedMonitorId === layer.id }">
                                     <i :class="layer.icon" class="w-4 text-center text-base opacity-80"></i>
@@ -272,10 +286,8 @@
                             </div>
                         </div>
 
-                        <!-- 歷史折線圖選項 -->
                         <div v-show="monitorMode === 'history'">
                             <h3 class="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wider">選擇監測站與變數</h3>
-                            
                             <div class="flex flex-col gap-3">
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1 font-medium">監測站點</label>
@@ -291,9 +303,7 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </section>
@@ -480,7 +490,6 @@
         Chart.register(ChartDataLabels);
     }
 
-    // 🌟 顏色對照表（包含淺白與灰白）
     const COLOR_MAP = {
         green:  { border: '#16a34a', head: '#16a34a', body: '#f0fdf4', text: '#ffffff' },
         blue:   { border: '#2563eb', head: '#2563eb', body: '#eff6ff', text: '#ffffff' },
@@ -488,8 +497,8 @@
         orange: { border: '#ea580c', head: '#ea580c', body: '#fff7ed', text: '#ffffff' },
         red:    { border: '#dc2626', head: '#dc2626', body: '#fef2f2', text: '#ffffff' },
         black:  { border: '#000000', head: '#000000', body: '#f3f4f6', text: '#ffffff' },
-        lightgray: { border: '#9ca3af', head: '#f3f4f6', body: '#f9fafb', text: '#1f2937' }, // 潛在熱帶氣旋 (淺白)
-        cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }  // 取消警報 (灰白)
+        lightgray: { border: '#9ca3af', head: '#f3f4f6', body: '#f9fafb', text: '#1f2937' },
+        cancelled: { border: '#6b7280', head: '#6b7280', body: '#f9fafb', text: '#ffffff' }
     };
 
     const NAV_ITEMS = [
@@ -546,7 +555,8 @@
 
                 warningsText: '',
                 specialTipsText: '',
-                warningIcons: [], // 🌟 載入 JSON 規則陣列
+                warningIcons: [],
+                hiddenImages: {}, // 🌟 用來記錄載入失敗的圖片，以便隱藏它們
 
                 chartMode: 'temp',
                 mobileOpen: false,
@@ -636,14 +646,13 @@
                 return blocks.map(b => this.parseWarningBlock(b)).filter(w => w !== null);
             },
 
-            // 🌟 全新特別天氣提示解析：支援多提示 (---) 與自動提取發佈時間
             specialTipsList() {
                 const t = (this.specialTipsText || '').trim();
                 if (!t || t === '-') return [];
 
                 const blocks = t.split(/\n\s*-{3,}\s*\n/);
 
-                return blocks.map(block => {
+                return blocks.map((block, index) => {
                     const lines = block.split('\n').map(l => l.trim()).filter(l => l);
                     if (!lines.length) return null;
 
@@ -661,7 +670,8 @@
 
                     return {
                         content: contentLines.join('\n'),
-                        issuedTime: issuedTime
+                        issuedTime: issuedTime,
+                        imageIndex: index + 1
                     };
                 }).filter(Boolean);
             }
@@ -700,7 +710,6 @@
             document.addEventListener('click', this.handleDocumentClick);
             document.addEventListener('keydown', this.handleKeydown);
 
-            // 🌟 載入警報圖片與顏色對照 JSON
             fetch('warning-icons.json', { cache: 'no-store' })
                 .then(res => res.json())
                 .then(data => { this.warningIcons = data; })
@@ -925,6 +934,21 @@
             onModelLoad() {
                 clearTimeout(this.modelLoadTimer);
                 this.modelLoading = false;
+            },
+
+            openImageInNewTab(e) {
+                const src = e.target.src;
+                if (src) {
+                    window.open(src, '_blank');
+                }
+            },
+
+            // 🌟 簡化版錯誤處理，只找 png，找不到就隱藏，避免無限請求導致卡死
+            handleImageError(key, e) {
+                const img = e.target;
+                // 如果已經嘗試過一次（或者這就是原生錯誤），直接隱藏
+                this.hiddenImages[key] = true;
+                img.style.display = 'none';
             },
 
             initChart() {
