@@ -1,7 +1,7 @@
 // weather-utils.js
 const WEATHER_ICON_RULES = [
     { regex: /雷暴/, icon: "rain3_thunder.png" },
-    { regex: /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴).*(幾陣雨|驟雨)|(幾陣雨|驟雨).*(短暫時間天晴|部分時間天晴)/, icon: "Sun_cloud_rain.png" },
+    { regex: /(短暫時間天晴|部分時間天晴|間中天晴|短暫天晴).*(幾陣雨|驟雨|微雨)|(幾陣雨|驟雨|微雨).*(短暫時間天晴|部分時間天晴)/, icon: "Sun_cloud_rain.png" },
     { regex: /幾陣驟雨|間中有驟雨|有驟雨|有幾陣雨|間中有雨|有雨|有微雨|有幾陣微雨/, icon: "rain2.png" },
     { regex: /煙霞|烟霞/, icon: "Haze.png" },
     { regex: /薄霧|薄雾/, icon: "fog1.png" },
