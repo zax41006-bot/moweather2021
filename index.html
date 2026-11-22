@@ -68,7 +68,10 @@
         .seven-grid .grid-label { color: #6b7280; font-size: 0.8rem; font-weight: 500; text-align: right; padding-right: 0.75rem; white-space: nowrap; }
         .seven-grid .grid-cell { text-align: center; }
         .day-head .day-date { color: #1f2937; font-size: 0.85rem; font-weight: 600; }
-        .day-head img { width: 1.9rem; height: 1.9rem; object-fit: contain; margin: 0.35rem auto 0; display: block; }
+        
+        /* 🌟 修改：再次放大桌面版天氣圖標 (從 3.5rem 調大到 4.5rem) */
+        .day-head img { width: 4.5rem; height: 4.5rem; object-fit: contain; margin: 0.35rem auto 0; display: block; }
+        
         .temp-chart-wrap { grid-column: 2 / -1; position: relative; height: 200px; overflow: visible; }
         .divider-line { border-top: 1px solid #e5e7eb; margin: 0.75rem 0; }
 
@@ -85,14 +88,20 @@
             .seven-grid.day-head > div:first-child { display: none; }
             .seven-grid.day-head .grid-cell { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0.5rem; border-bottom: 1px solid #e5e7eb; }
             .seven-grid.day-head .grid-cell .day-date { font-size: 1rem; text-align: left; margin-bottom: 0; display: inline-block; vertical-align: middle; }
-            .seven-grid.day-head .grid-cell img { display: inline-block; vertical-align: middle; width: 2rem; height: 2rem; margin: 0 0 0 0.5rem; }
+            
+            /* 🌟 修改：再次放大平板/手機版天氣圖標 (從 3.5rem 調大到 4rem) */
+            .seven-grid.day-head .grid-cell img { display: inline-block; vertical-align: middle; width: 4rem; height: 4rem; margin: 0 0 0 0.5rem; }
+            
             .mobile-temp { display: block; font-weight: 700; font-size: 1rem; color: #1f2937; }
         }
         @media (max-width: 640px) {
             .seven-grid { grid-template-columns: 4.5rem repeat(7, 1fr); }
             .seven-grid .grid-label { font-size: 0.7rem; padding-right: 0.4rem; }
             .day-head .day-date { font-size: 0.72rem; }
-            .day-head img { width: 1.5rem; height: 1.5rem; }
+            
+            /* 🌟 修改：再次放大小螢幕天氣圖標 (從 3rem 調大到 3.5rem) */
+            .day-head img { width: 3.5rem; height: 3.5rem; }
+            
             .temp-chart-wrap { height: 170px; }
             .chart-tabs button { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
         }
@@ -943,10 +952,8 @@
                 }
             },
 
-            // 🌟 簡化版錯誤處理，只找 png，找不到就隱藏，避免無限請求導致卡死
             handleImageError(key, e) {
                 const img = e.target;
-                // 如果已經嘗試過一次（或者這就是原生錯誤），直接隱藏
                 this.hiddenImages[key] = true;
                 img.style.display = 'none';
             },
