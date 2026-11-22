@@ -92,7 +92,8 @@
 
         .forecast-row {
             display: grid;
-            grid-template-columns: 90px 86px 1fr 140px 150px;
+            /* 調整了第一列圖標的寬度以容納更大的圖標 */
+            grid-template-columns: 90px 100px 1fr 140px 150px;
             align-items: stretch;
             gap: 0.75rem;
             padding: 0.85rem 0.25rem;
@@ -133,9 +134,10 @@
             font-variant-numeric: tabular-nums;
         }
         .forecast-col-icon { justify-content: center; }
+        /* 🌟 修改：再放大列表天氣圖標 (從 3.5rem 調大到 4.5rem) */
         .forecast-col-icon img {
-            width: 2.25rem;
-            height: 2.25rem;
+            width: 4.5rem;
+            height: 4.5rem;
             object-fit: contain;
             display: block;
         }
@@ -151,7 +153,8 @@
 
         @media (max-width: 720px) {
             .forecast-row {
-                grid-template-columns: 40px 1fr;
+                /* 稍微加寬左側以容納更大的圖標 */
+                grid-template-columns: 70px 1fr;
                 grid-template-areas:
                     "icon date"
                     "icon text"
@@ -163,6 +166,8 @@
             }
             .forecast-header { display: none; }
             .forecast-col-icon { grid-area: icon; align-self: start; padding-top: 0.15rem; }
+            /* 🌟 修改：再放大手機版列表天氣圖標 (從 3rem 調大到 4rem) */
+            .forecast-col-icon img { width: 4rem; height: 4rem; }
             .forecast-col-date { grid-area: date; display: block; }
             .forecast-col-text { grid-area: text; display: block; }
             .forecast-col-temp { grid-area: temp; display: block; }
@@ -220,9 +225,10 @@
         }
 
         /* 圖標欄 */
+        /* 🌟 修改：再放大圖文版天氣圖標 (從 5rem 調大到 6rem) */
         .graphic-table .icon-cell img {
-            width: 3.5rem;
-            height: 3.5rem;
+            width: 6rem;
+            height: 6rem;
             object-fit: contain;
             display: block;
             margin: 0 auto;
@@ -267,7 +273,8 @@
 
         @media (max-width: 640px) {
             .graphic-table .date-cell { font-size: 0.85rem; padding: 8px 2px; }
-            .graphic-table .icon-cell img { width: 2.5rem; height: 2.5rem; }
+            /* 🌟 修改：再放大小螢幕圖文版天氣圖標 (從 3.5rem 調大到 4.5rem) */
+            .graphic-table .icon-cell img { width: 4.5rem; height: 4.5rem; }
             .graphic-table .temp-cell, .graphic-table .humid-cell { font-size: 0.9rem; }
             .graphic-table .outlook-cell { font-size: 0.85rem; padding: 10px; }
             .graphic-main-title { font-size: 1.6rem; margin-bottom: 1rem; }
@@ -281,7 +288,7 @@
             .weather-card { box-shadow: none !important; border: none !important; padding: 0 !important; }
             .weather-doc { font-size: 11pt; }
             .forecast-row { padding: 0.5rem 0.25rem; min-height: 0; }
-            .forecast-col-icon img { width: 1.6rem; height: 1.6rem; }
+            .forecast-col-icon img { width: 2rem; height: 2rem; }
         }
     </style>
 </head>
