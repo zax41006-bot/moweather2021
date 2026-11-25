@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>澳門氣象中心 | 首頁</title>
-    <link rel="icon" href="mmclogo.jpg" type="image/jpeg">
+    <link rel="icon" href="mmclogo-b.jpg" type="image/jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -104,6 +104,30 @@
             
             .temp-chart-wrap { height: 170px; }
             .chart-tabs button { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
+        }
+
+        /* ======================================================================
+           🕯️ 默哀模式：除「實時天氣監測」與「天氣圖像資訊」外，其餘灰階
+           ----------------------------------------------------------------------
+           說明：
+           - header、footer、以及 main 內未標記 .keep-color 的 section 一律灰階。
+           - 標記 .keep-color 的 section 保留原本顏色。
+           - body 背景改為灰色，避免原本淺藍背景仍顯示藍色。
+           - 如需恢復全站彩色，只需刪除或註解本段 CSS。
+           ====================================================================== */
+        header,
+        footer,
+        main > section:not(.keep-color) {
+            filter: grayscale(100%);
+        }
+
+        body {
+            background-color: #e5e7eb; /* 灰色背景，取代原本 #E3F2FD */
+        }
+
+        /* 保留原本顏色的區塊 */
+        main > section.keep-color {
+            filter: none;
         }
     </style>
 </head>
@@ -256,8 +280,8 @@
             </div>
         </section>
 
-        <!-- 🌟 實時天氣監測 -->
-        <section class="mb-8" aria-labelledby="data-heading">
+        <!-- 🌟 實時天氣監測（保留原本顏色） -->
+        <section id="data-section" class="mb-8 keep-color" aria-labelledby="data-heading">
             <h2 id="data-heading" class="text-xl font-bold mb-4 text-black">實時天氣監測</h2>
             
             <div class="weather-card p-4 md:p-6">
@@ -394,8 +418,8 @@
             </div>
         </section>
 
-        <!-- 🌟 天氣圖像資訊區塊 -->
-        <section class="mb-8" aria-labelledby="model-heading">
+        <!-- 🌟 天氣圖像資訊區塊（保留原本顏色） -->
+        <section id="model-section" class="mb-8 keep-color" aria-labelledby="model-heading">
             <h2 id="model-heading" class="text-xl font-bold mb-4 text-black">天氣圖像資訊</h2>
             <div class="weather-card p-6">
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
