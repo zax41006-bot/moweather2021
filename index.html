@@ -488,6 +488,36 @@
                             </div>
                         </div>
 
+                        <!-- 向日葵9號華南衛星雲圖 (himawari9_sc_B13_MM-DD_XXXX.png) -->
+                        <div v-else-if="selectedModel === 'satellite'" class="w-full flex flex-col items-center">
+                            <img :src="currentHimawariImage"
+                                 :alt="'Himawari-9 華南衛星雲圖 ' + currentHimawariLabel"
+                                 class="max-w-full h-auto object-contain rounded-lg drop-shadow-md transition-opacity duration-300 mb-5 cursor-pointer"
+                                 :class="{'opacity-50': modelLoading}"
+                                 style="max-height: 600px;"
+                                 @load="onHimawariLoad"
+                                 @error="onHimawariError"
+                                 @click="openImageInNewTab($event)"
+                                 title="點擊查看大圖">
+
+                            <div class="flex flex-wrap items-center justify-center gap-3 mb-4">
+                                <div class="inline-flex items-center bg-white border border-gray-300 rounded-lg px-2.5 py-1.5 shadow-sm text-sm font-semibold text-gray-800">
+                                    <button type="button" @click="prevHimawariSlot" class="px-1.5 py-0.5 text-gray-600 hover:text-primary-dark focus:outline-none" title="上一時次">
+                                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                                    </button>
+                                    <span class="px-2.5 select-none tabular-nums">{{ currentHimawariLabel }}</span>
+                                    <button type="button" @click="nextHimawariSlot" class="px-1.5 py-0.5 text-gray-600 hover:text-primary-dark focus:outline-none" title="下一時次">
+                                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                                    </button>
+                                </div>
+
+                                <button type="button" @click="toggleHimawariPlay" class="inline-flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg px-4 py-1.5 shadow-sm text-sm font-semibold text-gray-800 transition-colors focus:outline-none">
+                                    <span>{{ isPlayingHimawari ? '暫停播放' : '自動播放' }}</span>
+                                    <i :class="isPlayingHimawari ? 'fa-solid fa-pause text-xs' : 'fa-solid fa-play text-xs'"></i>
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- 熱帶氣旋路徑圖 -->
                         <img v-else-if="selectedModel === 'mmc-tc' && currentTCImage" 
                              :src="currentTCImage + '?t=' + Date.now()" 
@@ -500,7 +530,7 @@
                         </div>
 
                         <!-- 其他模式 (iframe) -->
-                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h'"
+                        <iframe v-else-if="selectedModel !== 'mmc-tc' && selectedModel !== 'precip_48h' && selectedModel !== 'satellite'"
                             :src="currentModelUrl"
                             width="100%"
                             height="600"
@@ -558,12 +588,13 @@
     ];
 
     const IMG_BASE = "https://raw.githubusercontent.com/macao2021928moweather-debug/mmc-r-weather/gh-pages/static/images/";
+    const HIMAWARI_BASE = "https://zax41006-bot.github.io/MMC-weather/himawari9_sc/";
 
     const MODEL_OPTIONS = [
+        { value: 'satellite', label: 'Himawari-9 華南衛星雲圖 (B13)', url: '', frameTitle: 'Himawari-9 華南衛星雲圖 (B13)' },
         { value: 'mmc-gis', label: 'MMC-GIS 天氣雷達/衛星雲圖', url: 'https://zax41006-bot.github.io/MMC-GIS/', frameTitle: 'MMC-GIS 天氣雷達及衛星雲圖' },
         { value: 'precip_48h', label: '天氣預報圖', url: '', frameTitle: '天氣預報圖' },
-        { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', url: '', frameTitle: '熱帶氣旋路徑預報圖' },
-        { value: 'satellite', label: '知天衛星雲圖', url: 'https://api852.knoweather.com/get_nightvis.php?key=V1IMHHS907c608ycGaGftQ9_jdPlZPkay-m26fvBoCU', frameTitle: '知天衛星雲圖' }
+        { value: 'mmc-tc', label: '🌀 熱帶氣旋路徑預報圖', url: '', frameTitle: '熱帶氣旋路徑預報圖' }
     ];
 
     createApp({
@@ -571,13 +602,20 @@
             return {
                 navItems: NAV_ITEMS,
                 modelOptions: MODEL_OPTIONS,
-                tcOptions: [], selectedTC: '', selectedModel: 'mmc-gis',
+                tcOptions: [], selectedTC: '', selectedModel: 'satellite',
                 
                 selectedPrecipHour: '06',
                 selectedPrecipType: 'precip', 
                 precipHours: ['06', '12', '18', '24', '30', '36', '42', '48'],
                 isPlaying: false,
                 playTimer: null,
+
+                himawariSlots: [],
+                himawariSlotIndex: 0,
+                himawariFallbackAttempt: 0,
+                himawariCacheBuster: Date.now(),
+                isPlayingHimawari: false,
+                himawariPlayTimer: null,
 
                 monitorMode: 'realtime', 
                 monitorLayers: MONITOR_LAYERS,
@@ -602,7 +640,7 @@
 
                 chartMode: 'temp',
                 mobileOpen: false,
-                modelLoading: false,
+                modelLoading: true,
 
                 chart: null,
                 chartAriaLabel: '七日氣溫預報折線圖，載入中。',
@@ -633,6 +671,23 @@
             },
             currentModelUrl() { return this.currentModel.url; },
             currentModelTitle() { return this.currentModel.frameTitle; },
+
+            currentHimawariSlot() {
+                if (!this.himawariSlots.length) {
+                    return this.buildHimawariSlotFromOffset(this.himawariFallbackAttempt);
+                }
+                const safeIdx = Math.max(0, Math.min(this.himawariSlotIndex, this.himawariSlots.length - 1));
+                return this.himawariSlots[safeIdx];
+            },
+            currentHimawariImage() {
+                const slot = this.currentHimawariSlot;
+                const fileName = `himawari9_sc_B13_${slot.mmdd}_${slot.hhmm}.png`;
+                return `${HIMAWARI_BASE}${fileName}?v=${this.himawariCacheBuster}`;
+            },
+            currentHimawariLabel() {
+                const slot = this.currentHimawariSlot;
+                return `${slot.mmdd} ${slot.hh}:${slot.mm}`;
+            },
 
             currentPrecip48hImage() {
                 const cacheBuster = new Date().toISOString().slice(0, 13).replace('T', '-'); 
@@ -724,7 +779,15 @@
         },
 
         watch: {
-            selectedModel() {
+            selectedModel(val) {
+                if (val !== 'satellite' && this.isPlayingHimawari) {
+                    this.stopHimawariPlay();
+                }
+                if (val === 'satellite') {
+                    this.himawariFallbackAttempt = 0;
+                    this.himawariCacheBuster = Date.now();
+                    this.discoverHimawariSlots();
+                }
                 this.modelLoading = true;
                 clearTimeout(this.modelLoadTimer);
                 this.modelLoadTimer = setTimeout(() => {
@@ -761,6 +824,10 @@
                 .then(data => { this.warningIcons = data; })
                 .catch(e => console.error('載入 warning-icons.json 失敗:', e));
 
+            if (this.selectedModel === 'satellite') {
+                this.discoverHimawariSlots();
+            }
+
             this.loadTCOptions();
             this.loadForecastTxt();
             this.loadWeather7dText();
@@ -774,9 +841,106 @@
             clearTimeout(this.modelLoadTimer);
             if (this.chart) this.chart.destroy();
             if (this.playTimer) clearInterval(this.playTimer);
+            this.stopHimawariPlay();
         },
 
         methods: {
+            buildHimawariSlotFromOffset(slotOffset) {
+                const nowMst = new Date(Date.now() + 8 * 3600 * 1000);
+                const flooredMin = Math.floor(nowMst.getUTCMinutes() / 30) * 30;
+                const baseMs = Date.UTC(
+                    nowMst.getUTCFullYear(),
+                    nowMst.getUTCMonth(),
+                    nowMst.getUTCDate(),
+                    nowMst.getUTCHours(),
+                    flooredMin,
+                    0
+                );
+                const target = new Date(baseMs - slotOffset * 30 * 60 * 1000);
+                const pad = n => String(n).padStart(2, '0');
+                const mm = pad(target.getUTCMonth() + 1);
+                const dd = pad(target.getUTCDate());
+                const hh = pad(target.getUTCHours());
+                const min = pad(target.getUTCMinutes());
+                return {
+                    mmdd: `${mm}-${dd}`,
+                    hhmm: `${hh}${min}`,
+                    hh,
+                    mm: min
+                };
+            },
+
+            checkImageExists(url) {
+                return new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
+                    img.src = url;
+                });
+            },
+
+            async discoverHimawariSlots() {
+                this.modelLoading = true;
+                this.himawariCacheBuster = Date.now();
+                const candidates = Array.from({ length: 16 }, (_, idx) => this.buildHimawariSlotFromOffset(idx));
+                const found = [];
+                for (const slot of candidates) {
+                    const url = `${HIMAWARI_BASE}himawari9_sc_B13_${slot.mmdd}_${slot.hhmm}.png?v=${this.himawariCacheBuster}`;
+                    if (await this.checkImageExists(url)) {
+                        found.push(slot);
+                    }
+                }
+                if (found.length) {
+                    this.himawariSlots = found.reverse();
+                    this.himawariSlotIndex = this.himawariSlots.length - 1;
+                } else {
+                    this.himawariSlots = [];
+                    this.himawariFallbackAttempt = 0;
+                }
+                this.modelLoading = false;
+            },
+
+            onHimawariLoad() {
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoading = false;
+            },
+
+            onHimawariError() {
+                clearTimeout(this.modelLoadTimer);
+                this.modelLoading = false;
+            },
+
+            prevHimawariSlot() {
+                if (!this.himawariSlots.length) return;
+                this.modelLoading = true;
+                this.himawariSlotIndex = this.himawariSlotIndex > 0 ? this.himawariSlotIndex - 1 : this.himawariSlots.length - 1;
+            },
+
+            nextHimawariSlot() {
+                if (!this.himawariSlots.length) return;
+                this.modelLoading = true;
+                this.himawariSlotIndex = this.himawariSlotIndex < this.himawariSlots.length - 1 ? this.himawariSlotIndex + 1 : 0;
+            },
+
+            stopHimawariPlay() {
+                this.isPlayingHimawari = false;
+                if (this.himawariPlayTimer) {
+                    clearInterval(this.himawariPlayTimer);
+                    this.himawariPlayTimer = null;
+                }
+            },
+
+            toggleHimawariPlay() {
+                this.isPlayingHimawari = !this.isPlayingHimawari;
+                if (this.isPlayingHimawari) {
+                    this.himawariPlayTimer = setInterval(() => {
+                        this.nextHimawariSlot();
+                    }, 1200);
+                } else {
+                    this.stopHimawariPlay();
+                }
+            },
+
             selectPrecipHour(hour) {
                 if (this.selectedPrecipHour === hour) return;
                 this.selectedPrecipHour = hour;
